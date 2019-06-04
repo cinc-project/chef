@@ -5,48 +5,48 @@ class Chef
 
     # This class is not fully implemented, depending on it is not recommended!
     # When referencing a product directly, like Chef (Now Chef Infra)
-    PRODUCT = "Chef Infra Client".freeze
+    PRODUCT = "Cinc Client".freeze
 
     # A short designation for the product, used in Windows event logs
     # and some nomenclature.
     SHORT = ChefConfig::Dist::SHORT.freeze
 
     # The name of the server product
-    SERVER_PRODUCT = "Chef Infra Server".freeze
+    SERVER_PRODUCT = "Cinc Server".freeze
 
     # The client's alias (chef-client)
     CLIENT = ChefConfig::Dist::CLIENT.freeze
 
     # name of the automate product
-    AUTOMATE = "Chef Automate".freeze
+    AUTOMATE = "Cinc Dashboard".freeze
 
     # The chef executable, as in `chef gem install` or `chef generate cookbook`
     EXEC = ChefConfig::Dist::EXEC.freeze
 
     # product website address
-    WEBSITE = "https://chef.io".freeze
+    WEBSITE = "https://gitlab.com/cinc-project/organization-subjects/wikis/home".freeze
 
     # Chef-Zero's product name
-    ZERO = "Chef Infra Zero".freeze
+    ZERO = "Cinc Zero".freeze
 
     # Chef-Solo's product name
-    SOLO = "Chef Infra Solo".freeze
+    SOLO = "Cinc Solo".freeze
 
     # The chef-zero executable (local mode)
-    ZEROEXEC = "chef-zero".freeze
+    ZEROEXEC = "cinc-zero".freeze
 
     # The chef-solo executable (legacy local mode)
-    SOLOEXEC = "chef-solo".freeze
+    SOLOEXEC = "cinc-solo".freeze
 
     # The chef-shell executable
-    SHELL = "chef-shell".freeze
+    SHELL = "cinc-shell".freeze
 
     # The chef-apply executable
     APPLY = "chef-apply".freeze
 
     # Configuration related constants
     # The chef-shell configuration file
-    SHELL_CONF = "chef_shell.rb".freeze
+    SHELL_CONF = "cinc_shell.rb".freeze
 
     # The configuration directory
     CONF_DIR = ChefConfig::Config.etc_chef_dir.freeze
@@ -55,6 +55,6 @@ class Chef
     USER_CONF_DIR = ChefConfig::Dist::USER_CONF_DIR.freeze
 
     # The server's configuration directory
-    SERVER_CONF_DIR = "/etc/chef-server".freeze
+    SERVER_CONF_DIR = "/etc/cinc-server".freeze
   end
 end
