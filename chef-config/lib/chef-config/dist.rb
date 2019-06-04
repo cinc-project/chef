@@ -1,33 +1,32 @@
 module ChefConfig
   class Dist
     # The chef executable name.
-    EXEC = "chef".freeze
+    EXEC = "cinc".freeze
 
     # The client's alias (chef-client)
-    CLIENT = "chef-client".freeze
+    CLIENT = "cinc-client".freeze
 
     # A short name for the product
-    SHORT = "chef".freeze
+    SHORT = "cinc".freeze
 
     # The suffix for Chef's /etc/chef, /var/chef and C:\\Chef directories
     # "cinc" => /etc/cinc, /var/cinc, C:\\cinc
-    DIR_SUFFIX = "chef".freeze
+    DIR_SUFFIX = "cinc".freeze
 
     # The user's configuration directory
-    USER_CONF_DIR = ".chef".freeze
+    USER_CONF_DIR = ".cinc".freeze
 
     # The legacy conf folder: C:/opscode/chef. Specifically the "opscode" part
     # DIR_SUFFIX is appended to it in code where relevant
-    LEGACY_CONF_DIR = "opscode".freeze
+    LEGACY_CONF_DIR = "cincproject".freeze
 
     # Enable forcing Chef EULA
-    ENFORCE_LICENSE = true
+    ENFORCE_LICENSE = false
 
     # The servers's alias (chef-server)
-    SERVER = "chef-server".freeze
+    SERVER = "cinc-server".freeze
 
     # The server's configuration utility
-    SERVER_CTL = "chef-server-ctl".freeze
-
+    SERVER_CTL = "cinc-server-ctl".freeze
   end
 end
