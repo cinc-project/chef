@@ -10,7 +10,7 @@
 # This whole file exists because on some versions of RPM, during upgrades, the postrm script
 # runs AFTER the installation of the upgraded RPM. Oops. See https://github.com/chef/chef/pull/7964
 
-INSTALLER_DIR=/opt/chef
+INSTALLER_DIR=/opt/cinc
 
 if [ -e $INSTALLER_DIR ]; then
   echo "removing $INSTALLER_DIR..."
@@ -24,8 +24,8 @@ fi
 if [ -e $INSTALLER_DIR ]; then
   echo "Some files failed to delete, moving them so we don't interfere with upgrades, and then removing them"
 
-  # have to do this dance of moving /opt/chef to a tmp dir since files may be in use
-  tmp_dir="/opt/.chef.$$"
+  # have to do this dance of moving /opt/cinc to a tmp dir since files may be in use
+  tmp_dir="/opt/.cinc.$$"
   # if we can't create the tmp_dir then fail hard to prevent any possible security hole
   (umask 077 && mkdir $tmp_dir) || exit 1
   # now we can clean up the tmp_dir we created safely
