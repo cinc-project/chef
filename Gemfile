@@ -31,7 +31,10 @@ group(:omnibus_package) do
   gem "rb-readline"
   gem "chef-vault"
 
-  gem "inspec-core-bin", "~> 5.24", "< 6"
+  gem "cinc-auditor-core-bin", ">= 5", "< 6",
+    source: "https://packagecloud.io/cinc-project/stable"
+
+  gem "chef-zero", source: "https://packagecloud.io/cinc-project/stable"
 end
 
 group(:omnibus_package, :pry) do
