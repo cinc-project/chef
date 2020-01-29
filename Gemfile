@@ -31,8 +31,10 @@ end
 group(:packaging) do
   gem "appbundler"
   gem "rb-readline"
-  gem "inspec-core-bin", "= 7.0.107" # need to provide the binaries for inspec
+  gem "cinc-auditor-core-bin", "~> 7.0.107", # need to provide the binaries for inspec
+    source: "https://packagecloud.io/cinc-project/stable"
   gem "chef-vault"
+  gem "chef-zero", source: "https://packagecloud.io/cinc-project/stable"
 end
 
 gem "repl_type_completor", "~> 0.1.15" # deprecation warnings in chef-shell
