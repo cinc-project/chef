@@ -15,24 +15,16 @@
 # applied so 15.0.260 would be tagged as "latest", "stable", "15" and "15.0", as well as "15.0.260".
 
 FROM busybox
-LABEL maintainer="Progress Chef <docker@chef.io>"
+LABEL maintainer="Cinc Project <docker@cinc.sh>"
 
 #TODO: Change back to stable when 19.x is GA
 ARG CHANNEL=unstable
 ARG VERSION=19.2.12
 ARG ARCH=x86_64
+ARG PKG_VERSION=7
 
-ENV HAB_LICENSE="accept-no-persist"
+RUN wget "http://downloads.cinc.sh/files/files/${CHANNEL}/cinc/${VERSION}/el/${PKG_VERSION}/cinc-${VERSION}-1.el${PKG_VERSION}.${ARCH}.rpm" -O /tmp/cinc-client.rpm && \
+    rpm2cpio /tmp/cinc-client.rpm | cpio -idmv && \
+    rm -rf /tmp/cinc-client.rpm
 
-# Use --mount=type=secret to access HAB_AUTH_TOKEN securely
-RUN --mount=type=secret,id=hab_token \
-    wget -qO /tmp/hab.tar.gz https://packages.chef.io/files/stable/habitat/latest/hab-${ARCH}-linux.tar.gz && \
-    mkdir /tmp/hab && \
-    tar -xzf /tmp/hab.tar.gz -C /tmp/hab && \
-    HAB_DIR=$(find /tmp/hab -type d -name "hab-*") && \
-    $HAB_DIR/hab pkg install --binlink --force --channel "stable" "core/hab" && \
-    rm -rf /tmp/* && \
-    HAB_AUTH_TOKEN=$(cat /run/secrets/hab_token) hab pkg install --binlink --force --auth "$(cat /run/secrets/hab_token)" --channel "${CHANNEL}" "chef/chef-infra-client/${VERSION}" && \
-    rm -rf /hab/cache
-
-VOLUME [ "/hab" ]
+VOLUME [ "/opt/cinc" ]
