@@ -15,35 +15,15 @@
 # applied so 15.0.260 would be tagged as "latest", "stable", "15" and "15.0", as well as "15.0.260".
 
 FROM busybox
-LABEL maintainer="Chef Software, Inc. <docker@chef.io>"
+LABEL maintainer="Cinc Project <docker@cinc.sh>"
 
 ARG CHANNEL=stable
 ARG VERSION=19.0.49
 ARG ARCH=x86_64
-ARG PKG_VERSION=6
-ARG INFRA_PACKAGE="chef/chef-infra-client"
+ARG PKG_VERSION=7
 
-ARG HAB_CHANNEL=stable
-ARG HAB_VERSION="1.6.1041"
-ARG HABITAT_PACKAGE="core/hab/1.6.1041"
+RUN wget "http://downloads.cinc.sh/files/files/${CHANNEL}/cinc/${VERSION}/el/${PKG_VERSION}/cinc-${VERSION}-1.el${PKG_VERSION}.${ARCH}.rpm" -O /tmp/cinc-client.rpm && \
+    rpm2cpio /tmp/cinc-client.rpm | cpio -idmv && \
+    rm -rf /tmp/cinc-client.rpm
 
-ADD https://packages.chef.io/files/${HAB_CHANNEL}/habitat/${HAB_VERSION}/hab-x86_64-linux.tar.gz /tmp/hab.tar.gz
-
-RUN mkdir /tmp/hab
-RUN mkdir /hab
-RUN tar -xzf /tmp/hab.tar.gz -C /tmp/hab && \
-    cd /tmp/hab && \
-    HAB_DIR=$(find . -type d -name "hab-*") && \
-    cp $HAB_DIR/hab /hab/hab
-
-ENV HAB_LICENSE="accept-no-persist"
-RUN /hab/hab pkg install --binlink --force --channel "${CHANNEL}" "${HABITAT_PACKAGE}"
-RUN rm /tmp/hab.tar.gz
-RUN rm -rf /tmp/hab
-
-RUN hab pkg install --channel "${CHANNEL}" "core/bash"
-RUN TMP=$(hab pkg path core/bash) && ln -s "${TMP}/bin/bash" /bin/bash
-
-RUN hab pkg install --binlink --force --channel "${CHANNEL}" "${INFRA_PACKAGE}/${VERSION}"
-
-VOLUME [ "/hab" ]
+VOLUME [ "/opt/cinc" ]
