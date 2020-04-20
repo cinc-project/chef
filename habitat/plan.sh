@@ -1,7 +1,7 @@
-pkg_name=chef-infra-client
-pkg_origin=chef
-pkg_maintainer="The Chef Maintainers <humans@chef.io>"
-pkg_description="The Chef Infra Client"
+pkg_name=cinc-infra-client
+pkg_origin=cinc
+pkg_maintainer="The cinc Maintainers <maintainers@cinc.sh>"
+pkg_description="The cinc Infra Client"
 pkg_license=('Apache-2.0')
 pkg_bin_dirs=(bin)
 pkg_build_deps=(
@@ -56,6 +56,7 @@ do_prepare() {
   export OPENSSL_LIB_DIR=$(pkg_path_for openssl)/lib
   export OPENSSL_INCLUDE_DIR=$(pkg_path_for openssl)/include
   export SSL_CERT_FILE=$(pkg_path_for cacerts)/ssl/cert.pem
+  openssl s_client -showcerts -verify 5 -connect free.fr:443 </dev/null | awk '/BEGIN/,/END/{if(/BEGIN/){a++}; certs[a]=(certs[a] "\n" $0)}; END {print certs[a]}' >> $SSL_CERT_FILE
 
   build_line "Setting link for /usr/bin/env to 'coreutils'"
   if [ ! -f /usr/bin/env ]; then
@@ -101,14 +102,14 @@ do_build() {
 
 do_install() {
   build_line "Copying directories from source to pkg_prefix"
-  mkdir -p "${pkg_prefix}/chef"
+  mkdir -p "${pkg_prefix}/cinc"
   for dir in bin chef-bin chef-config chef-utils lib chef.gemspec Gemfile Gemfile.lock; do
-    cp -rv "${SRC_PATH}/${dir}" "${pkg_prefix}/chef/"
+    cp -rv "${SRC_PATH}/${dir}" "${pkg_prefix}/cinc/"
   done
 
   # If we generated them on install, bundler thinks our source is in $HAB_CACHE_SOURCE_PATH
   build_line "Generating binstubs with the correct path"
-  ( cd "$pkg_prefix/chef" || exit_with "unable to enter pkg prefix directory" 1
+  ( cd "$pkg_prefix/cinc" || exit_with "unable to enter pkg prefix directory" 1
     _bundle_install \
       "${pkg_prefix}/bundle" \
       --local \
