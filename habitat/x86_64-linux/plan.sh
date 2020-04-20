@@ -1,10 +1,10 @@
 export HAB_BLDR_CHANNEL="base-2025"
 SRC_PATH="$(dirname "$(dirname "$PLAN_CONTEXT")")"
 _chef_client_ruby="core/ruby3_4/3.4.10"
-pkg_name="chef-infra-client"
-pkg_origin="chef"
-pkg_maintainer="The Chef Maintainers <humans@chef.io>"
-pkg_description="The Chef Infra Client"
+pkg_name=cinc-infra-client
+pkg_origin=cinc
+pkg_maintainer="The cinc Maintainers <maintainers@cinc.sh>"
+pkg_description="The Cinc Infra Client"
 pkg_license=('Apache-2.0')
 pkg_bin_dirs=(
   bin
