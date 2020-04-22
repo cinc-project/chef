@@ -106,6 +106,7 @@ do_install() {
   for dir in bin chef-bin chef-config chef-utils lib chef.gemspec Gemfile Gemfile.lock; do
     cp -rv "${SRC_PATH}/${dir}" "${pkg_prefix}/cinc/"
   done
+  cp "${SRC_PATH}/cinc/cinc-wrapper" "${pkg_prefix}/bin"
 
   # If we generated them on install, bundler thinks our source is in $HAB_CACHE_SOURCE_PATH
   build_line "Generating binstubs with the correct path"
@@ -116,6 +117,15 @@ do_install() {
       --quiet \
       --binstubs "${pkg_prefix}/bin"
   )
+
+  wrapper_links="chef-apply chef-client chef-shell chef-solo"
+  link_target="cinc-wrapper"
+  for link in $wrapper_links; do
+    if [ ! -e ${pkg_prefix}/bin/$link ]; then
+      build_line "Symlinking $link command to cinc-wrapper for compatibility..."
+      ln -sf ${pkg_prefix}/bin/$link_target ${pkg_prefix}/bin/$link || error_exit "Cannot link $link_target to $PREFIX/bin/$link"
+    fi
+  done
 
   build_line "Fixing bin/ruby and bin/env interpreters"
   fix_interpreter "${pkg_prefix}/bin/*" core/coreutils bin/env
