@@ -17,7 +17,7 @@
 #
 
 require_relative "../../http/authenticator"
-require "chef-utils"
+require "chef-utils/dist"
 
 class Chef
   module Formatters

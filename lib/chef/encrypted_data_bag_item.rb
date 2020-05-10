@@ -20,7 +20,6 @@ require_relative "config"
 require_relative "data_bag_item"
 require_relative "encrypted_data_bag_item/decryptor"
 require_relative "encrypted_data_bag_item/encryptor"
-require "chef-utils"
 require "open-uri"
 
 # An EncryptedDataBagItem represents a read-only data bag item where
