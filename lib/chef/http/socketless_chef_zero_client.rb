@@ -44,7 +44,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 require "chef_zero/server"
-require_relative "../dist"
+require "chef-utils"
 
 class Chef
   class HTTP
@@ -64,7 +64,7 @@ class Chef
         # or else streaming-style responses won't work.
         def read_body(dest = nil, &block)
           if dest
-            raise "responses from socketless #{Chef::Dist::ZERO} can't be written to specific destination"
+            raise "responses from socketless #{ChefUtils::Dist::Zero::PRODUCT} can't be written to specific destination"
           end
 
           if block_given?
