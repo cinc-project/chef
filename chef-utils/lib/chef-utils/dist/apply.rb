@@ -2,9 +2,9 @@ module ChefUtils
   module Dist
     class Apply
       # The chef-apply product name
-      PRODUCT = "Chef Infra Apply".freeze
+      PRODUCT = "Cinc Apply".freeze
       # The chef-apply binary
-      EXEC = "chef-apply".freeze
+      EXEC = "cinc-apply".freeze
     end
   end
 end

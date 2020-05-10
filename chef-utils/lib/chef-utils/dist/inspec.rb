@@ -1,11 +1,11 @@
 module ChefUtils
   module Dist
     class Inspec
-      PRODUCT = "Chef Inspec".freeze
+      PRODUCT = "Cinc Auditor".freeze
 
-      EXEC = "inspec".freeze
+      EXEC = "cinc-auditor".freeze
 
-      DIR_SUFFIX = "inspec".freeze
+      DIR_SUFFIX = "cinc-auditor".freeze
     end
   end
 end

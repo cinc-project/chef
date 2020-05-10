@@ -1,7 +1,7 @@
 module ChefUtils
   module Dist
     class Automate
-      PRODUCT = "Chef Automate".freeze
+      PRODUCT = "Cinc Dashboard".freeze
     end
   end
 end

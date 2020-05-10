@@ -2,10 +2,10 @@ module ChefUtils
   module Dist
     class Run
       # chef-run's product name
-      PRODUCT = "Chef Infra Run".freeze
+      PRODUCT = "Cinc Run".freeze
 
       # The chef-run binary
-      EXEC = "chef-run".freeze
+      EXEC = "cinc-run".freeze
     end
   end
 end
