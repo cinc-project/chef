@@ -22,7 +22,7 @@ require "uri" unless defined?(URI)
 require "net/http" unless defined?(Net::HTTP)
 require "mixlib/authentication/signedheaderauth"
 require "openssl" unless defined?(OpenSSL)
-require_relative "dist"
+require "chef-utils"
 
 class Chef
   # == Chef::CookbookSiteStreamingUploader
@@ -37,7 +37,7 @@ class Chef
     class << self
 
       def create_build_dir(cookbook)
-        tmp_cookbook_path = Tempfile.new("#{Chef::Dist::SHORT}-#{cookbook.name}-build")
+        tmp_cookbook_path = Tempfile.new("#{ChefUtils::Dist::Infra::SHORT}-#{cookbook.name}-build")
         tmp_cookbook_path.close
         tmp_cookbook_dir = tmp_cookbook_path.path
         File.unlink(tmp_cookbook_dir)
