@@ -21,6 +21,7 @@ require_relative "base"
 require_relative "../handler/error_report"
 require_relative "../workstation_config_loader"
 require "uri" unless defined?(URI)
+require "chef-utils"
 
 # DO NOT MAKE EDITS, see Chef::Application::Base
 #

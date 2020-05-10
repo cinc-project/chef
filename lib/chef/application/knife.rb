@@ -20,7 +20,7 @@ require_relative "../application"
 require "mixlib/log"
 require "ohai/config"
 require "chef/monkey_patches/net_http.rb"
-require "chef-utils"
+require "chef-utils/dist"
 
 class Chef::Application::Knife < Chef::Application
 

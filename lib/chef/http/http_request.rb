@@ -23,7 +23,7 @@
 require "uri" unless defined?(URI)
 require "cgi" unless defined?(CGI)
 require "net/http" unless defined?(Net::HTTP)
-require "chef-utils"
+require "chef-utils/dist/org"
 
 # To load faster, we only want ohai's version string.
 # However, in ohai before 0.6.0, the version is defined

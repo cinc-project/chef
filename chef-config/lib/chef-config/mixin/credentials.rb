@@ -17,6 +17,7 @@
 
 require "tomlrb"
 require_relative "../path_helper"
+require "chef-utils/dist/infra"
 
 module ChefConfig
   module Mixin
