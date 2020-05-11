@@ -34,6 +34,7 @@ require "uri" unless defined?(URI)
 require "addressable/uri" unless defined?(Addressable::URI)
 require "openssl" unless defined?(OpenSSL)
 require "yaml"
+require "chef-utils/dist"
 
 module ChefConfig
 
@@ -100,7 +101,7 @@ module ChefConfig
 
     def self.c_opscode_dir
       drive = windows_installation_drive || "C:"
-      path = PathHelper.join(drive, ChefUtils::Dist::LEGACY_CONF_DIR, ChefUtils::Dist::Infra::DIR_SUFFIX)
+      path = PathHelper.join(drive, ChefUtils::Dist::Org::LEGACY_CONF_DIR, ChefUtils::Dist::Infra::DIR_SUFFIX)
       PathHelper.cleanpath(path)
     end
 

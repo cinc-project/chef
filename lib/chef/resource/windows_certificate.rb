@@ -21,7 +21,7 @@ require_relative "../util/path_helper"
 require_relative "../resource"
 require "win32-certstore" if Chef::Platform.windows?
 require "openssl" unless defined?(OpenSSL)
-require "chef-utils/dist/infra"
+require "chef-utils/dist"
 
 class Chef
   class Resource

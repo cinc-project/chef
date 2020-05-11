@@ -22,7 +22,7 @@ require "uri" unless defined?(URI)
 require "net/http" unless defined?(Net::HTTP)
 require "mixlib/authentication/signedheaderauth"
 require "openssl" unless defined?(OpenSSL)
-require "chef-utils/dist/infra"
+require "chef-utils/dist"
 
 class Chef
   # == Chef::CookbookSiteStreamingUploader

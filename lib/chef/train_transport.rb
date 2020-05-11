@@ -17,7 +17,7 @@
 
 require "chef-config/mixin/credentials"
 require "train"
-require "chef-utils/dist/infra"
+require "chef-utils/dist"
 
 class Chef
   class TrainTransport

@@ -27,7 +27,8 @@ require "mixlib/cli" unless defined?(Mixlib::CLI)
 require "tmpdir" unless defined?(Dir.mktmpdir)
 require "rbconfig"
 require_relative "application/exit_code"
-require "chef-utils"
+require "chef-utils/dsl/windows"
+require "chef-utils/dist"
 require "license_acceptance/acceptor"
 
 class Chef

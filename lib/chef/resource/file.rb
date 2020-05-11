@@ -76,17 +76,10 @@ class Chef
       property :diff, [ String, nil ], desired_state: false, skip_docs: true
 
       property :force_unlink, [ TrueClass, FalseClass ], desired_state: false, default: false,
-<<<<<<< HEAD
-        description: "How #{Chef::Dist::PRODUCT} handles certain situations when the target file turns out not to be a file. For example, when a target file is actually a symlink. Set to true for #{Chef::Dist::PRODUCT} to delete the non-file target and replace it with the specified file. Set to false for #{Chef::Dist::PRODUCT} to raise an error."
+        description: "How #{ChefUtils::Dist::Infra::PRODUCT} handles certain situations when the target file turns out not to be a file. For example, when a target file is actually a symlink. Set to true for #{ChefUtils::Dist::Infra::PRODUCT} to delete the non-file target and replace it with the specified file. Set to false for #{ChefUtils::Dist::Infra::PRODUCT} to raise an error."
 
       property :manage_symlink_source, [ TrueClass, FalseClass ], desired_state: false,
-        description: "Change the behavior of the file resource if it is pointed at a symlink. When this value is set to true, #{Chef::Dist::PRODUCT} will manage the symlink's permissions or will replace the symlink with a normal file if the resource has content. When this value is set to false, #{Chef::Dist::PRODUCT} will follow the symlink and will manage the permissions and content of symlink's target file. The default behavior is true but emits a warning that the default value will be changed to false in a future version; setting this explicitly to true or false suppresses this warning."
-=======
-               description: "How #{ChefUtils::Dist::Infra::PRODUCT} handles certain situations when the target file turns out not to be a file. For example, when a target file is actually a symlink. Set to true for #{ChefUtils::Dist::Infra::PRODUCT} to delete the non-file target and replace it with the specified file. Set to false for #{ChefUtils::Dist::Infra::PRODUCT} to raise an error."
-
-      property :manage_symlink_source, [ TrueClass, FalseClass ], desired_state: false,
-               description: "Change the behavior of the file resource if it is pointed at a symlink. When this value is set to true, #{ChefUtils::Dist::Infra::PRODUCT} will manage the symlink's permissions or will replace the symlink with a normal file if the resource has content. When this value is set to false, #{ChefUtils::Dist::Infra::PRODUCT} will follow the symlink and will manage the permissions and content of symlink's target file. The default behavior is true but emits a warning that the default value will be changed to false in a future version; setting this explicitly to true or false suppresses this warning."
->>>>>>> 8455c7565... move dist implementation into chef-utils
+        description: "Change the behavior of the file resource if it is pointed at a symlink. When this value is set to true, #{ChefUtils::Dist::Infra::PRODUCT} will manage the symlink's permissions or will replace the symlink with a normal file if the resource has content. When this value is set to false, #{ChefUtils::Dist::Infra::PRODUCT} will follow the symlink and will manage the permissions and content of symlink's target file. The default behavior is true but emits a warning that the default value will be changed to false in a future version; setting this explicitly to true or false suppresses this warning."
 
       property :verifications, Array, default: lazy { [] }
 
