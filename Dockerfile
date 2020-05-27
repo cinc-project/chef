@@ -26,7 +26,7 @@ ARG VERSION=15.12.22
 ENV VERSION ${EXPEDITOR_VERSION:-${VERSION}}
 ENV CHANNEL ${EXPEDITOR_CHANNEL:-${CHANNEL}}
 
-RUN wget "http://downloads.cinc.sh/files/${CHANNEL}/cinc/${VERSION}/el/6/cinc-${VERSION}-1.el6.x86_64.rpm" -O /tmp/cinc-client.rpm && \
+RUN wget "http://ftp-osl.osuosl.org/pub/cinc/files/${CHANNEL}/cinc/${VERSION}/el/6/cinc-${VERSION}-1.el6.x86_64.rpm" -O /tmp/cinc-client.rpm && \
     rpm2cpio /tmp/cinc-client.rpm | cpio -idmv && \
     rm -rf /tmp/cinc-client.rpm
 
