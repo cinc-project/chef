@@ -26,7 +26,7 @@ gem "cheffish", ">= 14"
 gem "chef-telemetry", "=1.0.3"
 
 group(:omnibus_package) do
-  gem "appbundler"
+  gem "appbundler", source: "https://packagecloud.io/cinc-project/unstable"
   gem "rb-readline"
   gem "inspec-core", "~> 4.18",
     source: "https://packagecloud.io/cinc-project/stable"
