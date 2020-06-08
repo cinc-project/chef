@@ -34,7 +34,7 @@ group(:omnibus_package) do
     source: "https://packagecloud.io/cinc-project/stable"
   gem "chef-vault"
   gem "ed25519" # ed25519 ssh key support done here as it's a native gem we can't put in train
-  gem "bcrypt_pbkdf" # ed25519 ssh key support done here as it's a native gem we can't put in train
+  gem "bcrypt_pbkdf", ">= 1.1.0.rc1" # ed25519 ssh key support done here as it's a native gem we can't put in train
   gem "chef-zero", source: "https://packagecloud.io/cinc-project/stable"
 end
 
