@@ -3,6 +3,7 @@ SRC_PATH="$(dirname "$(dirname "$PLAN_CONTEXT")")"
 _chef_client_ruby="core/ruby3_4/3.4.8"
 pkg_name=cinc-infra-client
 pkg_origin=cinc
+pkg_upstream_url=https://www.cinc.sh
 pkg_maintainer="The cinc Maintainers <maintainers@cinc.sh>"
 pkg_description="The Cinc Infra Client"
 pkg_license=('Apache-2.0')
@@ -183,6 +184,20 @@ do_install() {
       sed -i "/require \"rubygems\"/r ${PLAN_CONTEXT}/../binstub_patch.rb" "$binstub"
     done
   )
+
+  # Copy cinc-wrapper in place
+  cp "${SRC_PATH}/cinc/cinc-wrapper" "${pkg_prefix}/bin"
+  # Patch wrapper with pkd_prefix
+  sed -i "s#/opt/cinc#${pkg_prefix}#g" "${pkg_prefix}/bin/cinc-wrapper"
+
+  wrapper_links="chef-apply chef-client chef-shell chef-solo inspec"
+  link_target="cinc-wrapper"
+  for link in $wrapper_links; do
+    if [ ! -e ${pkg_prefix}/bin/$link ]; then
+      build_line "Symlinking $link command to cinc-wrapper for compatibility..."
+      ln -sf ${pkg_prefix}/bin/$link_target ${pkg_prefix}/bin/$link || error_exit "Cannot link $link_target to $PREFIX/bin/$link"
+    fi
+  done
 }
 
 do_after() {
