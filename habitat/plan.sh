@@ -113,6 +113,15 @@ do_install() {
       --quiet \
       --binstubs "${pkg_prefix}/bin"
   )
+  
+  wrapper_links="chef-apply chef-client chef-shell chef-solo"
+  link_target="cinc-wrapper"
+  for link in $wrapper_links; do
+    if [ ! -e ${pkg_prefix}/bin/$link ]; then
+      build_line "Symlinking $link command to cinc-wrapper for compatibility..."
+      ln -sf ${pkg_prefix}/bin/$link_target ${pkg_prefix}/bin/$link || error_exit "Cannot link $link_target to $PREFIX/bin/$link"
+    fi
+  done
 
   build_line "Fixing bin/ruby and bin/env interpreters"
   fix_interpreter "${pkg_prefix}/bin/*" core/coreutils bin/env
