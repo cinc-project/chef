@@ -537,8 +537,8 @@ class Chef
         Erubis::Eruby.new(template).evaluate(bootstrap_context)
       end
 
-      def run
-        check_license
+      def run(enforce_license: false)
+        check_license if enforce_license
 
         plugin_setup!
         validate_name_args!

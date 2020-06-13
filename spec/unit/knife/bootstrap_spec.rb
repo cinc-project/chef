@@ -349,7 +349,7 @@ describe Chef::Knife::Bootstrap do
         allow(knife).to receive(:validate_name_args!)
         expect(knife).to receive(:check_license)
 
-        expect { knife.run }.to raise_error(Chef::Exceptions::BootstrapCommandInputError)
+        expect { knife.run(enforce_license: true) }.to raise_error(Chef::Exceptions::BootstrapCommandInputError)
         jsonfile.close
       end
     end
@@ -1658,7 +1658,28 @@ describe Chef::Knife::Bootstrap do
       expect(knife).to receive(:perform_bootstrap).with("/remote/path.sh")
       expect(connection).to receive(:del_file!) # Make sure cleanup happens
 
-      knife.run
+      knife.run(enforce_license: true)
+
+      # Post-run verify expected state changes (not many directly in #run)
+      expect($stdout.sync).to eq true
+    end
+    it "enforce_license false" do
+      expect(knife).to_not receive(:check_license)
+      expect(knife).to receive(:validate_name_args!).ordered
+      expect(knife).to receive(:validate_protocol!).ordered
+      expect(knife).to receive(:validate_first_boot_attributes!).ordered
+      expect(knife).to receive(:validate_winrm_transport_opts!).ordered
+      expect(knife).to receive(:validate_policy_options!).ordered
+      expect(knife).to receive(:winrm_warn_no_ssl_verification).ordered
+      expect(knife).to receive(:warn_on_short_session_timeout).ordered
+      expect(knife).to receive(:connect!).ordered
+      expect(knife).to receive(:register_client).ordered
+      expect(knife).to receive(:render_template).and_return "content"
+      expect(knife).to receive(:upload_bootstrap).with("content").and_return "/remote/path.sh"
+      expect(knife).to receive(:perform_bootstrap).with("/remote/path.sh")
+      expect(connection).to receive(:del_file!) # Make sure cleanup happens
+
+      knife.run(enforce_license: false)
 
       # Post-run verify expected state changes (not many directly in #run)
       expect($stdout.sync).to eq true
@@ -1897,7 +1918,7 @@ describe Chef::Knife::Bootstrap do
   it "verifies that a server to bootstrap was given as a command line arg" do
     knife.name_args = nil
     expect(knife).to receive(:check_license)
-    expect { knife.run }.to raise_error(SystemExit)
+    expect { knife.run(enforce_license: true) }.to raise_error(SystemExit)
     expect(stderr.string).to match(/ERROR:.+FQDN or ip/)
   end
 
