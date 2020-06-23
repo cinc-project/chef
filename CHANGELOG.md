@@ -6,7 +6,7 @@
 - Bump ohai to 16.2.1 [#10035](https://github.com/chef/chef/pull/10035) ([chef-expeditor[bot]](https://github.com/chef-expeditor[bot]))
 <!-- latest_release -->
 
-<!-- release_rollup since=16.2.44 -->
+<!-- release_rollup since=16.2.50 -->
 ### Changes not yet released to stable
 
 #### Merged Pull Requests
@@ -19,6 +19,17 @@
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v16.2.50](https://github.com/chef/chef/tree/v16.2.50) (2020-06-23)
+
+#### Merged Pull Requests
+- Bump inspec-core-bin to 4.20.10 [#10017](https://github.com/chef/chef/pull/10017) ([chef-expeditor[bot]](https://github.com/chef-expeditor[bot]))
+- windows_security_policy was using resource_name instead of provides [#10018](https://github.com/chef/chef/pull/10018) ([chef-davin](https://github.com/chef-davin))
+- Fix for knife config use-profile doesn&#39;t validate that the profile exist [#10011](https://github.com/chef/chef/pull/10011) ([Vasu1105](https://github.com/Vasu1105))
+- Add more examples to the resource code [#10020](https://github.com/chef/chef/pull/10020) ([tas50](https://github.com/tas50))
+- Resource doc updates [#10024](https://github.com/chef/chef/pull/10024) ([phiggins](https://github.com/phiggins))
+- Bump ohai to 16.2.1 [#10035](https://github.com/chef/chef/pull/10035) ([chef-expeditor[bot]](https://github.com/chef-expeditor[bot]))
+<!-- latest_stable_release -->
+
 ## [v16.2.44](https://github.com/chef/chef/tree/v16.2.44) (2020-06-17)
 
 #### Merged Pull Requests
@@ -76,7 +87,6 @@
 - Add a umask property for resources. [#10000](https://github.com/chef/chef/pull/10000) ([phiggins](https://github.com/phiggins))
 - Minor docs updates and MacOS -&gt; macOS [#10010](https://github.com/chef/chef/pull/10010) ([tas50](https://github.com/tas50))
 - Update the list of allowed policies for the windows_security_policy resource [#10012](https://github.com/chef/chef/pull/10012) ([chef-davin](https://github.com/chef-davin))
-<!-- latest_stable_release -->
 
 ## [v16.1.16](https://github.com/chef/chef/tree/v16.1.16) (2020-05-27)
 
