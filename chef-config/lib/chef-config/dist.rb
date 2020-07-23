@@ -19,5 +19,11 @@ module ChefConfig
     # The legacy conf folder: C:/opscode/chef. Specifically the "opscode" part
     # DIR_SUFFIX is appended to it in code where relevant
     LEGACY_CONF_DIR = "opscode".freeze
+
+    # The servers's alias (chef-server)
+    SERVER = "chef-server".freeze
+
+    # The server's configuration utility
+    SERVER_CTL = "chef-server-ctl".freeze
   end
 end
