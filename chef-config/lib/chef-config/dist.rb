@@ -18,12 +18,12 @@ module ChefConfig
 
     # The legacy conf folder: C:/opscode/chef. Specifically the "opscode" part
     # DIR_SUFFIX is appended to it in code where relevant
-    LEGACY_CONF_DIR = "opscode".freeze
+    LEGACY_CONF_DIR = "cincproject".freeze
 
     # The servers's alias (chef-server)
-    SERVER = "chef-server".freeze
+    SERVER = "cinc-server".freeze
 
     # The server's configuration utility
-    SERVER_CTL = "chef-server-ctl".freeze
+    SERVER_CTL = "cinc-server-ctl".freeze
   end
 end
