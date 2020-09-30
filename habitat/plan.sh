@@ -112,16 +112,11 @@ do_install() {
     build_line "** fixing binstub shebangs"
     fix_interpreter "${pkg_prefix}/vendor/bin/*" "$_chef_client_ruby" bin/ruby
     export BUNDLE_GEMFILE="${CACHE_PATH}/Gemfile"
-    for gem in chef-bin chef inspec-core-bin ohai; do
+    for gem in chef-bin chef cinc-auditor-core-bin ohai; do
       build_line "** generating binstubs for $gem with precise version pins"
       appbundler $CACHE_PATH $pkg_prefix/bin $gem
     done
   )
-
-  # Copy cinc-wrapper in place
-  cp "${SRC_PATH}/cinc/cinc-wrapper" "${pkg_prefix}/bin"
-  # Patch wrapper with pkd_prefix
-  sed -i "s#/opt/cinc#${pkg_prefix}#g" "${pkg_prefix}/bin/cinc-wrapper"
 
   wrapper_links="chef-apply chef-client chef-shell chef-solo inspec"
   link_target="cinc-wrapper"
