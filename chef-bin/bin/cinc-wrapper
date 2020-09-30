@@ -28,6 +28,8 @@ command = if File.basename($PROGRAM_NAME) == 'inspec'
           end
 
 STDERR.puts "Redirecting to #{command}"
+
 cmd_dir = File.dirname(File.realpath($PROGRAM_NAME))
-cmd = Mixlib::ShellOut.new("#{cmd_dir}/#{command}", live_stream: STDOUT)
+cmd = Mixlib::ShellOut.new("#{cmd_dir}/#{command}", ARGV, live_stream: STDOUT)
 cmd.run_command
+exit cmd.exitstatus
