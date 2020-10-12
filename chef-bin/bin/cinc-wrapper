@@ -2,7 +2,7 @@
 #
 # ./cinc-wrapper - Redirect chef binstubs to cinc one with information on stdout
 #
-# Copyright:: Copyright (c) 2018, Cinc Team
+# Copyright:: Copyright (c) 2018-2020, Cinc Team
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
