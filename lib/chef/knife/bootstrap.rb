@@ -287,7 +287,7 @@ class Chef
       option :bootstrap_product,
         long: "--bootstrap-product PRODUCT",
         description: "Product to install.",
-        default: "chef"
+        default: "cinc"
 
       option :msi_url, # Windows target only
         short: "-m URL",
