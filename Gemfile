@@ -28,6 +28,7 @@ group(:omnibus_package) do
   gem "appbundler"
   gem "rb-readline"
   gem "chef-vault"
+  gem "inspec-core-bin", "~> 4.18"
 end
 
 group(:omnibus_package, :pry) do
