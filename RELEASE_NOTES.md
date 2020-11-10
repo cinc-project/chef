@@ -1,5 +1,41 @@
 This file holds "in progress" release notes for the current release under development and is intended for consumption by the Chef Documentation team. Please see <https://docs.chef.io/release_notes/> for the official Chef release notes.
 
+# What's New in 16.7
+
+## Windows Performance Enhancements
+
+We've improved how many of the resources work on Windows providing a significant performance increase when running complex cookbooks on Windows hosts.
+
+Chef Infra Client install times on Windows have also been improved resulting in up to a 3x improvement in install time.
+
+## Windows Bootstrap Improvements
+
+Bootstrapping of Windows nodes has been improved when using `knife bootstrap`. The `knife bootstrap` `--secret` flag is now respected on Windows hosts, allowing for the proper setup of nodes to use encrypted data bags. Thanks for reporting this issue [@AMC-7](https://github.com/AMC-7). Additionally during the bootstrap we now force connections to use TLS 1.2, preventing failures on Windows 2012-2016. Thanks for this improvement [@TimothyTitan](https://github.com/TimothyTitan).
+
+## New Resources
+
+## Updated Resources
+
+### chef_client_config
+
+The `chef_client_config` resource has been updated to no longer produce invalid `client.rb` content.
+
+### homebrew_update
+
+The `homebrew_update` has been updated to resolve failures that would occur when running the resource.
+
+### ifconfig
+
+The `ifconfig` resource has been updated to better support Linux distributions that are derivatives of either Ubuntu or Debian. Support for setting the `BRIDGE` property on RHEL-based systems has also been added.
+
+### mount
+
+The `mount` resource is now idempotent on Linux systems when using a label for the device name. Thanks for reporting this issue [@limitusus](https://github.com/limitusus)
+
+### powershell_package
+
+The `powershell_package` resource has been updated to better force connections to use TLS 1.2 when communicating with the PowerShell Gallery on Windows Server 2012-2016. Connections must be forced to use TLS 1.2 as system default cipher suite which did not include TLS 1.2 in Windows 2012-2016.
+
 # What's New in 16.6
 
 ## pwsh Support
