@@ -99,12 +99,14 @@ class Chef
         def resolve_available_version(package_name, new_version)
           search_string = new_version.nil? ? package_name : "#{package_name}=#{new_version}"
           so = shell_out!("zypper", "--non-interactive", "search", "-s", "--provides", "--match-exact", "--type=package", search_string)
-          pp so
           so.stdout.each_line do |line|
             if md = line.match(/^(\S*)\s+\|\s+(\S+)\s+\|\s+(\S+)\s+\|\s+(\S+)\s+\|\s+(\S+)\s+\|\s+(.*)$/)
               (status, name, type, version, arch, repo) = [ md[1], md[2], md[3], md[4], md[5], md[6] ]
-              pp md
               next if version == "Version" # header
+
+              if new_version
+                next unless version == new_version
+              end
 
               return version
             end
