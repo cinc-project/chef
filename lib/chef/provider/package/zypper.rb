@@ -78,7 +78,6 @@ class Chef
           is_installed = false
           logger.trace("#{new_resource} checking zypper")
           status = shell_out!("zypper", "--non-interactive", "info", package_name)
-          puts status.stdout
           status.stdout.each_line do |line|
             case line
             when /^Version *: (.+) *$/
@@ -105,7 +104,7 @@ class Chef
               next if version == "Version" # header
 
               if new_version
-                next unless version == new_version
+                next unless version == new_version || version.start_with?("#{new_version}-")
               end
 
               return version
