@@ -97,14 +97,14 @@ task :update_chef_exec_dll do
 
   sh("hab pkg install chef/chef-powershell-shim")
   sh("hab pkg install chef/chef-powershell-shim-x86")
-  x64 = `hab pkg path chef/chef-powershell-shim`.chomp.gsub(/\\/,'/')
-  x86 = `hab pkg path chef/chef-powershell-shim-x86`.chomp.gsub(/\\/,'/')
+  x64 = `hab pkg path chef/chef-powershell-shim`.chomp.gsub(/\\/, '/')
+  x86 = `hab pkg path chef/chef-powershell-shim-x86`.chomp.gsub(/\\/, '/')
   FileUtils.rm_rf(Dir["distro/ruby_bin_folder/AMD64/*"])
   FileUtils.rm_rf(Dir["distro/ruby_bin_folder/x86/*"])
-  puts "Copying #{x64}/bin/* to distro/ruby_bin_folder/AMD64"  
-  FileUtils.cp_r(Dir["#{x64}/bin/*"],"distro/ruby_bin_folder/AMD64")
+  puts "Copying #{x64}/bin/* to distro/ruby_bin_folder/AMD64"
+  FileUtils.cp_r(Dir["#{x64}/bin/*"], "distro/ruby_bin_folder/AMD64")
   puts "Copying #{x86}/bin/* to distro/ruby_bin_folder/x86"
-  FileUtils.cp_r(Dir["#{x86}/bin/*"],"distro/ruby_bin_folder/x86")
+  FileUtils.cp_r(Dir["#{x86}/bin/*"], "distro/ruby_bin_folder/x86")
 end
 
 begin
