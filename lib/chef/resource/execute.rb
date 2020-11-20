@@ -664,6 +664,7 @@ class Chef
         :environment,
         :group,
         :user,
+        :password,
         :umask
       )
 
