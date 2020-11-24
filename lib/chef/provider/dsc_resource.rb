@@ -164,7 +164,7 @@ class Chef
         properties = translate_type(new_resource.properties)
         switches = "-Method #{method} -Name #{new_resource.resource}"\
                    " -Property #{properties} -Module #{module_info_object} -Verbose"
-        Timeout::timeout(new_resource.timeout) {
+        Timeout.timeout(new_resource.timeout) {
           powershell_exec!("Invoke-DscResource #{switches}")
         }
       end
