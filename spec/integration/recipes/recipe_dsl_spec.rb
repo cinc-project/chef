@@ -28,6 +28,7 @@ describe "Recipe DSL methods" do
         def provider
           Provider
         end
+
         class Provider < Chef::Provider
           def load_current_resource; end
 
@@ -41,6 +42,7 @@ describe "Recipe DSL methods" do
 
       # Modules to put stuff in
       module RecipeDSLSpecNamespace; end
+
       module RecipeDSLSpecNamespace::Bar; end
 
     end

@@ -44,21 +44,37 @@ class Chef
     end
 
     class Application < RuntimeError; end
+
     class SigInt < RuntimeError; end
+
     class SigTerm < RuntimeError; end
+
     class Cron < RuntimeError; end
+
     class WindowsEnv < RuntimeError; end
+
     class Exec < RuntimeError; end
+
     class Execute < RuntimeError; end
+
     class ErlCall < RuntimeError; end
+
     class FileNotFound < RuntimeError; end
+
     class Package < RuntimeError; end
+
     class Service < RuntimeError; end
+
     class Script < RuntimeError; end
+
     class Route < RuntimeError; end
+
     class SearchIndex < RuntimeError; end
+
     class Override < RuntimeError; end
+
     class UnsupportedAction < RuntimeError; end
+
     class MissingLibrary < RuntimeError; end
 
     class CannotDetermineNodeName < RuntimeError
@@ -68,64 +84,112 @@ class Chef
     end
 
     class User < RuntimeError; end
+
     class Group < RuntimeError; end
+
     class Link < RuntimeError; end
+
     class Mount < RuntimeError; end
+
     class Reboot < Exception; end # rubocop:disable Lint/InheritException
+
     class RebootPending < Exception; end # rubocop:disable Lint/InheritException
+
     class RebootFailed < Mixlib::ShellOut::ShellCommandFailed; end
+
     class ClientUpgraded < Exception; end # rubocop:disable Lint/InheritException
+
     class PrivateKeyMissing < RuntimeError; end
+
     class CannotWritePrivateKey < RuntimeError; end
+
     class RoleNotFound < RuntimeError; end
+
     class DuplicateRole < RuntimeError; end
+
     class ValidationFailed < ArgumentError; end
+
     class CannotValidateStaticallyError < ArgumentError; end
+
     class InvalidPrivateKey < ArgumentError; end
+
     class MissingKeyAttribute < ArgumentError; end
+
     class KeyCommandInputError < ArgumentError; end
+
     class BootstrapCommandInputError < ArgumentError
       def initialize
         super "You cannot pass both --json-attributes and --json-attribute-file. Please pass one or none."
       end
     end
+
     class InvalidKeyArgument < ArgumentError; end
+
     class InvalidKeyAttribute < ArgumentError; end
+
     class InvalidUserAttribute < ArgumentError; end
+
     class InvalidClientAttribute < ArgumentError; end
+
     class RedirectLimitExceeded < RuntimeError; end
+
     class AmbiguousRunlistSpecification < ArgumentError; end
+
     class CookbookFrozen < ArgumentError; end
+
     class CookbookNotFound < RuntimeError; end
+
     class OnlyApiVersion0SupportedForAction < RuntimeError; end
+
     # Cookbook loader used to raise an argument error when cookbook not found.
     # for back compat, need to raise an error that inherits from ArgumentError
     class CookbookNotFoundInRepo < ArgumentError; end
+
     class CookbookMergingError < RuntimeError; end
+
     class RecipeNotFound < ArgumentError; end
+
     # AttributeNotFound really means the attribute file could not be found
     class AttributeNotFound < RuntimeError; end
+
     # NoSuchAttribute is raised on access by node.read!("foo", "bar") when node["foo"]["bar"] does not exist.
     class NoSuchAttribute < RuntimeError; end
+
     # AttributeTypeMismatch is raised by node.write!("foo", "bar", "baz") when e.g. node["foo"] = "bar" (overwriting String with Hash)
     class AttributeTypeMismatch < RuntimeError; end
+
     class MissingCookbookDependency < StandardError; end # CHEF-5120
+
     class InvalidCommandOption < RuntimeError; end
+
     class CommandTimeout < RuntimeError; end
+
     class RequestedUIDUnavailable < RuntimeError; end
+
     class InvalidHomeDirectory < ArgumentError; end
+
     class DsclCommandFailed < RuntimeError; end
+
     class PlistUtilCommandFailed < RuntimeError; end
+
     class UserIDNotFound < ArgumentError; end
+
     class GroupIDNotFound < ArgumentError; end
+
     class ConflictingMembersInGroup < ArgumentError; end
+
     class InvalidResourceReference < RuntimeError; end
+
     class ResourceNotFound < RuntimeError; end
+
     class ProviderNotFound < RuntimeError; end
     NoProviderAvailable = ProviderNotFound
     class VerificationNotFound < RuntimeError; end
+
     class InvalidEventType < ArgumentError; end
+
     class MultipleIdentityError < RuntimeError; end
+
     # Used in Resource::ActionClass#load_current_resource to denote that
     # the resource doesn't actually exist (for example, the file does not exist)
     class CurrentValueDoesNotExist < RuntimeError; end
@@ -140,36 +204,56 @@ class Chef
     class InvalidPolicybuilderCall < ArgumentError; end
 
     class InvalidResourceSpecification < ArgumentError; end
+
     class SolrConnectionError < RuntimeError; end
+
     class IllegalChecksumRevert < RuntimeError; end
+
     class CookbookVersionNameMismatch < ArgumentError; end
+
     class MissingParentDirectory < RuntimeError; end
+
     class UnresolvableGitReference < RuntimeError; end
+
     class InvalidRemoteGitReference < RuntimeError; end
+
     class InvalidEnvironmentRunListSpecification < ArgumentError; end
+
     class InvalidDataBagItemID < ArgumentError; end
+
     class InvalidDataBagName < ArgumentError; end
+
     class EnclosingDirectoryDoesNotExist < ArgumentError; end
+
     # Errors originating from calls to the Win32 API
     class Win32APIError < RuntimeError; end
 
     # Thrown when Win32 API layer binds to non-existent Win32 function.  Occurs
     # when older versions of Windows don't support newer Win32 API functions.
     class Win32APIFunctionNotImplemented < NotImplementedError; end # rubocop:disable Lint/InheritException
+
     # Attempting to run windows code on a not-windows node
     class Win32NotWindows < RuntimeError; end
+
     class WindowsNotAdmin < RuntimeError; end
+
     # Attempting to access a 64-bit only resource on a 32-bit Windows system
     class Win32ArchitectureIncorrect < RuntimeError; end
+
     class ObsoleteDependencySyntax < ArgumentError; end
+
     class InvalidDataBagPath < ArgumentError; end
+
     class DuplicateDataBagItem < RuntimeError; end
 
     class PowershellCmdletException < RuntimeError; end
+
     class LCMParser < RuntimeError; end
 
     class CannotDetermineHomebrewOwner < Package; end
+
     class CannotDetermineWindowsInstallerType < Package; end
+
     class NoWindowsPackageSource < Package; end
 
     # Can not create staging file during file deployment
@@ -185,6 +269,7 @@ class Chef
 
     # does not follow X.Y.Z format. ArgumentError?
     class InvalidPlatformVersion < ArgumentError; end
+
     class InvalidCookbookVersion < ArgumentError; end
 
     # version constraint should be a string or array, or it doesn't
@@ -195,6 +280,7 @@ class Chef
     class IllegalVersionConstraint < NotImplementedError; end # rubocop:disable Lint/InheritException
 
     class MetadataNotValid < StandardError; end
+
     class MetadataNotFound < StandardError
       attr_reader :install_path
       attr_reader :cookbook_name
@@ -232,22 +318,34 @@ class Chef
 
     # Registry Helper throws the following errors
     class Win32RegArchitectureIncorrect < Win32ArchitectureIncorrect; end
+
     class Win32RegHiveMissing < ArgumentError; end
+
     class Win32RegKeyMissing < RuntimeError; end
+
     class Win32RegValueMissing < RuntimeError; end
+
     class Win32RegDataMissing < RuntimeError; end
+
     class Win32RegValueExists < RuntimeError; end
+
     class Win32RegNoRecursive < ArgumentError; end
+
     class Win32RegTypeDoesNotExist < ArgumentError; end
+
     class Win32RegBadType < ArgumentError; end
+
     class Win32RegBadValueSize < ArgumentError; end
+
     class Win32RegTypesMismatch < ArgumentError; end
 
     # incorrect input for registry_key create action throws following error
     class RegKeyValuesTypeMissing < ArgumentError; end
+
     class RegKeyValuesDataMissing < ArgumentError; end
 
     class InvalidEnvironmentPath < ArgumentError; end
+
     class EnvironmentNotFound < RuntimeError; end
 
     # File-like resource found a non-file (socket, pipe, directory, etc) at its destination
@@ -283,6 +381,7 @@ class Chef
       end
 
     end
+
     # Exception class for collecting multiple failures. Used when running
     # delayed notifications so that chef can process each delayed
     # notification even if chef client or other notifications fail.
@@ -432,6 +531,7 @@ class Chef
     # Raised by Chef::JSONCompat
     class JSON
       class EncodeError < RuntimeError; end
+
       class ParseError < RuntimeError; end
     end
 

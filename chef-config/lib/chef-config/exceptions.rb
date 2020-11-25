@@ -21,7 +21,9 @@ require_relative "logger"
 module ChefConfig
 
   class ConfigurationError < ArgumentError; end
+
   class InvalidPath < StandardError; end
+
   class UnparsableConfigOption < StandardError; end
 
 end

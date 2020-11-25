@@ -20,12 +20,15 @@ require "spec_helper"
 require "chef/node_map"
 
 class Foo; end
+
 class Bar; end
 
 class FooResource < Chef::Resource; end
+
 class BarResource < Chef::Resource; end
 
 class FooProvider < Chef::Provider; end
+
 class BarProvider < Chef::Provider; end
 
 describe Chef::NodeMap do

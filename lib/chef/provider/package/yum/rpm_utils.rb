@@ -485,6 +485,7 @@ class Chef
         end
 
         class RPMProvide < RPMDependency; end
+
         class RPMRequire < RPMDependency; end
 
         class RPMDbPackage < RPMPackage

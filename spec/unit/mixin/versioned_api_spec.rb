@@ -29,7 +29,9 @@ end
 
 describe Chef::Mixin::VersionedAPIFactory do
   class V1Class; extend Chef::Mixin::VersionedAPI; minimum_api_version 1; end
+
   class V2Class; extend Chef::Mixin::VersionedAPI; minimum_api_version 2; end
+
   class V3Class; extend Chef::Mixin::VersionedAPI; minimum_api_version 3; end
 
   let(:factory_class) { Class.new { extend Chef::Mixin::VersionedAPIFactory } }

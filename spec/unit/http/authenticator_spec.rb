@@ -40,6 +40,7 @@ describe Chef::HTTP::Authenticator do
 
       context "when version_class is provided" do
         class V0Class; extend Chef::Mixin::VersionedAPI; minimum_api_version 0; end
+
         class V2Class; extend Chef::Mixin::VersionedAPI; minimum_api_version 2; end
 
         class AuthFactoryClass

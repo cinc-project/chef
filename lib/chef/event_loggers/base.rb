@@ -21,6 +21,7 @@ require_relative "../event_dispatch/base"
 class Chef
   module EventLoggers
     class UnknownEventLogger < StandardError; end
+
     class UnavailableEventLogger < StandardError; end
 
     def self.event_loggers_by_name
