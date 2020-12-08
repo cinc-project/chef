@@ -100,7 +100,7 @@ describe "chef-client" do
       end
 
       it "should load .chef/knife.rb when -z is specified" do
-        puts "in it"
+        $stdout.puts "in it"
         result = shell_out("#{chef_client} -z -o 'x::default'", cwd: path_to(""))
         # FATAL: Configuration error NoMethodError: undefined method `xxx' for nil:NilClass
         expect(result.stdout).to include("xxx")
