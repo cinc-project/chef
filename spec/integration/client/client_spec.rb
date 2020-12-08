@@ -99,7 +99,7 @@ describe "chef-client" do
         file ".chef/knife.rb", "xxx.xxx"
       end
 
-      it "should load .chef/knife.rb when -z is specified" do
+      it "should load .chef/knife.rb when -z is specified dumb ass" do
         $stdout.puts "in it"
         result = shell_out("#{chef_client} -z -o 'x::default'", cwd: path_to(""))
         # FATAL: Configuration error NoMethodError: undefined method `xxx' for nil:NilClass
