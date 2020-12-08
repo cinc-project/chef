@@ -58,8 +58,10 @@ module ChefConfig
       if @chef_config_dir.nil?
         @chef_config_dir = false
         full_path = working_directory.split(File::SEPARATOR)
+        puts "full_path: #{full_path}"
         (full_path.length - 1).downto(0) do |i|
           candidate_directory = File.join(full_path[0..i] + [ChefUtils::Dist::Infra::USER_CONF_DIR])
+          puts "candidate_directory: #{candidate_directory}"
           if File.exist?(candidate_directory) && File.directory?(candidate_directory)
             @chef_config_dir = candidate_directory
             break
@@ -125,6 +127,7 @@ module ChefConfig
       end
       # Look for $UPWARD/.chef/knife.rb
       if chef_config_dir
+        puts "chef_config_dir: #{chef_config_dir}"
         candidate_configs << File.join(chef_config_dir, "config.rb")
         candidate_configs << File.join(chef_config_dir, "knife.rb")
       end
