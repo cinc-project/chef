@@ -89,7 +89,7 @@ Get-ChildItem Env:
 
 (Get-Counter '\Process(*)\% Processor Time').CounterSamples | Where-Object {$_.CookedValue -gt 5}
 
-bundle exec rspec -f progress --profile -- ./spec/unit/provider/systemd_unit_spec.rb
+bundle exec rspec ./spec/unit/provider/systemd_unit_spec.rb:140
 If ($lastexitcode -ne 0) { $exit = 1 }
 
 Exit $exit
