@@ -87,6 +87,7 @@ module IntegrationSupport
 
   def file(relative_path, contents)
     filename = path_to(relative_path)
+    puts "writing to #{filename}"
     dir = File.dirname(filename)
     FileUtils.mkdir_p(dir) unless dir == "."
     File.open(filename, "w") do |file|

@@ -63,6 +63,7 @@ module ChefConfig
           candidate_directory = File.join(full_path[0..i] + [ChefUtils::Dist::Infra::USER_CONF_DIR])
           puts "candidate_directory: #{candidate_directory}"
           if File.exist?(candidate_directory) && File.directory?(candidate_directory)
+            puts "praise the sweet lord! file exists!!"
             @chef_config_dir = candidate_directory
             break
           end
