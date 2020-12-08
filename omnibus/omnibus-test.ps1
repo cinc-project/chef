@@ -1,15 +1,6 @@
 # Stop script execution when a non-terminating error occurs
 $ErrorActionPreference = "Stop"
 
-# install chocolatey
-Set-ExecutionPolicy Bypass -Scope Process -Force
-[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-
-# install powershell core
-Invoke-WebRequest "https://github.com/PowerShell/PowerShell/releases/download/v7.0.3/PowerShell-7.0.3-win-x64.msi" -UseBasicParsing -OutFile powershell.msi
-Start-Process msiexec.exe -Wait -ArgumentList "/package PowerShell.msi /quiet"
-$env:path += ";C:\Program Files\PowerShell\7"
 
 $channel = "$Env:CHANNEL"
 If ([string]::IsNullOrEmpty($channel)) { $channel = "unstable" }
@@ -52,23 +43,6 @@ Remove-Item Env:RUBY_ROOT -ErrorAction SilentlyContinue
 Remove-Item Env:RUBY_VERSION -ErrorAction SilentlyContinue
 Remove-Item Env:BUNDLER_VERSION -ErrorAction SilentlyContinue
 
-ForEach ($b in
-  "chef-client",
-  "knife",
-  "chef-solo",
-  "ohai"
-) {
-  Write-Output "Checking for existence of binfile $b..."
-
-  If (Test-Path -PathType Leaf -Path "C:\opscode\$product\bin\$b") {
-    Write-Output "Found $b!"
-  }
-  Else {
-    Write-Output "Error: Could not find $b"
-    exit 1
-  }
-}
-
 $Env:PATH = "C:\opscode\$product\bin;$Env:PATH"
 
 chef-client --version
@@ -95,9 +69,6 @@ $Env:FORCE_FFI_YAJL = "ext"
 # accept license
 $Env:CHEF_LICENSE = "accept-no-persist"
 
-# some tests need winrm configured
-winrm quickconfig -quiet
-
 bundle
 If ($lastexitcode -ne 0) { Exit $lastexitcode }
 
@@ -116,7 +87,9 @@ $exit = 0
 
 Get-ChildItem Env:
 
-bundle exec rspec -f progress --profile -- ./spec/unit
+(Get-Counter '\Process(*)\% Processor Time').CounterSamples | Where-Object {$_.CookedValue -gt 5}
+
+bundle exec rspec -f progress --profile -- ./spec/unit/provider/systemd_unit_spec.rb
 If ($lastexitcode -ne 0) { $exit = 1 }
 
 Exit $exit
