@@ -138,6 +138,7 @@ describe Chef::Provider::SystemdUnit do
     end
 
     it "sets the active property to false if the unit is not active" do
+      puts "starting test!!!"
       require "ruby-prof"
       RubyProf.start
       allow(provider).to receive(:active?).and_return(false)
@@ -145,7 +146,9 @@ describe Chef::Provider::SystemdUnit do
       expect(current_resource.active).to be false
       result = RubyProf.stop
       printer = RubyProf::FlatPrinter.new(result)
+      puts "printing prof results"
       printer.print(STDOUT)
+      puts "done printing prof results"
     end
 
     it "should check if the unit is enabled" do
