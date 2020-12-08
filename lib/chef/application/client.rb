@@ -156,6 +156,7 @@ class Chef::Application::Client < Chef::Application::Base
   def load_config_file
     if !config.key?(:config_file) && !config[:disable_config]
       if config[:local_mode]
+        puts "drtermining config file location in local mode"
         config[:config_file] = Chef::WorkstationConfigLoader.new(nil, Chef::Log).config_location
       else
         config[:config_file] = Chef::Config.platform_specific_path("#{ChefConfig::Config.etc_chef_dir}/client.rb")

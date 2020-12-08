@@ -135,6 +135,7 @@ module ChefConfig
       end
 
       candidate_configs.find do |candidate_config|
+        puts "checking #{candidate_config} for config"
         have_config?(candidate_config)
       end
     end
