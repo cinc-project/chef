@@ -138,7 +138,7 @@ describe Chef::Provider::SystemdUnit do
     end
 
     it "sets the active property to false if the unit is not active" do
-      puts "starting test!!!"
+      $stdout.puts "starting test!!!"
       require "ruby-prof"
       RubyProf.start
       allow(provider).to receive(:active?).and_return(false)
