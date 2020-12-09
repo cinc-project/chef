@@ -149,6 +149,8 @@ module ChefConfig
       puts "dir.pwd #{Dir.pwd}"
       if ChefUtils.windows?
         env["CD"]
+      elsif RUBY_PLATFORM.include?("solaris")
+        Dir.pwd
       else
         env["PWD"]
       end || Dir.pwd
