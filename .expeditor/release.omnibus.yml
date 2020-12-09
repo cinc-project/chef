@@ -8,5 +8,5 @@ fips-platforms:
   - el-*-x86_64
   - windows-*
 builder-to-testers-map:
-  windows-2012r2-x86_64:
-    - windows-2019-x86_64
+ solaris2-5.11-sparc:
+   - solaris2-5.11-sparc
