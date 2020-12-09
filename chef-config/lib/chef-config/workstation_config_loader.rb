@@ -145,6 +145,8 @@ module ChefConfig
     end
 
     def working_directory
+      puts "env: #{env["PWD"]}"
+      puts "dir.pwd #{Dir.pwd}"
       if ChefUtils.windows?
         env["CD"]
       else
