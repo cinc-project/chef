@@ -60,19 +60,6 @@ $chefdir = gem which chef
 $chefdir = Split-Path -Path "$chefdir" -Parent
 $chefdir = Split-Path -Path "$chefdir" -Parent
 
-Copy-Item ./spec/unit/provider/systemd_unit_spec.rb $chefdir/spec/unit/provider/systemd_unit_spec.rb -force
-Copy-Item ./lib/chef/provider/systemd_unit.rb $chefdir/lib/chef/provider/systemd_unit.rb -force
-Copy-Item Gemfile $chefdir/Gemfile -force
-Set-Location -Path $chefdir
-
-Get-Location
-
-# ffi-yajl must run in c-extension mode for perf, so force it so we don't accidentally fall back to ffi
-$Env:FORCE_FFI_YAJL = "ext"
-
-# accept license
-$Env:CHEF_LICENSE = "accept-no-persist"
-
 bundle
 If ($lastexitcode -ne 0) { Exit $lastexitcode }
 
@@ -89,11 +76,10 @@ $env:Path = $p
 # desktop heap exhaustion seems likely (https://docs.microsoft.com/en-us/archive/blogs/ntdebugging/desktop-heap-overview)
 $exit = 0
 
-Get-ChildItem Env:
 
 (Get-Counter '\Process(*)\% Processor Time').CounterSamples | Where-Object {$_.CookedValue -gt 5}
 
-bundle exec rspec ./spec/unit/provider/systemd_unit_spec.rb:140
+bundle exec ruby test.rb
 If ($lastexitcode -ne 0) { $exit = 1 }
 
 Exit $exit
