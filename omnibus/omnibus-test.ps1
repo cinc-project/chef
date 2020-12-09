@@ -61,6 +61,7 @@ $chefdir = Split-Path -Path "$chefdir" -Parent
 $chefdir = Split-Path -Path "$chefdir" -Parent
 
 Copy-Item ./spec/unit/provider/systemd_unit_spec.rb $chefdir/spec/unit/provider/systemd_unit_spec.rb -force
+Copy-Item ./lib/chef/provider/systemd_unit.rb $chefdir/lib/chef/provider/systemd_unit.rb -force
 Copy-Item Gemfile $chefdir/Gemfile -force
 Set-Location -Path $chefdir
 

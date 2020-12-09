@@ -16,6 +16,7 @@
 # limitations under the License.
 #
 
+require "pry"
 require_relative "../provider"
 require_relative "../mixin/which"
 require_relative "../resource/file"
@@ -251,7 +252,14 @@ class Chef
       end
 
       def systemctl_execute(action, unit, **options)
-        shell_out(systemctl_cmd, action, unit, **systemctl_opts.merge(options))
+        require "ruby-prof"
+        RubyProf.start
+        cmd = shell_out(systemctl_cmd, action, unit, **systemctl_opts.merge(options))
+        result = RubyProf.stop
+        printer = RubyProf::FlatPrinter.new(result)
+        printer.print(STDOUT)
+        puts "cmd: #{cmd.command}"
+        cmd
       end
 
       def systemctl_cmd
