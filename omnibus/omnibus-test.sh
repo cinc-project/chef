@@ -149,7 +149,7 @@ fi
 # accept license
 export CHEF_LICENSE=accept-no-persist
 
-cp spec/integration/client/client_spec.rb $chef_gem/spec/integration/client/client_spec.rb
+sudo cp spec/integration/client/client_spec.rb $chef_gem/spec/integration/client/client_spec.rb
 cd "$chef_gem"
 sudo -E bundle install --jobs=3 --retry=3
 sudo -E bundle exec rspec --profile -f progress ./spec/integration/client/client_spec.rb:102
