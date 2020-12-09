@@ -3,9 +3,10 @@ project-name: chef
 config: omnibus/omnibus.rb
 test-path: omnibus/omnibus-test.sh
 test-path-windows: omnibus/omnibus-test.ps1
+test-version: 16.8.1+20201208213619
 fips-platforms:
   - el-*-x86_64
   - windows-*
 builder-to-testers-map:
- solaris2-5.11-sparc:
-   - solaris2-5.11-sparc
+  windows-2012r2-x86_64:
+    - windows-2019-x86_64

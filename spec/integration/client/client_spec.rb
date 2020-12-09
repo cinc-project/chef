@@ -95,12 +95,11 @@ describe "chef-client" do
 
     context "and a config file under .chef/knife.rb" do
       before do
-        puts "in before!!!"
         file ".chef/knife.rb", "xxx.xxx"
       end
 
       it "should load .chef/knife.rb when -z is specified dumb ass" do
-        $stdout.puts "in it"
+        puts "cwd: #{path_to("")}"
         result = shell_out("#{chef_client} -z -o 'x::default'", cwd: path_to(""))
         # FATAL: Configuration error NoMethodError: undefined method `xxx' for nil:NilClass
         expect(result.stdout).to include("xxx")
