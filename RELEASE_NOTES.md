@@ -1,5 +1,12 @@
 This file holds "in progress" release notes for the current release under development and is intended for consumption by the Chef Documentation team. Please see <https://docs.chef.io/release_notes/> for the official Chef release notes.
 
+# What's New in 16.8.14
+
+- Updated openSSL to 1.0.2x to resolve [CVE-2020-1971](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-1971)
+- Updated libarchive to 3.5.0, which powers the `archive_file` resource. This new release resolves extraction failures and better handles symlinks in archives
+- `knife ssh` will now properly raise and error when attempting to use sudo without a tty or an askpass program specified. Thanks for the fix [@rveznaver](https://github.com/rveznaver)
+- A failure introduced in the previous 
+
 # What's New in 16.8
 
 ## Chef InSpec 4.24
