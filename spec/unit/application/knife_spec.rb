@@ -61,7 +61,7 @@ describe Chef::Application::Knife do
   end
 
   it "should run a sub command with the applications command line option prototype" do
-    with_argv(*%w{noop knife command with some args}) do
+    with_argv("noop", "knife", "command", "with", "some", "args") do
       knife = double(Chef::Knife)
       expect(Chef::Knife).to receive(:run).with(ARGV, @knife.options).and_return(knife)
       expect(@knife).to receive(:exit).with(0)
@@ -70,7 +70,7 @@ describe Chef::Application::Knife do
   end
 
   it "should set the colored output to true by default on windows and true on all other platforms as well" do
-    with_argv(*%w{noop knife command}) do
+    with_argv("noop", "knife", "command") do
       expect(@knife).to receive(:exit).with(0)
       @knife.run
     end
@@ -79,7 +79,7 @@ describe Chef::Application::Knife do
 
   context "validate --format option" do
     it "should set the default format summary" do
-      with_argv(*%w{noop knife command}) do
+      with_argv("noop", "knife", "command") do
         expect(@knife).to receive(:exit).with(0)
         @knife.run
         expect(@knife.default_config[:format]).to eq("summary")
@@ -87,7 +87,7 @@ describe Chef::Application::Knife do
     end
 
     it "should raise the error for invalid value" do
-      with_argv(*%w{noop knife command -F abc}) do
+      with_argv("noop", "knife", "command", "-F", "abc") do
         expect(STDOUT).to receive(:puts).at_least(2).times
         expect { @knife.run }.to raise_error(SystemExit) { |e| expect(e.status).to eq(2) }
       end
@@ -103,7 +103,7 @@ describe Chef::Application::Knife do
       end
 
       it "does not initialize fips mode when no flags are passed" do
-        with_argv(*%w{noop knife command}) do
+        with_argv("noop", "knife", "command") do
           expect(@knife).to receive(:exit).with(0)
           expect(Chef::Config).not_to receive(:enable_fips_mode)
           @knife.run
@@ -112,7 +112,7 @@ describe Chef::Application::Knife do
       end
 
       it "overwrites the Chef::Config value when passed --fips" do
-        with_argv(*%w{noop knife command --fips}) do
+        with_argv("noop", "knife", "command", "--fips") do
           expect(@knife).to receive(:exit).with(0)
           expect(Chef::Config).to receive(:enable_fips_mode)
           @knife.run
@@ -127,7 +127,7 @@ describe Chef::Application::Knife do
       end
 
       it "initializes fips mode when passed --fips" do
-        with_argv(*%w{noop knife command --fips}) do
+        with_argv("noop", "knife", "command", "--fips") do
           expect(@knife).to receive(:exit).with(0)
           expect(Chef::Config).to receive(:enable_fips_mode)
           @knife.run
@@ -136,7 +136,7 @@ describe Chef::Application::Knife do
       end
 
       it "overwrites the Chef::Config value when passed --no-fips" do
-        with_argv(*%w{noop knife command --no-fips}) do
+        with_argv("noop", "knife", "command", "--no-fips") do
           expect(@knife).to receive(:exit).with(0)
           expect(Chef::Config).not_to receive(:enable_fips_mode)
           @knife.run
@@ -150,7 +150,7 @@ describe Chef::Application::Knife do
     it "expands a relative path relative to the CWD" do
       relative_path = ".chef/client.pem"
       allow(Dir).to receive(:pwd).and_return(CHEF_SPEC_DATA)
-      with_argv(*%W{noop knife command -k #{relative_path}}) do
+      with_argv("noop", "knife", "command", "-k", "#{relative_path}") do
         expect(@knife).to receive(:exit).with(0)
         @knife.run
       end
@@ -159,7 +159,7 @@ describe Chef::Application::Knife do
 
     it "expands a ~/home/path to the correct full path" do
       home_path = "~/.chef/client.pem"
-      with_argv(*%W{noop knife command -k #{home_path}}) do
+      with_argv("noop", "knife", "command", "-k", "#{home_path}") do
         expect(@knife).to receive(:exit).with(0)
         @knife.run
       end
@@ -172,7 +172,7 @@ describe Chef::Application::Knife do
                   else
                     "/etc/chef/client.pem"
                   end
-      with_argv(*%W{noop knife command -k #{full_path}}) do
+      with_argv("noop", "knife", "command", "-k", "#{full_path}") do
         expect(@knife).to receive(:exit).with(0)
         @knife.run
       end
@@ -186,7 +186,7 @@ describe Chef::Application::Knife do
     end
 
     it "should default to no environment" do
-      with_argv(*%w{noop knife command}) do
+      with_argv("noop", "knife", "command") do
         expect(@knife).to receive(:exit).with(0)
         @knife.run
       end
@@ -195,7 +195,7 @@ describe Chef::Application::Knife do
 
     it "should load the environment from the config file" do
       config_file = File.join(CHEF_SPEC_DATA, "environment-config.rb")
-      with_argv(*%W{noop knife command -c #{config_file}}) do
+      with_argv("noop", "knife", "command", "-c", "#{config_file}") do
         expect(@knife).to receive(:exit).with(0)
         @knife.run
       end
@@ -203,7 +203,7 @@ describe Chef::Application::Knife do
     end
 
     it "should load the environment from the CLI options" do
-      with_argv(*%w{noop knife command -E development}) do
+      with_argv("noop", "knife", "command", "-E", "development") do
         expect(@knife).to receive(:exit).with(0)
         @knife.run
       end
@@ -212,7 +212,7 @@ describe Chef::Application::Knife do
 
     it "should override the config file environment with the CLI environment" do
       config_file = File.join(CHEF_SPEC_DATA, "environment-config.rb")
-      with_argv(*%W{noop knife command -c #{config_file} -E override}) do
+      with_argv("noop", "knife", "command", "-c", "#{config_file}", "-E", "override") do
         expect(@knife).to receive(:exit).with(0)
         @knife.run
       end
@@ -221,7 +221,7 @@ describe Chef::Application::Knife do
 
     it "should override the config file environment with the CLI environment regardless of order" do
       config_file = File.join(CHEF_SPEC_DATA, "environment-config.rb")
-      with_argv(*%W{noop knife command -E override -c #{config_file}}) do
+      with_argv("noop", "knife", "command", "-E", "override", "-c", "#{config_file}") do
         expect(@knife).to receive(:exit).with(0)
         @knife.run
       end
@@ -229,7 +229,7 @@ describe Chef::Application::Knife do
     end
 
     it "should run a sub command with the applications command line option prototype" do
-      with_argv(*%w{noop knife command with some args}) do
+      with_argv("noop", "knife", "command", "with", "some", "args") do
         knife = double(Chef::Knife)
         expect(Chef::Knife).to receive(:run).with(ARGV, @knife.options).and_return(knife)
         expect(@knife).to receive(:exit).with(0)

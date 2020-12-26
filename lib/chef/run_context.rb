@@ -661,6 +661,7 @@ class Chef
     #
     class ChildRunContext < RunContext
       extend Forwardable
+      # rubocop: disable Lint/RedundantSplatExpansion
       def_delegators :parent_run_context, *%w{
         action_collection
         action_collection=
