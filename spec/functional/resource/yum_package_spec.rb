@@ -194,7 +194,8 @@ describe Chef::Resource::YumPackage, :requires_root, external: exclude_test do
         end
       end
 
-      %w{1.2 1* 1.2-1 1*-1 1.2-* 1*-* 0:1.2 0:1* 0:1.2-1 0:1*-1 *:1.2-* *:1*-*}.each do |vstring|
+      # 0:1.2 0:1.2-1 0:1*-1 don't work on yum/el6
+      %w{1.2 1* 1.2-1 1*-1 1.2-* 1*-* 0:1* *:1.2-* *:1*-*}.each do |vstring|
         it "is idempotent when #{vstring} is in the version property and there is a candidate version" do
           preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
           yum_package.package_name("chef_rpm")
@@ -205,8 +206,8 @@ describe Chef::Resource::YumPackage, :requires_root, external: exclude_test do
         end
       end
 
-      # 0:1.10, 0:1.10-1, 0:1*-1 don't work on yum/el6
-      %w{1.2 1.2-1 1.2-* 0:1.2 0:1.2-1 *:1.2-*}.each do |vstring|
+      # 0:1.2, 0:1.2-1, 0:1*-1 don't work on yum/el6
+      %w{1.2 1.2-1 1.2-* *:1.2-*}.each do |vstring|
         it "is idempotent when #{vstring} is in the version property on upgrade and it doesn't match the candidate version" do
           preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
           yum_package.package_name("chef_rpm")
@@ -217,7 +218,8 @@ describe Chef::Resource::YumPackage, :requires_root, external: exclude_test do
         end
       end
 
-      %w{1* 1*-1 1*-* 0:1* 0:1*-1 *:1*-*}.each do |vstring|
+      # 0:1.2, 0:1.2-1, 0:1*-1 don't work on yum/el6
+      %w{1* 1*-1 1*-* 0:1* *:1*-*}.each do |vstring|
         it "upgrades when #{vstring} is in the version property on upgrade and it matches the candidate version" do
           preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
           yum_package.package_name("chef_rpm")
