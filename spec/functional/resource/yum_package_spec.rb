@@ -168,7 +168,7 @@ describe Chef::Resource::YumPackage, :requires_root, external: exclude_test do
           yum_package.package_name("chef_rpm-#{vstring}")
           yum_package.run_action(:upgrade)
           expect(yum_package.updated_by_last_action?).to be true
-       end
+        end
 
         it "is idempotent when #{vstring} is in the package_name" do
           preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")

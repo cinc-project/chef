@@ -112,13 +112,13 @@ class Chef
           end
 
           def is_arch?(arch)
-            arches = ["alpha", "alphaev4", "alphaev45", "alphaev5", "alphaev56", "alphaev6", "alphaev67", "alphaev68", "alphaev7", "alphapca56", "amd64", "armv5tejl", "armv5tel", "armv6l", "armv7l", "athlon", "geode", "i386", "i486", "i586", "i686", "ia32e", "ia64", "noarch", "ppc", "ppc64", "ppc64iseries", "ppc64pseries", "s390", "s390x", "sh3", "sh4", "sh4a", "sparc", "sparc64", "sparc64v", "sparcv8", "sparcv9", "sparcv9v", "x86_64" ]
+            arches = %w{alpha alphaev4 alphaev45 alphaev5 alphaev56 alphaev6 alphaev67 alphaev68 alphaev7 alphapca56 amd64 armv5tejl armv5tel armv6l armv7l athlon geode i386 i486 i586 i686 ia32e ia64 noarch ppc ppc64 ppc64iseries ppc64pseries s390 s390x sh3 sh4 sh4a sparc sparc64 sparc64v sparcv8 sparcv9 sparcv9v x86_64}
             arches.include?(arch)
           end
 
           def combine_args(provides, version, arch)
             provides = provides.dup
-            maybe_arch = provides.rpartition('.').last
+            maybe_arch = provides.rpartition(".").last
             if is_arch?(maybe_arch)
               arch = maybe_arch
               provides.delete_suffix!(".#{arch}")
@@ -138,7 +138,7 @@ class Chef
             restart unless repo_opts.empty?
             query_output = query(action, parameters)
             version = parse_response(query_output.lines.last)
-            #puts "parsed #{version} from python helper"
+            # puts "parsed #{version} from python helper"
             restart unless repo_opts.empty?
             version
           end
@@ -187,9 +187,9 @@ class Chef
             end
 
             # Special handling for certain action / param combos
-            #if %i{whatinstalled whatavailable}.include?(action)
+            # if %i{whatinstalled whatavailable}.include?(action)
             #  add_version(hash, parameters["version"]) unless parameters["version"].nil?
-            #end
+            # end
 
             FFI_Yajl::Encoder.encode(hash)
           end
