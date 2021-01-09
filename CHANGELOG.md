@@ -9,7 +9,7 @@ This changelog lists individual merged pull requests to Chef Infra Client and ge
 - Make sure our containers work on RHEL 6 [#10856](https://github.com/chef/chef/pull/10856) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
-<!-- release_rollup since=16.9.16 -->
+<!-- release_rollup since=16.9.17 -->
 ### Changes not yet released to stable
 
 #### Merged Pull Requests
@@ -17,6 +17,12 @@ This changelog lists individual merged pull requests to Chef Infra Client and ge
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v16.9.17](https://github.com/chef/chef/tree/v16.9.17) (2021-01-09)
+
+#### Merged Pull Requests
+- Make sure our containers work on RHEL 6 [#10856](https://github.com/chef/chef/pull/10856) ([tas50](https://github.com/tas50))
+<!-- latest_stable_release -->
+
 ## [v16.9.16](https://github.com/chef/chef/tree/v16.9.16) (2021-01-05)
 
 #### Merged Pull Requests
@@ -43,7 +49,6 @@ This changelog lists individual merged pull requests to Chef Infra Client and ge
 - Update Ohai to 16.8.2 and pin chefstyle [#10824](https://github.com/chef/chef/pull/10824) ([tas50](https://github.com/tas50))
 - Update Nokogiri to 1.11.0 [#10828](https://github.com/chef/chef/pull/10828) ([tas50](https://github.com/tas50))
 - Add a new `reposdir` property in the `yum_repository` resource [#10831](https://github.com/chef/chef/pull/10831) ([tas50](https://github.com/tas50))
-<!-- latest_stable_release -->
 
 ## [v16.8.14](https://github.com/chef/chef/tree/v16.8.14) (2020-12-12)
 
