@@ -6,6 +6,7 @@ variables:
 
 trigger:
 - master
+- chef-16
 
 pool:
   vmImage: $(imageName)
