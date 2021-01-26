@@ -32,6 +32,14 @@ Lint/DeprecatedConstants:
   Exclude:
     - chef/lib/chef/node/attribute.rb # false alarms
 
+
+# This cop shouldn't alert on the helper / specs itself
+Chef/Ruby/LegacyPowershellOutMethods:
+  Exclude:
+    - 'lib/chef/mixin/powershell_out.rb'
+    - 'spec/functional/mixin/powershell_out_spec.rb'
+    - 'spec/unit/mixin/powershell_out_spec.rb'
+
 # set additional paths
 Chef/Ruby/UnlessDefinedRequire:
   Include:
