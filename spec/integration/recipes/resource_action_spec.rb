@@ -223,6 +223,14 @@ module ResourceActionSpec
           ActionJackson.succeeded = ActionJackson.ruby_block_converged
         end
 
+        action :test1, description: "Hello world" do
+          ActionJackson.ran_action = :test1
+          ActionJackson.succeeded = true
+        end
+
+        allowed_actions action1: "Action1",
+          action2: "Action2"
+
         def foo_public
           "foo_public!"
         end

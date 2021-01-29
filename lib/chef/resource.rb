@@ -997,13 +997,34 @@ class Chef
     # @return [Array<Symbol>] The list of actions, as symbols.
     #
     def self.allowed_actions(*actions)
+      final_actions = []
       @allowed_actions ||=
         if superclass.respond_to?(:allowed_actions)
           superclass.allowed_actions.dup
         else
           [ :nothing ]
         end
-      @allowed_actions |= actions.flatten
+
+      actions.each do |element|
+        case element
+        when Array # array of strings/symbols. Should not be possible,
+          # TODO confirm - Array within actions shouldn't happen.
+          raise "HEY! Delete this code already"
+        when Hash # name/description
+          element.each_pair do |name, desc|
+            name = name.to_sym
+            final_actions << name
+            # See comments in self.action for concerns around doing this here too -
+            # maybe the answer is that the only place to declare a description is
+            # in the action definition.
+            action_descriptions[name] = desc unless desc.nil?
+          end
+        when Symbol,String
+          final_actions << name.to_sym
+        end
+      end
+
+      @allowed_actions |= final_actions
     end
 
     def self.allowed_actions=(value)
@@ -1071,12 +1092,32 @@ class Chef
     #
     # @return The Action class implementing the action
     #
-    def self.action(action, &recipe_block)
+    def self.action(action, description: nil, &recipe_block)
       action = action.to_sym
       declare_action_class
       action_class.action(action, &recipe_block)
       self.allowed_actions += [ action ]
+      # TODO So this is weird and makes me think we shouldn't accept description in
+      # allowed_actions:  if someone for some reason has an action with a description,
+      # and allowed_actions also gives a description for the same action - which
+      # description prevails is load order dependent.
+      #
+      # In any case, accept any non-nil description, which will correctly override
+      # any specific inherited description.
+      self.action_descriptions[action] = description unless description.nil?
       default_action action if Array(default_action) == [:nothing]
+    end
+
+    # # TODO test inherited descriptions
+    # # TODO test parent description doesn't get altered when inherited description is replaced
+    def self.action_description(action)
+      action_descriptions[action.to_sym]
+    end
+
+    # @api private
+    def self.action_descriptions
+      @action_descriptions ||=
+        superclass.respond_to?(:action_descriptions) ? superclass.action_descriptions.dup : { nothing: nil }
     end
 
     # Define a method to load up this resource's properties with the current
@@ -1196,9 +1237,9 @@ class Chef
     #
 
     # FORBIDDEN_IVARS do not show up when the resource is converted to JSON (ie. hidden from data_collector and sending to the chef server via #to_json/to_h/as_json/inspect)
-    FORBIDDEN_IVARS = %i{@run_context @logger @not_if @only_if @enclosing_provider @description @introduced @examples @validation_message @deprecated @default_description @skip_docs @executed_by_runner}.freeze
+    FORBIDDEN_IVARS = %i{@run_context @logger @not_if @only_if @enclosing_provider @description @introduced @examples @validation_message @deprecated @default_description @skip_docs @executed_by_runner, @action_descriptions}.freeze
     # HIDDEN_IVARS do not show up when the resource is displayed to the user as text (ie. in the error inspector output via #to_text)
-    HIDDEN_IVARS = %i{@allowed_actions @resource_name @source_line @run_context @logger @name @not_if @only_if @elapsed_time @enclosing_provider @description @introduced @examples @validation_message @deprecated @default_description @skip_docs @executed_by_runner}.freeze
+    HIDDEN_IVARS = %i{@allowed_actions @resource_name @source_line @run_context @logger @name @not_if @only_if @elapsed_time @enclosing_provider @description @introduced @examples @validation_message @deprecated @default_description @skip_docs @executed_by_runner @action_descriptions}.freeze
 
     include Chef::Mixin::ConvertToClassName
     extend Chef::Mixin::ConvertToClassName
