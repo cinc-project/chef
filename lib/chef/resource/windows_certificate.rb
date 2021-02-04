@@ -200,6 +200,7 @@ class Chef
 
         def resolve_thumbprint(thumbprint)
           return thumbprint if valid_thumbprint?(thumbprint)
+
           powershell_exec!(get_thumbprint(new_resource.store_name, ps_cert_location, new_resource.source)).result
         end
 
