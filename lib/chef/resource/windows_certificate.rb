@@ -186,7 +186,7 @@ class Chef
           store.get(resolve_thumbprint(new_resource.source))
         end
 
-        # Thumbprints should be excactly 40 Hex characters
+        # Thumbprints should be exactly 40 Hex characters
         def valid_thumbprint?(string)
           string.scan(/\H/).empty? && string.length == 40
         end
