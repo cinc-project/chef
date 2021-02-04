@@ -177,7 +177,7 @@ class Chef
         end
 
         def delete_cert
-          store = ::Win32::Certstore.open(new_resource.store_name)
+          store = ::Win32::Certstore.open(new_resource.store_name, store_location: native_cert_location)
           store.delete(resolve_thumbprint(new_resource.source))
         end
 
@@ -266,7 +266,7 @@ class Chef
 
         def cert_script(persist)
           cert_script = "$cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2"
-          file = Chef::Util::PathHelper.cleanpath(new_resource.source, native_cert_location)
+          file = Chef::Util::PathHelper.cleanpath(new_resource.source, ps_cert_location)
           cert_script << " \"#{file}\""
           if ::File.extname(file.downcase) == ".pfx"
             cert_script << ", \"#{new_resource.pfx_password}\""
