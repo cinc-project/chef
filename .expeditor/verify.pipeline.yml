@@ -468,6 +468,7 @@ steps:
   artifact_paths:
     - $PWD/.kitchen/logs/kitchen.log
   env:
+      GEMFILE_MOD: "gem \"ffi\", \"< 1.14\""
       KITCHEN_YAML: kitchen.yml
   expeditor:
     executor:

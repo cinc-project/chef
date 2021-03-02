@@ -8,3 +8,5 @@ gem "kitchen-dokken", ">= 2.0"
 gem "kitchen-inspec", git: "https://github.com/chef/kitchen-inspec.git", branch: "master"
 gem "inspec"
 gem "test-kitchen", git: "https://github.com/test-kitchen/test-kitchen.git", branch: "master"
+
+instance_eval(ENV["GEMFILE_MOD"]) if ENV["GEMFILE_MOD"]
