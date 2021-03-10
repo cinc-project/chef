@@ -11,15 +11,6 @@ is_darwin() {
   uname -a | grep "^Darwin" 2>&1 >/dev/null
 }
 
-is_suse() {
-  if [ -f /etc/os-release ]; then
-    . /etc/os-release
-    [ "$ID_LIKE" = "sles" ] || [ "$ID_LIKE" = "suse" ]
-  else
-    [ -f /etc/SuSE-release ]
-  fi
-}
-
 if is_darwin; then
     PREFIX="/usr/local"
 else
@@ -35,7 +26,8 @@ cleanup_symlinks() {
 
 # Clean up binary symlinks if they exist
 # see: http://tickets.opscode.com/browse/CHEF-3022
-if [ ! -f /etc/redhat-release -a ! -f /etc/fedora-release -a ! -f /etc/system-release -a ! is_suse ]; then
+# NOTE: Once we drop support for all non-systemd distros this can just be a check for /etc/os-release
+if [ ! -f /etc/os-release -a ! -f /etc/redhat-release -a ! -f /etc/SuSE-release ]; then
   # not a redhat-ish RPM-based system
   cleanup_symlinks
 elif [ "x$1" = "x0" ]; then
