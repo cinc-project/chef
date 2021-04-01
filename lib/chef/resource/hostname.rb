@@ -26,7 +26,6 @@ class Chef
       unified_mode true
 
       provides :hostname
-
       description "Use the **hostname** resource to set the system's hostname, configure hostname and hosts config file, and re-run the Ohai hostname plugin so the hostname will be available in subsequent cookbooks."
       introduced "14.0"
       examples <<~DOC
@@ -49,6 +48,9 @@ class Chef
       property :hostname, String,
         description: "An optional property to set the hostname if it differs from the resource block's name.",
         name_property: true
+
+      property :fqdn, String,
+        description: "An optional property to set the fqdn if it differs from the resource block's hostname."
 
       property :ipaddress, String,
         description: "The IP address to use when configuring the hosts file.",
@@ -115,7 +117,7 @@ class Chef
 
           # make sure node['fqdn'] resolves via /etc/hosts
           unless new_resource.ipaddress.nil?
-            newline = "#{new_resource.ipaddress} #{new_resource.hostname}"
+            newline = "#{new_resource.ipaddress} #{new_resource.fqdn} #{new_resource.hostname}"
             newline << " #{new_resource.aliases.join(" ")}" if new_resource.aliases && !new_resource.aliases.empty?
             newline << " #{new_resource.hostname[/[^\.]*/]}"
             r = append_replacing_matching_lines("/etc/hosts", /^#{new_resource.ipaddress}\s+|\s+#{new_resource.hostname}\s+/, newline)
@@ -144,6 +146,7 @@ class Chef
               notifies :reload, "ohai[reload hostname]"
             end
           when linux?
+
             case
             when ::File.exist?("/usr/bin/hostnamectl") && !docker?
               # use hostnamectl whenever we find it on linux (as systemd takes over the world)
@@ -166,6 +169,7 @@ class Chef
                 mode "0644"
               end
             when ::File.file?("/etc/sysconfig/network")
+
               # older non-systemd RHEL/Fedora derived
               append_replacing_matching_lines("/etc/sysconfig/network", /^HOSTNAME\s*=/, "HOSTNAME=#{new_resource.hostname}")
             when ::File.exist?("/etc/HOSTNAME")
