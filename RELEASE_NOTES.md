@@ -38,9 +38,54 @@ This section serves to track things we should later document here for 17.0
 - Alibaba Cloud support with node['alibaba'] showing metadata, `alibaba?` helper and node['cloud'] returning data now - https://github.com/chef/chef/pull/11004
 - Removed detection of discontinued antergos and Pidora distros - https://github.com/chef/ohai/pull/1633 / https://github.com/chef/ohai/pull/1634
 
+## What's New in 16.13
+
+### Chef InSpec 4.31
+
+Chef InSpec has been updated from 4.29.3 to 4.31.1.
+
+#### New Features
+
+- Commands can now be set to timeout using the [command resource](https://docs.chef.io/inspec/resources/command/) or the [`--command-timeout`](https://docs.chef.io/inspec/cli/) option in the CLI. Commands timeout by default after one hour.
+- Added the [`--docker-url`](https://docs.chef.io/inspec/cli/) CLI option, which can be used to specify the URI to connect to the Docker Engine.
+- Added support for targeting Linux and Windows containers running on Docker for Windows.
+
+#### Bug Fixes
+
+- Hash inputs will now be loaded consistently and accessed as strings or symbols. ([#5446](https://github.com/inspec/inspec/pull/5446))
+
+### Ubuntu FIPS Support
+
+Our Ubuntu packages are now FIPS compliant for all your FedRAMP needs.
+
+### Chef Language Additions
+
+We now include a new `centos_stream_platform?` helper to determine if your CentOS release is a standard CentOS release or a CentOS Stream release. This helper can be used in attributes files, recipes, and custome resources. Thanks for this new helper [@ramereth](https://github.com/ramereth)!
+
+### Resource Improvements
+
+#### dsc_script and dsc_resource
+
+Our PowerShell integration has been improved to better handle failures that were silently occuring when running some DSC code. Thanks for the report
+
+### Platform Support Updates
+
+#### Ubuntu 16.04 EOL
+
+Packages will no longer be built for Ubuntu 16.04 as Canonical ended maintenance updates on April 30, 2021. See Chef's [Platform End-of-Life Policy](https://docs.chef.io/platforms/#platform-end-of-life-policy) for more information on when Chef ends support for an OS release.
+
+### Security
+
+#### Ruby 2.7.3
+
+Ruby has been updated to 2.7.3, which provides a large number of bug fixes and also resolves the following CVEs:
+
+- [CVE-2021-28966](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-28966)
+- [CVE-2021-28966](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-28966)
+
 ## What's New in 16.12
 
-### Chef InSpec
+### Chef InSpec 4.29
 
 Chef InSpec has been updated from 4.28 to 4.29.3.
 
