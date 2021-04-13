@@ -4,10 +4,17 @@ This file holds "in progress" release notes for the current release under develo
 
 This section serves to track things we should later document here for 17.0
 
+### Compliance Phase
+
+Chef Infra Client's new Compliance Phase allows users to automatically execute compliance audits and view the results in Chef Automate as part of any Chef Infra Client Run. This new phase of the Chef Infra Client run replaces the legacy audit cookbook and works using the existing attributes. With this new phase you'll always have the latest compliance capabilities out of the box without the need to manage cookbook dependencies.
+
+The Compliance Phase also features a new compliance reporter: `cli`. This report mimics the InSpec command line output giving you a visual indication of your system's compliance status. Thanks for this new reporter [@aknarts](https://github.com/aknarts/).
+
+Existing audit cookbook users can migrate to the new Compliance Phase by removing the audit cookbook from their run_list and setting the `node['audit']['compliance_phase'] = true` attribute.
+
+
 - Chef Infra Client now ships with Ruby 3
-- Compliance Phase in GA: https://github.com/chef/chef/pull/10547
 - remove support for RHEL 6 i386
-- Compliance cli report - https://github.com/chef/chef/pull/10939
 - Remove ability to run client as a service on Windows - https://github.com/chef/chef/pull/10928
 - Knife Org commands from knife-opc are now part of chef itself - https://github.com/chef/chef/pull/10187
 - Chef packages on *nix now create the /etc/chef directory and subdirectories to make getting started easier - https://github.com/chef/chef/pull/11158 / https://github.com/chef/chef/pull/11173
