@@ -1,5 +1,5 @@
 ---
-name: unit
+name: gems
 
 "on":
   pull_request:
@@ -8,13 +8,15 @@ name: unit
       - master
 
 jobs:
-  choco:
+  test:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2019, windows-2016]
+        os: [ubuntu-latest]
         # Due to https://github.com/actions/runner/issues/849, we have to use quotes for '3.0'
         ruby: [2.7, '3.0']
+        projects: ['chef/chef-sugar', 'chefspec/chefspec', 'berkshelf/berkshelf']
+        # 'chef/chef-zero', 'chef/cheffish', 'chef/knife-windows'
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
@@ -22,4 +24,4 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle exec rspec spec/functional/resource/chocolatey_package_spec.rb
+    - run: bundle exec tasks/bin/run_external_test ${{ matrix.projects }} master rake
