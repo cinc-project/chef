@@ -18,8 +18,8 @@ GIT
 
 GIT
   remote: https://github.com/chef/omnibus-software
-  revision: 8d91dc6a566aba77c864678680d4142561b2f655
-  branch: master
+  revision: e8bc3f9d8e0cd77faad82b5778a0729c8964c216
+  branch: ruby_26_fix
   specs:
     omnibus-software (4.0.0)
       omnibus (>= 8.0.0)
