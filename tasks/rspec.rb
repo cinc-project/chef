@@ -42,7 +42,7 @@ begin
 
   desc "Run all chef specs in spec directory"
   RSpec::Core::RakeTask.new(:spec) do |t|
-    t.verbose = false
+    t.verbose = true
     t.rspec_opts = %w{--profile --format doc}
     t.pattern = FileList["spec/**/*_spec.rb"].reject do |path|
       path =~ /knife.*/
