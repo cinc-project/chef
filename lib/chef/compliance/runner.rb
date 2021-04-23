@@ -153,6 +153,7 @@ class Chef
       end
 
       def generate_report(opts: inspec_opts, profiles: inspec_profiles)
+        logger.info "Starting Chef Infra Compliance Phase"
         load_fetchers!
 
         logger.debug "Options are set to: #{opts}"
@@ -174,6 +175,8 @@ class Chef
         failed_report("Cannot fetch all profiles: #{profiles}. Please make sure you're authenticated and the server is reachable. #{e.message}")
       rescue => e
         failed_report(e.message)
+      ensure
+        logger.info "Chef Infra Compliance Phase Complete"
       end
 
       # In case InSpec raises a runtime exception without providing a valid report,
