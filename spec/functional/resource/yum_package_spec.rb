@@ -72,7 +72,9 @@ describe Chef::Resource::YumPackage, :requires_root, external: exclude_test do
 
   let(:default_options) { "--nogpgcheck" } #  --disablerepo=* --enablerepo=chef-yum-localtesting' }
 
-  let(:pkg_arch) { ohai[:kernel][:machine] }
+  def pkg_arch
+    ohai[:kernel][:machine]
+  end
 
   describe ":install" do
     context "vanilla use case" do
