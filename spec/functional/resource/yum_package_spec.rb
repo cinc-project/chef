@@ -19,7 +19,7 @@ require "spec_helper"
 require "chef/mixin/shell_out"
 
 # run this test only for following platforms.
-exclude_test = !(%w{rhel fedora amazon}.include?(ohai[:platform_family]) && !File.exist?("/usr/bin/dnf"))
+exclude_test = !(%w{rhel fedora amazon}.include?(OHAI_SYSTEM[:platform_family]) && !File.exist?("/usr/bin/dnf"))
 describe Chef::Resource::YumPackage, :requires_root, external: exclude_test do
   include RecipeDSLHelper
   include Chef::Mixin::ShellOut
@@ -73,7 +73,7 @@ describe Chef::Resource::YumPackage, :requires_root, external: exclude_test do
   let(:default_options) { "--nogpgcheck" } #  --disablerepo=* --enablerepo=chef-yum-localtesting' }
 
   def pkg_arch
-    ohai[:kernel][:machine]
+    OHAI_SYSTEM[:kernel][:machine]
   end
 
   describe ":install" do
