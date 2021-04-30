@@ -51,7 +51,6 @@ class Chef
           end
 
           def start
-            ENV["PYTHONUNBUFFERED"] = "1"
             @inpipe, inpipe_write = IO.pipe
             outpipe_read, @outpipe = IO.pipe
             @stdin, @stdout, @stderr, @wait_thr = Open3.popen3("#{yum_command} #{outpipe_read.fileno} #{inpipe_write.fileno}", outpipe_read.fileno => outpipe_read, inpipe_write.fileno => inpipe_write, close_others: false)
@@ -121,7 +120,7 @@ class Chef
             parameters = { "provides" => provides, "version" => version, "arch" => arch }
             repo_opts = options_params(options || {})
             parameters.merge!(repo_opts)
-            # XXX: for now we  before and after every query with an enablerepo/disablerepo to clean the helpers internal state
+            # XXX: for now we close the rpmdb before and after every query with an enablerepo/disablerepo to clean the helpers internal state
             close_rpmdb unless repo_opts.empty?
             query_output = query(action, parameters)
             version = parse_response(query_output.lines.last)

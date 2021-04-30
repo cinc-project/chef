@@ -10,7 +10,6 @@ import sys
 import yum
 import signal
 import os
-import fcntl
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'simplejson'))
 try: import json
@@ -18,7 +17,6 @@ except ImportError: import simplejson as json
 import re
 from rpmUtils.miscutils import stringToVersion,compareEVR
 from rpmUtils.arch import getBaseArch, getArchList
-
 
 try: from yum.misc import string_to_prco_tuple
 except ImportError:
@@ -169,9 +167,7 @@ def setup_exit_handler():
     signal.signal(signal.SIGPIPE, exit_handler)
     signal.signal(signal.SIGQUIT, exit_handler)
 
-def set_blocking(fd):
-    old_flags = fcntl.fcntl(fd, fcntl.F_GETFL)
-    fcntl.fcntl(fd, fcntl.F_SETFL, old_flags & ~os.O_NONBLOCK)
+setup_exit_handler()
 
 base = None
 
@@ -179,13 +175,10 @@ if len(sys.argv) < 3:
     inpipe = sys.stdin
     outpipe = sys.stdout
 else:
-    set_blocking(int(sys.argv[1]))
-    set_blocking(int(sys.argv[2]))
     inpipe = os.fdopen(int(sys.argv[1]), "r")
     outpipe = os.fdopen(int(sys.argv[2]), "w")
 
 try:
-    setup_exit_handler()
     while 1:
         # stop the process if the parent proc goes away
         ppid = os.getppid()
@@ -215,6 +208,7 @@ try:
         elif command['action'] == "installonlypkgs":
             install_only_packages(base, command['package'])
         elif command['action'] == "close_rpmdb":
+            close_rpmdb(base)
             base.closeRpmDB()
             base = None
             outpipe.write('nil nil nil\n')
