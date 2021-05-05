@@ -806,6 +806,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         FileUtils.rm_f "/etc/yum.repos.d/chef-dnf-localtesting.repo"
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options "--nogpgcheck --disablerepo=*"
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
@@ -815,12 +816,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         FileUtils.rm_f "/etc/yum.repos.d/chef-dnf-localtesting.repo"
         flush_cache
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
-          options default_options
+          options "--nogpgcheck --disablerepo=*"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
-          options default_options
+          options "--nogpgcheck --disablerepo=*"
           action :install
         end.should_not_be_updated
       end
@@ -1030,7 +1031,6 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "throws a deprecation warning with allow_downgrade" do
         Chef::Config[:treat_deprecation_warnings_as_errors] = false
         expect(Chef).to receive(:deprecated).at_least(:once).with(:dnf_package_allow_downgrade, /^the allow_downgrade property on the dnf_package provider is not used/)
-        options default_options
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
           options default_options
@@ -1503,12 +1503,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         FileUtils.rm_f "/etc/yum.repos.d/chef-dnf-localtesting.repo"
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
-          options default_options
+          options "--nogpgcheck --disablerepo=*"
           action :remove
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
         dnf_package "chef_rpm" do
-          options default_options
+          options "--nogpgcheck --disablerepo=*"
           action :remove
         end.should_not_be_updated
       end
