@@ -84,6 +84,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs if the package is not installed" do
         flush_cache
         dnf_package "chef_rpm" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
@@ -92,6 +93,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "does not install if the package is installed" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -99,10 +101,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "does not install twice" do
         flush_cache
         dnf_package "chef_rpm" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
@@ -111,6 +115,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "does not install if the prior version package is installed" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
@@ -120,6 +125,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         skip "FIXME: do nothing, or install the #{pkg_arch} version?"
         preinstall("chef_rpm-1.10-1.i686.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.i686$")
@@ -129,6 +135,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         skip "FIXME: do nothing, or install the #{pkg_arch} version?"
         preinstall("chef_rpm-1.2-1.i686.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.i686$")
@@ -140,6 +147,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         it "installs the rpm when #{vstring} is in the package_name" do
           flush_cache
           dnf_package "chef_rpm-#{vstring}" do
+            options default_options
             action :install
           end.should_be_updated
         end
@@ -147,6 +155,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         it "is idempotent when #{vstring} is in the package_name" do
           preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
           dnf_package "chef_rpm-#{vstring}" do
+            options default_options
             action :install
           end.should_not_be_updated
         end
@@ -154,6 +163,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         it "installs the rpm when #{vstring} is in the version property" do
           flush_cache
           dnf_package "chef_rpm" do
+            options default_options
             version vstring
             action :install
           end.should_be_updated
@@ -162,6 +172,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         it "is idempotent when #{vstring} is in the version property" do
           preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
           dnf_package "chef_rpm" do
+            options default_options
             version vstring
             action :install
           end.should_not_be_updated
@@ -170,6 +181,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         it "upgrades the rpm when #{vstring} is in the package_name" do
           flush_cache
           dnf_package "chef_rpm-#{vstring}" do
+            options default_options
             action :upgrade
           end.should_be_updated
         end
@@ -177,6 +189,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         it "is idempotent when #{vstring} is in the package_name" do
           preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
           dnf_package "chef_rpm-#{vstring}" do
+            options default_options
             action :upgrade
           end.should_not_be_updated
         end
@@ -184,6 +197,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         it "upgrades the rpm when #{vstring} is in the version property" do
           flush_cache
           dnf_package "chef_rpm" do
+            options default_options
             version vstring
             action :upgrade
           end.should_be_updated
@@ -192,6 +206,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         it "is idempotent when #{vstring} is in the version property" do
           preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
           dnf_package "chef_rpm" do
+            options default_options
             version vstring
             action :upgrade
           end.should_not_be_updated
@@ -202,6 +217,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         it "is idempotent when #{vstring} is in the version property and there is a candidate version" do
           preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
           dnf_package "chef_rpm" do
+            options default_options
             version vstring
             action :install
           end.should_not_be_updated
@@ -213,6 +229,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         it "is idempotent when #{vstring} is in the version property on upgrade and it doesn't match the candidate version" do
           preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
           dnf_package "chef_rpm" do
+            options default_options
             version vstring
             action :upgrade
           end.should_not_be_updated
@@ -224,11 +241,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         it "upgrades when #{vstring} is in the version property on upgrade and it matches the candidate version" do
           preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
           dnf_package "chef_rpm" do
+            options default_options
             version vstring
             action :upgrade
           end.should_be_updated
           expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
           dnf_package "chef_rpm" do
+            options default_options
             version vstring
             action :upgrade
           end.should_not_be_updated
@@ -240,10 +259,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "works with a version" do
         flush_cache
         dnf_package "chef_rpm-1.10" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm-1.10" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -251,10 +272,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "works with an older version" do
         flush_cache
         dnf_package "chef_rpm-1.2" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm-1.2" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -262,10 +285,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "works with an evra" do
         flush_cache
         dnf_package "chef_rpm-0:1.2-1.#{pkg_arch}" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm-0:1.2-1.#{pkg_arch}" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -273,10 +298,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "works with version and release" do
         flush_cache
         dnf_package "chef_rpm-1.2-1" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm-1.2-1" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -284,10 +311,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "works with a version glob" do
         flush_cache
         dnf_package "chef_rpm-1*" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm-1*" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -295,10 +324,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "works with a name glob + version glob" do
         flush_cache
         dnf_package "chef_rp*-1*" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rp*-1*" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -306,10 +337,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "upgrades when the installed version does not match the version string" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm-1.10" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}")
         dnf_package "chef_rpm-1.10" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -317,10 +350,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "downgrades when the installed version is higher than the package_name version" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm-1.2" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm-1.2" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -331,11 +366,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "matches the full version" do
         flush_cache
         dnf_package "chef_rpm" do
+          options default_options
           version "1.10"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.10"
           action :install
         end.should_not_be_updated
@@ -344,11 +381,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "matches with a glob" do
         flush_cache
         dnf_package "chef_rpm" do
+          options default_options
           version "1*"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           version "1*"
           action :install
         end.should_not_be_updated
@@ -357,11 +396,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "matches the vr" do
         flush_cache
         dnf_package "chef_rpm" do
+          options default_options
           version "1.10-1"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.10-1"
           action :install
         end.should_not_be_updated
@@ -370,11 +411,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "matches the evr" do
         flush_cache
         dnf_package "chef_rpm" do
+          options default_options
           version "0:1.10-1"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           version "0:1.10-1"
           action :install
         end.should_not_be_updated
@@ -383,11 +426,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "matches with a vr glob", :rhel_gte_8 do
         flush_cache
         dnf_package "chef_rpm" do
+          options default_options
           version "1.10-1*"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.10-1*"
           action :install
         end.should_not_be_updated
@@ -396,11 +441,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "matches with an evr glob", :rhel_gte_8 do
         flush_cache
         dnf_package "chef_rpm" do
+          options default_options
           version "0:1.10-1*"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           version "0:1.10-1*"
           action :install
         end.should_not_be_updated
@@ -412,11 +459,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         flush_cache
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.2-1"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.2-1"
           action :install
         end.should_not_be_updated
@@ -427,10 +476,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs with 64-bit arch in the name" do
         flush_cache
         dnf_package "chef_rpm.#{pkg_arch}" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm.#{pkg_arch}" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -438,10 +489,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs with 32-bit arch in the name" do
         flush_cache
         dnf_package "chef_rpm.i686" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.i686$")
         dnf_package "chef_rpm.i686" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -449,11 +502,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs with 64-bit arch in the property" do
         flush_cache
         dnf_package "chef_rpm" do
+          options default_options
           arch pkg_arch
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           arch pkg_arch
           action :install
         end.should_not_be_updated
@@ -462,11 +517,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs with 32-bit arch in the property" do
         flush_cache
         dnf_package "chef_rpm" do
+          options default_options
           arch "i686"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.i686$")
         dnf_package "chef_rpm" do
+          options default_options
           arch "i686"
           action :install
         end.should_not_be_updated
@@ -475,11 +532,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs when the 32-bit arch is in the name and the version is in the property" do
         flush_cache
         dnf_package "chef_rpm.i686" do
+          options default_options
           version "1.10-1"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.i686$")
         dnf_package "chef_rpm.i686" do
+          options default_options
           version "1.10-1"
           action :install
         end.should_not_be_updated
@@ -488,11 +547,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs when the 64-bit arch is in the name and the version is in the property" do
         flush_cache
         dnf_package "chef_rpm.#{pkg_arch}" do
+          options default_options
           version "1.10-1"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm.#{pkg_arch}" do
+          options default_options
           version "1.10-1"
           action :install
         end.should_not_be_updated
@@ -503,10 +564,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with nothing installed, it installs the latest version" do
         flush_cache
         dnf_package "chef_rpm >= 1.2" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm >= 1.2" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -514,6 +577,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "when it is met, it does nothing" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm >= 1.2" do
+          options default_options
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
@@ -522,6 +586,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "when it is met, it does nothing" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm >= 1.2" do
+          options default_options
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
@@ -530,10 +595,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with nothing installed, it installs the latest version" do
         flush_cache
         dnf_package "chef_rpm > 1.2" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm > 1.2" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -541,10 +608,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "when it is not met by an installed rpm, it upgrades" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm > 1.2" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm > 1.2" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -552,10 +621,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with an equality constraint, when it is not met by an installed rpm, it upgrades" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm = 1.10" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm = 1.10" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -563,6 +634,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with an equality constraint, when it is met by an installed rpm, it does nothing" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm = 1.2" do
+          options default_options
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
@@ -571,6 +643,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "when it is met by an installed rpm, it does nothing" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm > 1.2" do
+          options default_options
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
@@ -593,10 +666,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a less than constraint, when nothing is installed, it installs" do
         flush_cache
         dnf_package "chef_rpm < 1.10" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm < 1.10" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -604,6 +679,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a less than constraint, when the install version matches, it does nothing" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm < 1.10" do
+          options default_options
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
@@ -612,10 +688,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a less than constraint, when the install version fails, it should downgrade" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm < 1.10" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm < 1.10" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -633,6 +711,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         Chef::Config[:why_run] = true
         flush_cache
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/this-file-better-not-exist.rpm" do
+          options default_options
           action :install
         end
       end
@@ -640,12 +719,14 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs the package when using the source argument" do
         flush_cache
         dnf_package.source("#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm") do
+          options default_options
           package_name "somethingelse"
           name "something"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package.source("#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm") do
+          options default_options
           package_name "somethingelse"
           name "something"
           action :install
@@ -655,10 +736,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs the package when the name is a path to a file" do
         flush_cache
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -666,11 +749,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "downgrade on a local file with allow_downgrade true works" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           version "1.2-1"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           version "1.2-1"
           action :install
         end.should_not_be_updated
@@ -679,6 +764,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "does not downgrade the package with :install" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
@@ -687,6 +773,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "does not upgrade the package with :install" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.10-1.#{pkg_arch}.rpm" do
+          options default_options
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
@@ -695,6 +782,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "is idempotent when the package is already installed" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
@@ -703,6 +791,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "is idempotent when the package is already installed and there is a version string" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           version "1.2-1"
           action :install
         end.should_not_be_updated
@@ -724,10 +813,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         FileUtils.rm_f "/etc/yum.repos.d/chef-dnf-localtesting.repo"
         flush_cache
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -737,11 +828,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs two rpms" do
         flush_cache
         dnf_package [ "chef_rpm.#{pkg_arch}", "chef_rpm.i686" ] do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match(/^chef_rpm-1.10-1.#{pkg_arch}$/)
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match(/^chef_rpm-1.10-1.i686$/)
         dnf_package [ "chef_rpm.#{pkg_arch}", "chef_rpm.i686" ] do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -750,6 +843,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm", "chef_rpm-1.10-1.i686.rpm")
         flush_cache
         dnf_package [ "chef_rpm.#{pkg_arch}", "chef_rpm.i686" ] do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -757,11 +851,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs the second rpm if the first is installed" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package [ "chef_rpm.#{pkg_arch}", "chef_rpm.i686" ] do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match(/^chef_rpm-1.10-1.#{pkg_arch}$/)
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match(/^chef_rpm-1.10-1.i686$/)
         dnf_package [ "chef_rpm.#{pkg_arch}", "chef_rpm.i686" ] do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -769,11 +865,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs the first rpm if the second is installed" do
         preinstall("chef_rpm-1.10-1.i686.rpm")
         dnf_package [ "chef_rpm.#{pkg_arch}", "chef_rpm.i686" ] do
+          options default_options
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match(/^chef_rpm-1.10-1.#{pkg_arch}$/)
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match(/^chef_rpm-1.10-1.i686$/)
         dnf_package [ "chef_rpm.#{pkg_arch}", "chef_rpm.i686" ] do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -782,12 +880,14 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs two rpms with multi-arch" do
         flush_cache
         dnf_package %w{chef_rpm chef_rpm} do
+          options default_options
           arch [pkg_arch, "i686"]
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match(/^chef_rpm-1.10-1.#{pkg_arch}$/)
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match(/^chef_rpm-1.10-1.i686$/)
         dnf_package %w{chef_rpm chef_rpm} do
+          options default_options
           arch [pkg_arch, "i686"]
           action :install
         end.should_not_be_updated
@@ -797,12 +897,14 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs the second rpm if the first is installed (muti-arch)" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package %w{chef_rpm chef_rpm} do
+          options default_options
           arch [pkg_arch, "i686"]
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match(/^chef_rpm-1.10-1.#{pkg_arch}$/)
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match(/^chef_rpm-1.10-1.i686$/)
         dnf_package %w{chef_rpm chef_rpm} do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -811,12 +913,14 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs the first rpm if the second is installed (muti-arch)" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package %w{chef_rpm chef_rpm} do
+          options default_options
           arch [pkg_arch, "i686"]
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match(/^chef_rpm-1.10-1.#{pkg_arch}$/)
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match(/^chef_rpm-1.10-1.i686$/)
         dnf_package %w{chef_rpm chef_rpm} do
+          options default_options
           action :install
         end.should_not_be_updated
       end
@@ -825,6 +929,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "does nothing if both are installed (muti-arch)" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm", "chef_rpm-1.10-1.i686.rpm")
         dnf_package %w{chef_rpm chef_rpm} do
+          options default_options
           arch [pkg_arch, "i686"]
           action :install
         end.should_not_be_updated
@@ -836,7 +941,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         flush_cache
         expect {
           dnf_package "chef_rpm" do
-            options("--disablerepo=chef-dnf-localtesting")
+            options "--nogpgcheck --disablerepo=chef-dnf-localtesting"
             action :install
           end
         }.to raise_error(Chef::Exceptions::Package, /No candidate version available/)
@@ -845,12 +950,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "should work with disablerepo first" do
         flush_cache
         dnf_package "chef_rpm" do
-          options ["--disablerepo=*", "--enablerepo=chef-dnf-localtesting"]
+          options ["--nogpgcheck", "--disablerepo=*", "--enablerepo=chef-dnf-localtesting"]
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
-          options ["--disablerepo=*", "--enablerepo=chef-dnf-localtesting"]
+          options ["--nogpgcheck", "--disablerepo=*", "--enablerepo=chef-dnf-localtesting"]
           action :install
         end.should_not_be_updated
       end
@@ -860,16 +965,18 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         flush_cache
         expect {
           dnf_package "chef_rpm" do
+            options "--nogpgcheck"
             action :install
           end
         }.to raise_error(Chef::Exceptions::Package, /No candidate version available/)
         flush_cache
         dnf_package "chef_rpm" do
-          options("--enablerepo=chef-dnf-localtesting")
+          options "--nogpgcheck --enablerepo=chef-dnf-localtesting"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options "--nogpgcheck --enablerepo=chef-dnf-localtesting"
           action :install
         end.should_not_be_updated
       end
@@ -882,19 +989,19 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         # one rpm we need to do this).
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
-          options "--disablerepo=chef-dnf-localtesting"
+          options "--nogpgcheck --disablerepo=chef-dnf-localtesting"
           action :upgrade
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         # now we're still using the same cache in the dnf_helper.py cache and we test to see if the
         # repo that we temporarily disabled is enabled on this pass.
         dnf_package "chef_rpm-1.10-1.#{pkg_arch}" do
-          options nil
+          options "--nogpgcheck"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm-1.10-1.#{pkg_arch}" do
-          options nil
+          options "--nogpgcheck"
           action :install
         end.should_not_be_updated
       end
@@ -906,11 +1013,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "just work with DNF" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.2"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.2"
           action :install
         end.should_not_be_updated
@@ -919,14 +1028,17 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "throws a deprecation warning with allow_downgrade" do
         Chef::Config[:treat_deprecation_warnings_as_errors] = false
         expect(Chef).to receive(:deprecated).with(:dnf_package_allow_downgrade, /^the allow_downgrade property on the dnf_package provider is not used/)
+        options default_options
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.2"
           allow_downgrade true
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.2"
           allow_downgrade true
           action :install
@@ -938,12 +1050,14 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs the package when using the source argument" do
         flush_cache
         dnf_package "something" do
+          options default_options
           package_name "somethingelse"
           source("#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm")
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "something" do
+          options default_options
           package_name "somethingelse"
           source("#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm")
           action :upgrade
@@ -953,10 +1067,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "installs the package when the name is a path to a file" do
         flush_cache
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -964,10 +1080,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "downgrades the package when allow_downgrade is true" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -975,10 +1093,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "upgrades the package" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.10-1.#{pkg_arch}.rpm" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.10-1.#{pkg_arch}.rpm" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -986,6 +1106,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "is idempotent when the package is already installed" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
@@ -997,6 +1118,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         FileUtils.rm_f "/etc/yum.repos.d/chef-dnf-localtesting.repo"
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
@@ -1006,10 +1128,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         FileUtils.rm_f "/etc/yum.repos.d/chef-dnf-localtesting.repo"
         flush_cache
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -1019,11 +1143,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a full version pin it installs a later package" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.10-1"
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.10-1"
           action :upgrade
         end.should_not_be_updated
@@ -1032,11 +1158,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a full version pin in the name it downgrades the package" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.2-1"
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.2-1"
           action :upgrade
         end.should_not_be_updated
@@ -1045,11 +1173,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a partial (no release) version pin it installs a later package" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.10"
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           version "1.10"
           action :upgrade
         end.should_not_be_updated
@@ -1058,11 +1188,13 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a partial (no release) version pin in the name it downgrades the package" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           version("1.2")
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           version("1.2")
           action :upgrade
         end.should_not_be_updated
@@ -1071,10 +1203,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a full version pin it installs a later package" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm-1.10-1" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm-1.10-1" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -1082,10 +1216,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a full version pin in the name it downgrades the package" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm-1.2-1" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm-1.2-1" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -1093,10 +1229,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a partial (no release) version pin it installs a later package" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm-1.10" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm-1.10" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -1104,10 +1242,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a partial (no release) version pin in the name it downgrades the package" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm-1.2" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm-1.2" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -1115,10 +1255,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a prco equality pin in the name it upgrades a prior package" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm = 1.10" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm = 1.10" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -1126,10 +1268,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a prco equality pin in the name it downgrades a later package" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm = 1.2" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm = 1.2" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -1137,10 +1281,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a > pin in the name and no rpm installed it installs" do
         flush_cache
         dnf_package "chef_rpm > 1.2" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm > 1.2" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -1148,10 +1294,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a < pin in the name and no rpm installed it installs" do
         flush_cache
         dnf_package "chef_rpm < 1.10" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm < 1.10" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -1159,6 +1307,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a > pin in the name and matching rpm installed it does nothing" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm > 1.2" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
@@ -1167,6 +1316,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a < pin in the name and no rpm installed it installs" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm < 1.10" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
@@ -1175,10 +1325,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a > pin in the name and non-matching rpm installed it upgrades" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm > 1.2" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm > 1.2" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -1186,10 +1338,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "with a < pin in the name and non-matching rpm installed it downgrades" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm < 1.10" do
+          options default_options
           action :upgrade
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
         dnf_package "chef_rpm < 1.10" do
+          options default_options
           action :upgrade
         end.should_not_be_updated
       end
@@ -1202,6 +1356,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "does nothing if the package is not installed" do
         flush_cache
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
@@ -1210,6 +1365,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "removes the package if the package is installed" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
@@ -1218,10 +1374,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "does not remove the package twice" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
@@ -1230,10 +1388,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "removes the package if the prior version package is installed" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_not_be_updated
       end
@@ -1242,10 +1402,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         skip "FIXME: should this be fixed or is the current behavior correct?"
         preinstall("chef_rpm-1.10-1.i686.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_not_be_updated
       end
@@ -1254,10 +1416,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         skip "FIXME: should this be fixed or is the current behavior correct?"
         preinstall("chef_rpm-1.2-1.i686.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_not_be_updated
       end
@@ -1268,6 +1432,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "does nothing if the package is not installed" do
         flush_cache
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
@@ -1276,10 +1441,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "removes the package if the package is installed" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_not_be_updated
       end
@@ -1287,10 +1454,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "removes the package if the prior version package is installed" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_not_be_updated
       end
@@ -1298,6 +1467,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "does nothing if the i686 package is installed" do
         preinstall("chef_rpm-1.10-1.i686.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.i686$")
@@ -1306,6 +1476,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "does nothing if the prior version i686 package is installed" do
         preinstall("chef_rpm-1.2-1.i686.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.i686$")
@@ -1317,10 +1488,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "removes only the 32-bit arch if both are installed" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm", "chef_rpm-1.10-1.i686.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_not_be_updated
       end
@@ -1331,10 +1504,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
         FileUtils.rm_f "/etc/yum.repos.d/chef-dnf-localtesting.repo"
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
         dnf_package "chef_rpm" do
+          options default_options
           action :remove
         end.should_not_be_updated
       end
@@ -1353,10 +1528,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
     it "locks an rpm" do
       flush_cache
       dnf_package "chef_rpm" do
+        options default_options
         action :lock
       end.should_be_updated
       expect(shell_out("dnf versionlock list").stdout.chomp).to match("^chef_rpm-0:")
       dnf_package "chef_rpm" do
+        options default_options
         action :lock
       end.should_not_be_updated
     end
@@ -1365,6 +1542,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       flush_cache
       shell_out!("dnf versionlock add chef_rpm")
       dnf_package "chef_rpm" do
+        options default_options
         action :lock
       end.should_not_be_updated
       expect(shell_out("dnf versionlock list").stdout.chomp).to match("^chef_rpm-0:")
@@ -1374,10 +1552,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       flush_cache
       shell_out!("dnf versionlock add chef_rpm")
       dnf_package "chef_rpm" do
+        options default_options
         action :unlock
       end.should_be_updated
       expect(shell_out("dnf versionlock list").stdout.chomp).not_to match("^chef_rpm-0:")
       dnf_package "chef_rpm" do
+        options default_options
         action :unlock
       end.should_not_be_updated
     end
@@ -1385,6 +1565,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
     it "does not unlock an already locked rpm" do
       flush_cache
       dnf_package "chef_rpm" do
+        options default_options
         action :unlock
       end.should_not_be_updated
       expect(shell_out("dnf versionlock list").stdout.chomp).not_to match("^chef_rpm-0:")
@@ -1393,10 +1574,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
     it "check that we can lock based on provides" do
       flush_cache
       dnf_package "chef_rpm_provides" do
+        options default_options
         action :lock
       end.should_be_updated
       expect(shell_out("dnf versionlock list").stdout.chomp).to match("^chef_rpm-0:")
       dnf_package "chef_rpm_provides" do
+        options default_options
         action :lock
       end.should_not_be_updated
     end
@@ -1405,10 +1588,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       flush_cache
       shell_out!("dnf versionlock add chef_rpm")
       dnf_package "chef_rpm_provides" do
+        options default_options
         action :unlock
       end.should_be_updated
       expect(shell_out("dnf versionlock list").stdout.chomp).not_to match("^chef_rpm-0:")
       dnf_package "chef_rpm_provides" do
+        options default_options
         action :unlock
       end.should_not_be_updated
     end
