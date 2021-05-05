@@ -718,14 +718,16 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
 
       it "installs the package when using the source argument" do
         flush_cache
-        dnf_package.source("#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm") do
+        dnf_package "something" do
+          source("#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm")
           options default_options
           package_name "somethingelse"
           name "something"
           action :install
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
-        dnf_package.source("#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm") do
+        dnf_package "something" do
+          source("#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm")
           options default_options
           package_name "somethingelse"
           name "something"
@@ -803,7 +805,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
       it "works when a package is installed" do
         FileUtils.rm_f "/etc/yum.repos.d/chef-dnf-localtesting.repo"
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
-        dnf_pacakge "chef_rpm" do
+        dnf_package "chef_rpm" do
           action :install
         end.should_not_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}$")
@@ -1027,7 +1029,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
 
       it "throws a deprecation warning with allow_downgrade" do
         Chef::Config[:treat_deprecation_warnings_as_errors] = false
-        expect(Chef).to receive(:deprecated).with(:dnf_package_allow_downgrade, /^the allow_downgrade property on the dnf_package provider is not used/)
+        expect(Chef).to receive(:deprecated).at_least(:once).with(:dnf_package_allow_downgrade, /^the allow_downgrade property on the dnf_package provider is not used/)
         options default_options
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
@@ -1352,7 +1354,6 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
 
   describe ":remove" do
     context "vanilla use case" do
-      let(:package_name) { "chef_rpm" }
       it "does nothing if the package is not installed" do
         flush_cache
         dnf_package "chef_rpm" do
@@ -1428,10 +1429,9 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
     end
 
     context "with 64-bit arch", :intel_64bit do
-      let(:package_name) { "chef_rpm.#{pkg_arch}" }
       it "does nothing if the package is not installed" do
         flush_cache
-        dnf_package "chef_rpm" do
+        dnf_package "chef_rpm.#{pkg_arch}" do
           options default_options
           action :remove
         end.should_not_be_updated
@@ -1440,12 +1440,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
 
       it "removes the package if the package is installed" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
-        dnf_package "chef_rpm" do
+        dnf_package "chef_rpm.#{pkg_arch}" do
           options default_options
           action :remove
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
-        dnf_package "chef_rpm" do
+        dnf_package "chef_rpm.#{pkg_arch}" do
           options default_options
           action :remove
         end.should_not_be_updated
@@ -1453,12 +1453,12 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
 
       it "removes the package if the prior version package is installed" do
         preinstall("chef_rpm-1.2-1.#{pkg_arch}.rpm")
-        dnf_package "chef_rpm" do
+        dnf_package "chef_rpm.#{pkg_arch}" do
           options default_options
           action :remove
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^package chef_rpm is not installed$")
-        dnf_package "chef_rpm" do
+        dnf_package "chef_rpm.#{pkg_arch}" do
           options default_options
           action :remove
         end.should_not_be_updated
@@ -1466,7 +1466,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
 
       it "does nothing if the i686 package is installed" do
         preinstall("chef_rpm-1.10-1.i686.rpm")
-        dnf_package "chef_rpm" do
+        dnf_package "chef_rpm.#{pkg_arch}" do
           options default_options
           action :remove
         end.should_not_be_updated
@@ -1475,7 +1475,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
 
       it "does nothing if the prior version i686 package is installed" do
         preinstall("chef_rpm-1.2-1.i686.rpm")
-        dnf_package "chef_rpm" do
+        dnf_package "chef_rpm.#{pkg_arch}" do
           options default_options
           action :remove
         end.should_not_be_updated
@@ -1484,15 +1484,14 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
     end
 
     context "with 32-bit arch", :intel_64bit do
-      let(:package_name) { "chef_rpm.i686" }
       it "removes only the 32-bit arch if both are installed" do
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm", "chef_rpm-1.10-1.i686.rpm")
-        dnf_package "chef_rpm" do
+        dnf_package "chef_rpm.i686" do
           options default_options
           action :remove
         end.should_be_updated
         expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
-        dnf_package "chef_rpm" do
+        dnf_package "chef_rpm.i686" do
           options default_options
           action :remove
         end.should_not_be_updated
