@@ -269,12 +269,12 @@ class Chef
           unless Socket.gethostbyname(Socket.gethostname).first == new_resource.hostname
             converge_by "set hostname to #{new_resource.hostname}" do
               powershell_exec! <<~EOH
-                if ([string]::IsNullOrEmpty(#{new_resource.windows_domain_username})){
+                if ([string]::IsNullOrEmpty(#{new_resource.domain_user})){
                   Rename-Computer -NewName #{new_resource.hostname}
                 }
                 else {
-                  $user = #{new_resource.windows_domain_username}
-                  $secure_password = #{new_resource.windows_user_password} | Convertto-SecureString -AsPlainText -Force
+                  $user = #{new_resource.domain_user}
+                  $secure_password = #{new_resource.domain_password} | Convertto-SecureString -AsPlainText -Force
                   $Credentials = New-Object System.Management.Automation.PSCredential -Argumentlist ($user, $secure_password)
                   Rename-Computer -NewName #{new_resource.hostname} -DomainCredential $Credentials
                 }
