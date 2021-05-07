@@ -96,13 +96,7 @@ $env:Path = $p
 # desktop heap exhaustion seems likely (https://docs.microsoft.com/en-us/archive/blogs/ntdebugging/desktop-heap-overview)
 $exit = 0
 
-bundle exec rspec -f progress --profile -- ./spec/unit
-If ($lastexitcode -ne 0) { $exit = 1 }
-
-bundle exec rspec -f progress --profile -- ./spec/functional
-If ($lastexitcode -ne 0) { $exit = 1 }
-
-bundle exec rspec -f progress --profile -- ./spec/integration
+bundle exec rspec -f progress --profile -- ./spec/functional/resource/windows_env_spec.rb
 If ($lastexitcode -ne 0) { $exit = 1 }
 
 Exit $exit
