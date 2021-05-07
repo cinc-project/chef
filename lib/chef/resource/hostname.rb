@@ -268,7 +268,6 @@ class Chef
 
           unless Socket.gethostbyname(Socket.gethostname).first == new_resource.hostname
             converge_by "set hostname to #{new_resource.hostname}" do
-              sensitive true
               powershell_exec! <<~EOH
                 if ([string]::IsNullOrEmpty(#{new_resource.windows_domain_username})){
                   Rename-Computer -NewName #{new_resource.hostname}
