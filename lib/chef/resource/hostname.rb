@@ -89,11 +89,11 @@ class Chef
         description: "Determines whether or not Windows should be reboot after changing the hostname, as this is required for the change to take effect.",
         default: true
 
-      property :windows_domain_username, String,
-        description: "The domain username with permissions to change the local hostname. Specified in the form of 'Domain\User'"
+      property :domain_user, String,
+        description: "Windows only: The domain username with permissions to change the local hostname. Specified in the form of 'Domain\User'"
 
-      property :windows_user_password, String,
-        description: "The password associated with the domain user account"
+      property :domain_password, String, sensitive: true,
+        description: "Windows only: The password associated with the domain user account"
 
       action_class do
         def append_replacing_matching_lines(path, regex, string)
@@ -268,15 +268,16 @@ class Chef
 
           unless Socket.gethostbyname(Socket.gethostname).first == new_resource.hostname
             converge_by "set hostname to #{new_resource.hostname}" do
+              sensitive true
               powershell_exec! <<~EOH
                 if ([string]::IsNullOrEmpty(#{new_resource.windows_domain_username})){
                   Rename-Computer -NewName #{new_resource.hostname}
                 }
                 else {
                   $user = #{new_resource.windows_domain_username}
-                  $securepassword = #{new_resource.windows_user_password} | Convertto-SecureString -AsPlainText -Force
-                  $Credentials = New-Object System.Management.Automation.PSCredential -Argumentlist ($user, $securepassword)
-                  Rename-Computer -NewName #{new_resource.hostname} -DomainCredential $Credemtials
+                  $secure_password = #{new_resource.windows_user_password} | Convertto-SecureString -AsPlainText -Force
+                  $Credentials = New-Object System.Management.Automation.PSCredential -Argumentlist ($user, $secure_password)
+                  Rename-Computer -NewName #{new_resource.hostname} -DomainCredential $Credentials
                 }
               EOH
             end
