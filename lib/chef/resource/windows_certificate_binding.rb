@@ -23,7 +23,7 @@ class Chef
     class WindowsCertificateBinding < Chef::Resource
       unified_mode true
 
-      provides :windows_certificate
+      provides :windows_certificate_binding
       description "Use the **windows_certificate_binding** resource to..."
       introduced "17.2"
       examples <<~DOC
