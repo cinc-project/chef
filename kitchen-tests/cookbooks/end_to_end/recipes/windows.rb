@@ -187,5 +187,5 @@ windows_certificate "c:/mordor/test-cert.cer" do
 end
 
 windows_certificate_binding "ChefDummyCertForTest" do
-  store_name "root"
+  store_name "ROOT"
 end
