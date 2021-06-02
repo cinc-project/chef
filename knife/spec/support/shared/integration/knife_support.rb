@@ -24,7 +24,7 @@ require "chef/chef_fs/file_system_cache"
 
 module KnifeSupport
   DEBUG = ENV["DEBUG"]
-  def knife(*args, input: nil, instance_filter: nil)
+  def knife(*args, input: nil, instance_filter: nil, capture_init: false)
     # Allow knife('role from file roles/blah.json') rather than requiring the
     # arguments to be split like knife('role', 'from', 'file', 'roles/blah.json')
     # If any argument will have actual spaces in it, the long form is required.
@@ -57,13 +57,21 @@ module KnifeSupport
         subcommand_class = Chef::Knife.subcommand_class_from(args)
         subcommand_class.options = Chef::Application::Knife.options.merge(subcommand_class.options)
         subcommand_class.load_deps
-        instance = subcommand_class.new(args)
+        if capture_init
+          # This ensures that knife is using our UI instance from its instantiation,
+          # which allows us to capture errors that occur during initalization
+          ui = Chef::Knife::UI.new(stdout, stderr, stdin, disable_editing: true)
+          allow(Chef::Knife::UI).to receive(:new).and_return(ui)
+          instance = subcommand_class.new(args)
+        else
+          # Default behavior doesn't ever set an expectation on Knife::UI which can interfere with caller
+          # expectations when they don't know we're already messing with that.
+          instance = subcommand_class.new(args)
+          instance.ui = Chef::Knife::UI.new(stdout, stderr, stdin, instance.config.merge(disable_editing: true))
+        end
 
         # Load configs
         instance.merge_configs
-
-        # Capture stdout/stderr
-        instance.ui = Chef::Knife::UI.new(stdout, stderr, stdin, instance.config.merge(disable_editing: true))
 
         # Don't print stuff
         Chef::Config[:verbosity] = ( DEBUG ? 2 : 0 )
@@ -79,7 +87,7 @@ module KnifeSupport
         # smell right, abort.
 
         # To ensure that we don't pick up a user's credentials file we lie through our teeth about
-        # it's existence.
+        # its existence.
         allow(File).to receive(:file?).and_call_original
         allow(File).to receive(:file?).with(File.expand_path("~/.chef/credentials")).and_return(false)
 
