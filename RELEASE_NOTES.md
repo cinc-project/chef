@@ -1,5 +1,70 @@
 This file holds "in progress" release notes for the current release under development and is intended for consumption by the Chef Documentation team. Please see <https://docs.chef.io/release_notes/> for the official Chef release notes.
 
+## What's New in 17.2
+
+### Chef InSpec 4.37
+
+We've updated Chef InSpec from 4.36.4 to 4.37.8:
+
+#### New Features
+
+- The new `inspec automate` command replaces the `inspec compliance` command, which is now deprecated.
+- Added support for `zfs_pool` and `zfs_dataset` resources on Linux.
+- Improved `port` resource performance: adding more specific search while using `ss` command.
+- Updated the `inspec init plugin` command with the following changes:
+  - The values of flags passed to the `inspec init plugin` command are now wrapped in double quotes instead of single quotes.
+  - Template files are now ERB files.
+  - The `activator` flag replaces the `hook` flag, which is now an alias.
+
+#### Bug Fixes
+
+- Fixed an error when using profile dependencies and require_controls.
+- Fixed the `windows_firewall_rule` resource when it failed to validate more than one rule.
+- The `http` resource response body is now coerced into UTF-8.
+- Modified the `windows_feature` resource to indicate if a feature is enabled rather than just available.
+- `file` resource `more_permissive_than` matcher returns nil instead of throwing exception when file does not exist.
+- `inspec detect --no-color` now returns color-free output.
+
+### Slow Resource Report
+
+TODO: WRITE THIS ONE
+
+Add a slow resources report to chef-client - https://github.com/chef/chef/pull/11642
+
+### Improved YAML Recipe Support
+
+Chef Infra Client now supports YAML recipes that end in `.yaml` in addition to those ending in `.yml`. If a `.yml` and `.yaml` recipe of the same name is present Chef Infra Client will now fail as there is no way to determine which recipe should be loaded in this case.
+
+### Updated Resources
+
+#### homebrew_path
+
+The `homebrew_path` now passed the `homebrew_path` when creating or deleting taps. This prevents failures when running homebrew in a non-standard location or on a M1 system. Thanks [@mattlqx](https://github.com/mattlqx)!
+
+#### hostname
+
+The `hostname` resource now sets the hostname on Windows systems using native PowerShell calls for increased reliability and allows changing the hostname on domain-attached systems. To change the hostname on a domain-attached system pass a domain aministrator account using the new `domain_user` and `domain_password` properties.
+
+#### openssl_x509_certificate
+
+The `openssl_x509_certificate` no longer marks the creation of the X509 certificate file as sensitive since this makes troubleshooting difficult and this content is not actually sensitive. Thanks [@jasonwbarnett](https://github.com/jasonwbarnett)!
+
+#### windows_pagefile
+
+The `windows_pagefile` resource has been refactored to improve performance and to support the latest releases of Windows 10. The behavior of the resource has also been improved to making managing pagefiles more predictable:
+
+The `path` property now accepts a drive letter where the pagefile should be stored in addition to the full path the pagefile on disk. For example `C`, `C:`, or `C:\` can now be used to specify a pagefile stored at `C:\pagefile.sys`.
+
+Creating a new pagefile will no longer disable the system managed pagefile by default. If you wish to create a pagefile while also disabled the system managed pagefile set `system_managed false`.
+
+#### windows_security_policy
+
+The `windows_security_policy` resource now limits the value of `ResetLockoutCount` to any value less than that of `LockoutDuration` rather than limiting it to 30 minutes.
+
+#### windows_firewall_rule
+
+The `windows_firewall_rule` resource now allows specifying multiple allow for multiple IP addresses in the `remote_address` property.
+
 ## What's New in 17.1
 
 ### Compliance Phase Improvements
