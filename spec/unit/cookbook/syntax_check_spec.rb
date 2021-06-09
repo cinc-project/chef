@@ -159,12 +159,19 @@ describe Chef::Cookbook::SyntaxCheck do
       end
 
       describe "and a file has a syntax error" do
+
         before do
           cookbook_path = File.join(CHEF_SPEC_DATA, "cookbooks", "borken")
           syntax_check.cookbook_path.replace(cookbook_path)
         end
 
+        let(:error_message) {
+          "#{File.join(cookbook_path, "recipes", "default.rb")}:1: warning: ... at EOL, should be parenthesized?"
+        } 
+
         it "it indicates that a ruby file has a syntax error" do
+          expect(Chef::Log).to receive(:fatal).with("Cookbook file default.rb has a ruby syntax error.")
+          expect(Chef::Log).to receive(:fatal).with(error_message)
           expect(syntax_check.validate_ruby_files).to be_falsey
         end
 
