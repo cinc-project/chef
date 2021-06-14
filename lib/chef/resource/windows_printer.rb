@@ -1,5 +1,6 @@
 #
 # Author:: Doug Ireton (<doug@1strategy.com>)
+# Author:: Tim Smith (<tsmith@chef.io>)
 # Copyright:: 2012-2018, Nordstrom, Inc.
 # Copyright:: Chef Software, Inc.
 #
@@ -23,7 +24,6 @@ require_relative "../resource"
 class Chef
   class Resource
     # @todo
-    # 1. Allow updating the printer properties
     # 2. Fail with a warning if the port can't be found and create_port is false
     # 3. Fail with helpful messaging if the printer driver can't be installed
     class WindowsPrinter < Chef::Resource
@@ -33,7 +33,7 @@ class Chef
 
       provides(:windows_printer) { true }
 
-      description "Use the **windows_printer** resource to setup Windows printers. This resource will automatically install the driver specified in the `driver_name` property and will automatically create a printer port using either the `ipv4_address` property or the `port_name property."
+      description "Use the **windows_printer** resource to setup Windows printers. This resource will automatically install the driver specified in the `driver_name` property and will automatically create a printer port using either the `ipv4_address` property or the `port_name` property."
       introduced "14.0"
       examples <<~DOC
       **Create a printer**:
@@ -137,22 +137,38 @@ class Chef
         end
       end
 
-      action :create, description: "Create a new printer and printer port, if one doesn't already." do
+      action :create, description: "Create or update a printer." do
+        # Create the printer port first unless the property is set to false
+        if new_resource.create_port
+          windows_printer_port new_resource.port_name do
+            ipv4_address new_resource.ipv4_address
+            port_name new_resource.port_name
+          end
+        end
+
+        converge_if_changed(:driver_name) do
+          powershell_exec!("Add-PrinterDriver -Name '#{new_resource.driver_name}'")
+        end
+
         if current_resource
-          Chef::Log.info "#{@new_resource} already exists - nothing to do."
+          converge_if_changed(:device_id, :comment, :default, :location, :shared, :share_name, :port_name) do
+            # update the printer using PowerShell
+            powershell_exec! <<-EOH
+            Get-WmiObject Win32_Printer -EnableAllPrivileges -filter "DeviceID='#{new_resource.device_id}'" |
+            ForEach-Object{
+                  $_.Comment='#{new_resource.comment}'
+                  $_.Default='#{new_resource.default}'
+                  $_.DriverName='#{new_resource.driver_name}'
+                  $_.Location='$#{new_resource.location}'
+                  $_.PortName='#{new_resource.port_name}'
+                  $_.Shared='#{new_resource.shared}'
+                  $_.ShareName='#{new_resource.share_name}'
+                  $_.Put()
+            }
+            EOH
+          end
         else
-          # Create the printer port first unless the property is set to false
-          if new_resource.create_port
-            windows_printer_port new_resource.port_name do
-              ipv4_address new_resource.ipv4_address
-              port_name new_resource.port_name
-            end
-          end
-
-          converge_by("install driver #{new_resource.driver_name}") do
-            powershell_exec!("Add-PrinterDriver -Name '#{new_resource.driver_name}'")
-          end
-
+          # create a whole new printer using PowerShell
           converge_by("create #{@new_resource.device_id}") do
             powershell_exec! <<-EOH
             Set-WmiInstance -class Win32_Printer `
@@ -171,7 +187,7 @@ class Chef
         end
       end
 
-      action :delete, description: "Delete an existing printer. Note that this resource does not delete the associated printer port." do
+      action :delete, description: "Delete an existing printer. Note that this resource does not delete the associated printer port or remove the driver." do
         if current_resource
           converge_by("Delete #{new_resource.device_id}") do
             powershell_exec!("Remove-Printer -Name '#{new_resource.device_id}'")
