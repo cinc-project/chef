@@ -65,7 +65,7 @@ The `windows_printer` resource has been updated to...
 
 The `chef_client_config` resource has been updated to...
 
-### System Detect Improvements
+### System Detection Improvements
 
 #### virtuozzo Support
 
@@ -76,6 +76,10 @@ The `virtuozzo` platform is now detected as a member of the RHEL platform_family
 A new Ohai optional plugin `:Livepatch` has been added to detect Linux kernel Livepatch modules that have been loaded on a system. This plugin can be enabled on systems using the `ohai_optional_plugins` property in the [chef_client_config resource](https://docs.chef.io/resources/chef_client_config). Thanks for this new plugin [@liu-song-6](https://github.com/liu-song-6)!
 
 ### Package Improvements
+
+#### M1 macOS Monterey Packages
+
+Chef Infra Client packages are now produced for Apple's macOS Monterey preview release. Packages for Intel-based Macs will ship at a later date.
 
 #### Solaris 11.3 EOL / Solaris 11.4 Packages
 
