@@ -1,5 +1,80 @@
 This file holds "in progress" release notes for the current release under development and is intended for consumption by the Chef Documentation team. Please see <https://docs.chef.io/release_notes/> for the official Chef release notes.
 
+## What's New in 17.3
+
+### Compliance Phase Improvements
+
+#### Chef InSpec 4.38
+
+We've updated Chef InSpec from 4.37.23 to 4.38.3:
+
+##### New Features
+
+- Added a new mongodb_conf resource.
+
+##### Bug Fixes
+
+- Changed the Windows local pipe server connection to retry once on EPIPE.
+- Exceptions are now handled correctly in the oracledb_session resource.
+- Fixed the mysql_session resource to raise an exception if there is an error in a connection or query.
+- Fixed the postgres_session resource to raise an exception if there is an error in a connection or query
+
+### Override Runlists with Policyfiles
+
+### New Resources
+
+#### windows_defender
+
+Use the **windows_defender** resource to enable or disable the Microsoft Windows Defender service.
+
+```ruby
+windows_defender 'Configure Defender' do
+  realtime_protection true
+  intrusion_protection_system true
+  lock_ui true
+  scan_archives true
+  scan_scripts true
+  scan_email true
+  scan_removable_drives true
+  scan_network_files false
+  scan_mapped_drives false
+  action :enable
+end
+```
+
+#### windows_defender_exclusion
+
+Use the **windows_defender_exclusion** resource to exclude paths, processes, or file types from Windows Defender realtime protection scanning.
+
+```ruby
+windows_defender_exclusion 'Add to things to be excluded from scanning' do
+  paths 'c:\\foo\\bar, d:\\bar\\baz'
+  extensions 'png, foo, ppt, doc'
+  process_paths 'c:\\windows\\system32'
+  action :add
+end
+```
+
+### Updated Resources
+
+#### windows_printer
+
+The `windows_printer` resource has been updated to...
+
+#### chef_client_config
+
+The `chef_client_config` resource has been updated to...
+
+### Package Improvements
+
+#### Solaris 11.3 EOL / Solaris 11.4 Packages
+
+Oracle Solaris 11.3 became end-of-life (EOL) in January 2021. Chef Infra Client packages are no longer produced for Solaris 11.3 and new Solaris 11.4 packags are available in their place.
+
+#### FIPS on PPC RHEL
+
+Failures initializing Chef Infra Client on FIPS enabled PowerPC RHEL systems have been resolved.
+
 ## What's New in 17.2
 
 ### Compliance Phase Improvements
