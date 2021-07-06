@@ -59,7 +59,22 @@ end
 
 #### windows_printer
 
-The `windows_printer` resource has been updated to...
+The `windows_printer` resource has been updated to better load the current state of the printer and to allow controlling the creation of the printer port. The resource now includes a `create_port` property that allows skipping the creation of the printer port and a `port_name` property that allows specifying the name of the port to use. With these new properties, users can create advanced printer ports using the `windows_printer_port` resource and then attach a new printer to those ports using the `windows_printer` resource.
+
+```ruby
+windows_printer_port '10.4.64.39' do
+  port_name 'My awesome printer port'
+  snmp_enabled true
+  port_protocol 2
+end
+
+windows_printer 'HP LaserJet 5th Floor' do
+  driver_name 'HP LaserJet 4100 Series PCL6'
+  port_name 'My awesome printer port'
+  ipv4_address '10.4.64.38'
+  create_port false
+end
+```
 
 #### chef_client_config
 
