@@ -21,13 +21,13 @@ require_relative "exceptions"
 class Chef
   class SecretFetcher
 
-    SECRET_FETCHERS = [ :example ].freeze
+    SECRET_FETCHERS = [ :example, :aws_secrets_manager ].freeze
 
     # Returns a configured and validated instance
     # of a [Chef::SecretFetcher::Base]  for the given
     # service and configuration.
     #
-    # @param service [Symbol] the identifier for the service that will support this request. Must be in
+    # @param service [Symbol] the identifier for the service that will suppor this request. Must be in
     #                         SECRET_FETCHERS
     # @param config [Hash] configuration that the secrets service requires
     def self.for_service(service, config)
@@ -35,6 +35,9 @@ class Chef
                 when :example
                   require_relative "secret_fetcher/example"
                   Chef::SecretFetcher::Example.new(config)
+                when :aws_secrets_manager
+                  require_relative "secret_fetcher/aws_secrets_manager"
+                  Chef::SecretFetcher::AWSSecretsManager.new(config)
                 when nil, ""
                   raise Chef::Exceptions::Secret::MissingFetcher.new(SECRET_FETCHERS)
                 else
