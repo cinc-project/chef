@@ -11,6 +11,8 @@ server-testing:
   stage: test
   variables:
     CINC_REF: $CI_COMMIT_REF_NAME
+    # XXX: Temporary for debugging
+    OMNIBUS_LOG_LEVEL: debug
   trigger:
     project: cinc-project/distribution/client
     strategy: depend
