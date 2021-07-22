@@ -86,7 +86,7 @@ module ChefUtils
 
       # The legacy conf folder: C:/opscode/chef. Specifically the "opscode" part
       # DIR_SUFFIX is appended to it in code where relevant
-      LEGACY_CONF_DIR = "cincproject"
+      LEGACY_CONF_DIR = "cinc-project"
 
       # Enable forcing Chef EULA
       ENFORCE_LICENSE = false
