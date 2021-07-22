@@ -17,6 +17,7 @@
 #
 
 require_relative "base"
+require "aws-sdk-core"
 require "aws-sdk-secretsmanager"
 
 class Chef
@@ -26,19 +27,31 @@ class Chef
   # It is possible to pass options that configure it to use alternative credentials.
   # This implementation supports fetching with version.
   #
-  # NOTE: This does not yet support automatic retries, which the AWS client does by default.
+  # @note ':region' is required configuration.  If it is not explicitly provided,
+  # and it is not available via global AWS config, we will pull it from node ohai data by default.
+  # If this isn't correct, you iwll need to explicitly override it.
+  # If it is not available via ohai data either (such as if you have the AWS plugin disabled)
+  # then the converge will fail with an error.
+  #
+  # @note: This does not yet support automatic retries, which the AWS client does by default.
   #
   # For configuration options see https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/SecretsManager/Client.html#initialize-instance_method
   #
-  # Note that ~/.aws default and environment-based configurations are supported by default in the
-  # ruby SDK.
   #
   # Usage Example:
   #
-  # fetcher = SecretFetcher.for_service(:aws_secrets_manager, { region: "us-east-1" })
+  # fetcher = SecretFetcher.for_service(:aws_secrets_manager)
   # fetcher.fetch("secretkey1", "v1")
   class SecretFetcher
     class AWSSecretsManager < Base
+      def validate!
+        region = config[:region] || Aws.config[:region] || run_context.node["ec2"]["region"]
+        if region.nil?
+          raise Chef::Exceptions::ConfigurationInvalid.new("Missing required config for AWS secret fetcher: :region")
+        end
+        config[:region] = region
+      end
+
       # @param identifier [String] the secret_id
       # @param version [String] the secret version. Not usd at this time
       # @return Aws::SecretsManager::Types::GetSecretValueResponse
