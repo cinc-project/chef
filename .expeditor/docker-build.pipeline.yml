@@ -5,17 +5,9 @@ steps:
 - label: ":docker: build chef amd64"
   agents:
     queue: docker-linux
-  command:
-    - docker build --build-arg CHANNEL=$$EXPEDITOR_CHANNEL --build-arg VERSION=$$EXPEDITOR_VERSION -t chef/chef:$$EXPEDITOR_VERSION-amd64 .
-    - docker push chef/chef:$$EXPEDITOR_VERSION-amd64
-    - docker manifest create chef/chef:$$EXPEDITOR_CHANNEL --amend chef/chef:$$EXPEDITOR_VERSION-amd64
-    - docker manifest push chef/chef:$$EXPEDITOR_VERSION
+  command: .expeditor/build-docker-images.sh amd64
 
 - label: ":docker: build chef arm64"
   agents:
     queue: docker-linux-arm64
-  command:
-    - docker build --build-arg CHANNEL=$$EXPEDITOR_CHANNEL --build-arg VERSION=$$EXPEDITOR_VERSION -t chef/chef:$$EXPEDITOR_VERSION-arm64 .
-    - docker push chef/chef:$$EXPEDITOR_VERSION-arm64
-    - docker manifest create chef/chef:$$EXPEDITOR_CHANNEL --amend chef/chef:$$EXPEDITOR_VERSION-arm64
-    - docker manifest push chef/chef:$$EXPEDITOR_VERSION
+  command: .expeditor/build-docker-images.sh arm64

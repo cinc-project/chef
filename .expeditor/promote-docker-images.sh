@@ -1,18 +1,8 @@
 #! /bin/bash
 
-# EXPEDITOR_TARGET_CHANNEL - where we're going, we dont need roads
-# EXPEDITOR_PROMOTABLE - the version or channel
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
 VERSION=$(cat VERSION)
-
-echo "--- Creating manifest for ${VERSION}"
-docker manifest create "chef/chef:${VERSION}" \
-  --amend "chef/chef:${VERSION}-arm64" \
-  --amend "chef/chef:${VERSION}-amd64"
-
-echo "--- Pushing manifest for ${VERSION}"
-docker manifest push "chef/chef:${VERSION}"
 
 echo "--- Creating manifest for ${EXPEDITOR_TARGET_CHANNEL}"
 docker manifest create "chef/chef:${EXPEDITOR_TARGET_CHANNEL}" \
