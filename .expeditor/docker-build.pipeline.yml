@@ -1,6 +1,4 @@
 ---
-env:
-  DOCKER_CLI_EXPERIMENTAL: enabled
 steps:
 - label: ":docker: build chef amd64"
   agents:
