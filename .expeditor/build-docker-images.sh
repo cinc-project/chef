@@ -1,4 +1,7 @@
 #! /bin/bash
+
+export DOCKER_CLI_EXPERIMENTAL=enabled
+
 arch=$1
 
 echo "--- Building chef/chef:${EXPEDITOR_VERSION} docker image for ${arch}"
