@@ -60,6 +60,7 @@ class Chef
       # Run the compile phase of the chef run. Loads files in the following order:
       # * Libraries
       # * Ohai
+      # * Compliance Profiles/Waivers
       # * Attributes
       # * LWRPs
       # * Resource Definitions
@@ -73,6 +74,7 @@ class Chef
       def compile
         compile_libraries
         compile_ohai_plugins
+        complie_compliance
         compile_attributes
         compile_lwrps
         compile_resource_definitions
@@ -132,6 +134,14 @@ class Chef
         end
 
         @events.ohai_plugin_load_complete
+      end
+
+      def compile_compliance
+        @events.compliance_load_start
+        cookbook_order.each do |cookbook|
+          load_compliance_from_cookbook(cookbook)
+        end
+        @events.compliance_load_end
       end
 
       # Loads attributes files from cookbooks. Attributes files are loaded
@@ -285,6 +295,14 @@ class Chef
 
           FileUtils.mkdir_p(File.dirname(target_name))
           FileUtils.cp(filename, target_name)
+        end
+      end
+
+      def load_compliance_from_cookbook(cookbook_name)
+        files_in_cookbook_by_segment(cookbook_name, :compliance).each do |filename|
+          logger.warn "Compliance compiler found #{filename} from #{cookbook_name}"
+          # if its a waiver, create a waiver record
+          # if its a profile, create a profile record
         end
       end
 
