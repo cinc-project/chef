@@ -124,6 +124,9 @@ class Chef
     #
     attr_accessor :action_collection
 
+    attr_accessor :waiver_collection
+    attr_accessor :profile_collection
+
     # Pointer back to the Chef::Runner that created this
     #
     attr_accessor :runner
@@ -688,6 +691,8 @@ class Chef
         node
         node=
         open_stream
+        profile_collection
+        profile_collection=
         reboot_info
         reboot_info=
         reboot_requested?
@@ -700,6 +705,8 @@ class Chef
         transport
         transport_connection
         unreachable_cookbook?
+        waiver_collection
+        waiver_collection=
       }
 
       def initialize(parent_run_context)

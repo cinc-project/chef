@@ -12,6 +12,8 @@ class Chef
 
       attr_accessor :run_id
       attr_reader :node
+      attr_reader :run_context
+
       def_delegators :node, :logger
 
       def enabled?
@@ -25,7 +27,9 @@ class Chef
         logger.debug("#{self.class}##{__method__}: audit cookbook? #{audit_cookbook_present}")
         logger.debug("#{self.class}##{__method__}: compliance phase attr? #{node["audit"]["compliance_phase"]}")
 
-        if node["audit"]["compliance_phase"].nil?
+        if safe_profile_collection&.using_profiles?
+          true
+        elsif node["audit"]["compliance_phase"].nil?
           inspec_profiles.any? && !audit_cookbook_present
         else
           node["audit"]["compliance_phase"]
@@ -39,6 +43,14 @@ class Chef
 
       def node_load_completed(node, _expanded_run_list, _config)
         self.node = node
+      end
+
+      # This hook gives us the run_context immediately after it is created so that we can wire up this object to it.
+      #
+      # (see EventDispatch::Base#)
+      #
+      def cookbook_compilation_start(run_context)
+        @run_context = run_context
       end
 
       def run_started(run_status)
@@ -132,6 +144,7 @@ class Chef
         {
           backend_cache: node["audit"]["inspec_backend_cache"],
           inputs: inputs,
+          # color: true,
           logger: logger,
           output: node["audit"]["quiet"] ? ::File::NULL : STDOUT,
           report: true,
@@ -142,15 +155,26 @@ class Chef
         }
       end
 
+      def waiver_files
+        from_attributes = Array(node["audit"]["waiver_file"])
+        from_cookbooks = safe_waiver_collection&.active_waiver_files || []
+
+        from_attributes + from_cookbooks
+      end
+
       def inspec_profiles
         profiles = node["audit"]["profiles"]
         unless profiles.respond_to?(:map) && profiles.all? { |_, p| p.respond_to?(:transform_keys) && p.respond_to?(:update) }
           raise "CMPL010: #{Inspec::Dist::PRODUCT_NAME} profiles specified in an unrecognized format, expected a hash of hashes."
         end
 
-        profiles.map do |name, profile|
+        from_attributes = profiles.map do |name, profile|
           profile.transform_keys(&:to_sym).update(name: name)
-        end
+        end || []
+
+        from_cookbooks = safe_profile_collection&.for_inspec || []
+
+        from_attributes + from_cookbooks
       end
 
       def load_fetchers!
@@ -168,6 +192,7 @@ class Chef
         load_fetchers!
 
         logger.debug "Options are set to: #{opts}"
+        pp opts
         runner = ::Inspec::Runner.new(opts)
 
         if profiles.empty?
@@ -315,6 +340,14 @@ class Chef
         end
 
         @validation_passed = true
+      end
+
+      def safe_profile_collection
+        run_context&.profile_collection
+      end
+
+      def safe_waiver_collection
+        run_context&.waiver_collection
       end
     end
   end

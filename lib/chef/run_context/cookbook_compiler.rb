@@ -22,6 +22,8 @@ require_relative "../recipe"
 require_relative "../resource/lwrp_base"
 require_relative "../provider/lwrp_base"
 require_relative "../resource_definition_list"
+require_relative "../compliance/waiver_collection"
+require_relative "../compliance/profile_collection"
 
 class Chef
   class RunContext
@@ -32,6 +34,7 @@ class Chef
       attr_reader :events
       attr_reader :run_list_expansion
       attr_reader :logger
+      attr_reader :run_context
 
       def initialize(run_context, run_list_expansion, events)
         @run_context = run_context
@@ -39,22 +42,32 @@ class Chef
         @run_list_expansion = run_list_expansion
         @cookbook_order = nil
         @logger = run_context.logger.with_child(subsystem: "cookbook_compiler")
+        run_context.waiver_collection = Chef::Compliance::WaiverCollection.new
+        run_context.profile_collection = Chef::Compliance::ProfileCollection.new
       end
 
       # Chef::Node object for the current run.
       def node
-        @run_context.node
+        run_context.node
       end
 
       # Chef::CookbookCollection object for the current run
       def cookbook_collection
-        @run_context.cookbook_collection
+        run_context.cookbook_collection
       end
 
       # Resource Definitions from the compiled cookbooks. This is populated by
       # calling #compile_resource_definitions (which is called by #compile)
       def definitions
-        @run_context.definitions
+        run_context.definitions
+      end
+
+      def waiver_collection
+        run_context.waiver_collection
+      end
+
+      def profile_collection
+        run_context.profile_collection
       end
 
       # Run the compile phase of the chef run. Loads files in the following order:
@@ -74,7 +87,7 @@ class Chef
       def compile
         compile_libraries
         compile_ohai_plugins
-        complie_compliance
+        compile_compliance
         compile_attributes
         compile_lwrps
         compile_resource_definitions
@@ -141,7 +154,7 @@ class Chef
         cookbook_order.each do |cookbook|
           load_compliance_from_cookbook(cookbook)
         end
-        @events.compliance_load_end
+        @events.compliance_load_complete
       end
 
       # Loads attributes files from cookbooks. Attributes files are loaded
@@ -181,7 +194,7 @@ class Chef
         run_list_expansion.recipes.each do |recipe|
 
           path = resolve_recipe(recipe)
-          @run_context.load_recipe(recipe)
+          run_context.load_recipe(recipe)
           @events.recipe_file_loaded(path, recipe)
         rescue Chef::Exceptions::RecipeNotFound => e
           @events.recipe_not_found(e)
@@ -299,10 +312,13 @@ class Chef
       end
 
       def load_compliance_from_cookbook(cookbook_name)
-        files_in_cookbook_by_segment(cookbook_name, :compliance).each do |filename|
-          logger.warn "Compliance compiler found #{filename} from #{cookbook_name}"
-          # if its a waiver, create a waiver record
-          # if its a profile, create a profile record
+        each_file_in_cookbook_by_segment(cookbook_name, :compliance, [ "profiles/**/inspec.yml", "profiles/**/inspec.yaml" ]) do |filename|
+          profile_collection.from_file(filename, cookbook_name)
+          logger.warn "Compliance compiler found profile #{filename} from #{cookbook_name}"
+        end
+        each_file_in_cookbook_by_segment(cookbook_name, :compliance, [ "waivers/**/*.yml", "waivers/**/*.yaml" ]) do |filename|
+          waiver_collection.from_file(filename, cookbook_name)
+          logger.warn "Compliance compiler found waiver #{filename} from #{cookbook_name}"
         end
       end
 
