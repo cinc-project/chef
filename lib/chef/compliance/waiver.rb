@@ -19,13 +19,15 @@ require "yaml"
 
 class Chef
   module Compliance
-    attr_accessor :enabled
-    attr_accessor :cookbook
-
     class Waiver
-      def initialize(data, cookbook)
+      attr_accessor :enabled
+      attr_accessor :cookbook_name
+      attr_accessor :path
+
+      def initialize(data, path, cookbook_name)
         @data = data
-        @cookbook = cookbook
+        @cookbook_name = cookbook_name
+        @path = path
         @enabled = false
       end
 
@@ -41,18 +43,20 @@ class Chef
         @enabled = false
       end
 
-      def for_inspec; end
-
-      def self.from_hash(hash, cookbook = nil)
-        new(hash, cookbook)
+      def for_inspec
+        path
       end
 
-      def self.from_yaml(string, cookbook = nil)
-        from_hash(YAML.load(string), cookbook)
+      def self.from_hash(hash, path, cookbook_name = nil)
+        new(hash, path, cookbook_name)
       end
 
-      def self.from_file(filename, cookbook)
-        from_yaml(IO.read(filename), cookbook)
+      def self.from_yaml(string, path, cookbook_name = nil)
+        from_hash(YAML.load(string), path, cookbook_name)
+      end
+
+      def self.from_file(filename, cookbook_name = nil)
+        from_yaml(IO.read(filename), filename, cookbook_name)
       end
     end
   end

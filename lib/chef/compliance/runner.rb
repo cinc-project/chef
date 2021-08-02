@@ -144,20 +144,19 @@ class Chef
         {
           backend_cache: node["audit"]["inspec_backend_cache"],
           inputs: inputs,
-          # color: true,
           logger: logger,
           output: node["audit"]["quiet"] ? ::File::NULL : STDOUT,
           report: true,
           reporter: ["json-automate"],
           reporter_backtrace_inclusion: node["audit"]["result_include_backtrace"],
           reporter_message_truncation: node["audit"]["result_message_limit"],
-          waiver_file: Array(node["audit"]["waiver_file"]),
+          waiver_file: waiver_files,
         }
       end
 
       def waiver_files
         from_attributes = Array(node["audit"]["waiver_file"])
-        from_cookbooks = safe_waiver_collection&.active_waiver_files || []
+        from_cookbooks = safe_waiver_collection&.for_inspec || []
 
         from_attributes + from_cookbooks
       end

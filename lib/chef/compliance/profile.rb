@@ -62,7 +62,7 @@ class Chef
         from_hash(YAML.load(string), path, cookbook_name)
       end
 
-      def self.from_file(filename, cookbook_name)
+      def self.from_file(filename, cookbook_name = nil)
         from_yaml(IO.read(filename), filename, cookbook_name)
       end
     end

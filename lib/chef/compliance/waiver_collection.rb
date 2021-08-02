@@ -28,23 +28,23 @@ class Chef
         select(&:enabled?).each_with_object([]) { |waiver, arry| arry << waiver.for_inspec }
       end
 
-      def include_profile(arg)
-        (cookbook_name, profile_name) = arg.split("::")
-        profiles = nil
+      def include_waiver(arg)
+        (cookbook_name, waiver_name) = arg.split("::")
+        waivers = nil
 
-        if profile_name.nil?
-          profiles = select { |profile| /^#{cookbook_name}$/.match?(profile.cookbook_name) }
-          if profiles.empty?
-            raise "No inspec profiles found in cookbooks matching #{cookbook_name}"
+        if waiver_name.nil?
+          waivers = select { |waiver| /^#{cookbook_name}$/.match?(waiver.cookbook_name) }
+          if waivers.empty?
+            raise "No inspec waivers found in cookbooks matching #{cookbook_name}"
           end
         else
-          profiles = select { |profile| /^#{cookbook_name}$/.match?(profile.cookbook_name) && /^#{profile_name}$/.match?(profile.name) }
-          if profiles.empty?
-            raise "No inspec profiles matching #{profile_name} found in cookbooks matching #{cookbook_name}"
+          waivers = select { |waiver| /^#{cookbook_name}$/.match?(waiver.cookbook_name) && /^#{waiver_name}$/.match?(waiver.name) }
+          if waivers.empty?
+            raise "No inspec waivers matching #{waiver_name} found in cookbooks matching #{cookbook_name}"
           end
         end
 
-        profiles.each(&:enable!)
+        waivers.each(&:enable!)
       end
     end
   end
