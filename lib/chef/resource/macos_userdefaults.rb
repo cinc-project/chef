@@ -105,12 +105,6 @@ class Chef
       load_current_value do |new_resource|
         Chef::Log.debug "#load_current_value: attempting to read \"#{new_resource.domain}\" value from preferences to determine state"
 
-        if valid_key?(new_resource)
-          key new_resource.key
-        else
-          current_value_does_not_exist!
-        end
-
         value get_preference(new_resource)
       end
 
@@ -168,13 +162,6 @@ class Chef
           value
         end
       end
-
-      def valid_key?(new_resource)
-        user = to_cf_user new_resource.user
-        host = to_cf_host new_resource.host
-        CF::Preferences.valid_key?(new_resource.key, new_resource.domain, user, host)
-      end
-
     end
   end
 end
