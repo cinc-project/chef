@@ -23,6 +23,11 @@ require_relative "node"
 require_relative "resources"
 require_relative "json_compat"
 
+# We need to require providers  so that we can resolve
+# action documentation that may have been defined on the providers
+# instead of the resources.
+require_relative "providers"
+
 class Chef
   module ResourceInspector
     def self.get_default(default)
@@ -39,11 +44,10 @@ class Chef
     def self.extract_resource(resource, complete = false)
       data = {}
       data[:description] = resource.description
-      # data[:deprecated] = resource.deprecated || false
       data[:default_action] = resource.default_action
       data[:actions] = {}
       resource.allowed_actions.each do |action|
-        data[:actions][action] = resource.action_description(action)
+        data[:actions][action] = resolve_action_description(resource, action)
       end
 
       data[:examples] = resource.examples
@@ -67,6 +71,20 @@ class Chef
                  equal_to: sort_equal_to(opts[:equal_to]) }
       end
       data
+    end
+
+    def self.resolve_action_description(resource, action)
+      resource.action_description(action) ||
+        resource.new(resource.name, nil).provider_for_action(action).class.action_description(action)
+    rescue NameError => e
+      # Some providers will only properly load when the platform is correct -
+      # so for exmaple, we'll fail on some Windows resources because we don't
+      # invoke Windows platform-specific requires when not on Windows.
+      raise unless e.message =~ /uninitialized constant/
+    rescue Chef::Exceptions::ProviderNotFound
+      # Providers that are platform-specific won't correctly resolve,
+      # because we don't provide any platform information to resolve them.
+      nil
     end
 
     def self.sort_equal_to(equal_to)
