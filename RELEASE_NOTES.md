@@ -1,5 +1,81 @@
 This file holds "in progress" release notes for the current release under development and is intended for consumption by the Chef Documentation team. Please see <https://docs.chef.io/release_notes/> for the official Chef release notes.
 
+## What's New in 17.4
+
+### Compliance Phase Improvements
+
+#### Chef InSpec 4.41.2
+
+Chef InSpec has been updated from 4.38.3 to 4.41.2 with the following improvements for Compliance Phase
+
+- New OPA resources opa_cli and opa_api
+- New mongodb_session resource
+- Filter active controls in profile by tags
+- Remove default port for mssql_session, allowing named connections
+- Update postgresql resources to normalize it for platform supports
+- Oracle Session Exception Handling
+- Waiver file expiration dates misinterpretation fix
+
+#### Chef Attribute Integration
+
+https://github.com/chef/chef/pull/11874
+
+#### Rename InSpec Attributes to Inputs
+
+https://github.com/chef/chef/pull/11882/files
+
+### Secrets Manager Integration
+
+We've updated our beta secrets management integration helper to make it easier to fetch secrets from AWS Secrets Manager and Azure Key Vault. We'd still love to hear from you if you are integrating Chef Infra with a secrets management system or you'd like to do so in the future. E-mail us at secrets_management_beta@progress.com.
+
+#### Simpler Azure Key Vault Names Declaration
+
+https://github.com/chef/chef/pull/11867
+
+#### AWS Default to Node's Region in AWS Secrets Manager
+
+When fetching secrets from AWS Secrets Manager the `secrets` helper will now default to fetch secrets from the region where the node resides. You can still specify the region if you'd like to fetch secrets from another region:
+
+**Using Node Region**
+
+```ruby
+secret(name: 'test1', service: :aws_secrets_manager)
+```
+
+**Specifying AWS Region**
+
+```ruby
+secret(name: 'test1', service: :aws_secrets_manager, config: { region: 'us-west-2' })
+```
+
+https://github.com/chef/chef/pull/11853
+
+### Resource Updates
+
+#### group
+
+https://github.com/chef/chef/pull/11927
+
+#### homebrew_cask
+
+https://github.com/chef/chef/pull/11842
+
+#### rhsm_subscription
+
+https://github.com/chef/chef/pull/11534
+
+#### systemd_unit
+
+https://github.com/chef/chef/pull/11856
+
+#### user
+
+https://github.com/chef/chef/pull/11925
+
+#### yum_repository
+
+https://github.com/chef/chef/pull/11661
+
 ## What's New in 17.3
 
 ### Compliance Phase Improvements
