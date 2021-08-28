@@ -8,7 +8,7 @@ This changelog lists individual merged pull requests to Chef Infra Client and ge
 - Revert experimental/debug code [#11974](https://github.com/chef/chef/pull/11974) ([marcparadise](https://github.com/marcparadise))
 <!-- latest_release -->
 
-<!-- release_rollup since=17.4.25 -->
+<!-- release_rollup since=17.4.38 -->
 ### Changes not yet released to stable
 
 #### Merged Pull Requests
@@ -28,6 +28,24 @@ This changelog lists individual merged pull requests to Chef Infra Client and ge
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v17.4.38](https://github.com/chef/chef/tree/v17.4.38) (2021-08-28)
+
+#### Merged Pull Requests
+- testing main [#11947](https://github.com/chef/chef/pull/11947) ([lamont-granquist](https://github.com/lamont-granquist))
+- Improve phase logging [#11946](https://github.com/chef/chef/pull/11946) ([tas50](https://github.com/tas50))
+- Fix Test Kitchen tests [#11949](https://github.com/chef/chef/pull/11949) ([tas50](https://github.com/tas50))
+- Other fixes for branch renaming [#11948](https://github.com/chef/chef/pull/11948) ([lamont-granquist](https://github.com/lamont-granquist))
+- More updates to logging wording [#11951](https://github.com/chef/chef/pull/11951) ([tas50](https://github.com/tas50))
+- Remove the yanked parallel 1.20.2 gem [#11954](https://github.com/chef/chef/pull/11954) ([tas50](https://github.com/tas50))
+- Update libarchive to 3.5.2 [#11958](https://github.com/chef/chef/pull/11958) ([tas50](https://github.com/tas50))
+- Bump chef/ohai to 17.5.1 [#11959](https://github.com/chef/chef/pull/11959) ([chef-expeditor[bot]](https://github.com/chef-expeditor[bot]))
+- Update pipeline references from master -&gt; main [#11967](https://github.com/chef/chef/pull/11967) ([marcparadise](https://github.com/marcparadise))
+- Downgraded the Log level to warn as per AHA idea I-25 [#11945](https://github.com/chef/chef/pull/11945) ([rgjoshi24](https://github.com/rgjoshi24))
+- Bump chef/ohai to d7b28f39f6ef17ba20d2cc0ddbdb62e40b02d8bd [#11972](https://github.com/chef/chef/pull/11972) ([chef-expeditor[bot]](https://github.com/chef-expeditor[bot]))
+- Update openssl on macOS to 1.1.1l [#11973](https://github.com/chef/chef/pull/11973) ([tas50](https://github.com/tas50))
+- Revert experimental/debug code [#11974](https://github.com/chef/chef/pull/11974) ([marcparadise](https://github.com/marcparadise))
+<!-- latest_stable_release -->
+
 ## [v17.4.25](https://github.com/chef/chef/tree/v17.4.25) (2021-08-23)
 
 #### Merged Pull Requests
@@ -61,7 +79,6 @@ This changelog lists individual merged pull requests to Chef Infra Client and ge
 - Fix failures in mac_user when not all user fields are present [#11925](https://github.com/chef/chef/pull/11925) ([tas50](https://github.com/tas50))
 - Update InSpec to 4.41 [#11943](https://github.com/chef/chef/pull/11943) ([tas50](https://github.com/tas50))
 - Remove the default json logger from the compliance API [#11924](https://github.com/chef/chef/pull/11924) ([lamont-granquist](https://github.com/lamont-granquist))
-<!-- latest_stable_release -->
 
 ## [v17.3.48](https://github.com/chef/chef/tree/v17.3.48) (2021-07-21)
 
