@@ -345,9 +345,11 @@ describe Chef::Resource::Link do
             let(:test_user) { "test-link-user" }
             before do
               user(test_user).run_action(:create)
+              sleep 2 if aix? && (ohai[:platform_version] == "7.2")
             end
             after do
               user(test_user).run_action(:remove)
+              sleep 2 if aix? && (ohai[:platform_version] == "7.2")
             end
             before(:each) do
               resource.owner(test_user)
