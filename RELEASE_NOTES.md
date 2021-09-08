@@ -1,5 +1,59 @@
 This file holds "in progress" release notes for the current release under development and is intended for consumption by the Chef Documentation team. Please see <https://docs.chef.io/release_notes/> for the official Chef release notes.
 
+## What's New in 17.5
+
+### Compliance Phase Improvements
+
+#### InSpec Profiles Within Cookbooks
+
+#### Chef Inspec 4.
+
+### Secrets Management Beta
+
+Our secrets management beta within Chef Infra Client has been updated to support HashiCorp Vault secrets. These can fetched using the new `secrets` helper using either AWS IAM authentication or token based authentication.
+
+**Fetching Secrets From HashiCorp Vault Using AWS IAM**
+
+```ruby
+secret(name: "secret/example", 
+      service: :hashi_vault,
+      config: {
+        vault_addr: "vault.example.com",
+        role_name: "example-role"
+      })
+```
+
+**Fetching Secrets From HashiCorp Vault Using Tokens**
+
+```ruby
+secret(name: "secret/example", 
+      service: :hashi_vault,
+      config: {
+        vault_addr: "vault.example.com",
+        token: "123456"
+      })
+```
+
+### Resource Updates
+
+#### ulimit
+
+The `ulimit` resource now supports setting `sensitive true` to prevent logging ulimit data as it is written to disk.
+
+#### windows_uac
+
+The `windows_uac` resource now sets the proper registry key value when using the `consent_behavior_users` property. Thanks for reporting this [@ahembree](https://github.com/ahembree)!
+
+#### windows_user_privilege
+
+The `windows_user_privilege` resource no longer fails with an error stating that the `privilege` property needs to be set, even if it is set.
+
+### Security
+
+#### OpenSSL 1.0.2za
+
+OpenSSL has been updated from 1.0.2y to 1.0.2za to resolve [CVE-2021-3712](https://nvd.nist.gov/vuln/detail/CVE-2021-3712).
+
 ## What's New in 17.4.38
 
 ### Bug fixes
