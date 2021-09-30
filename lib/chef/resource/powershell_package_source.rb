@@ -138,7 +138,7 @@ class Chef
         description: "Whether or not to trust packages from this source. Used when creating a NON-PSRepository Package Source",
         default: false
 
-      property :user, introduced: "17.5.23", String,
+      property :user, introduced: "17.6", String,
         description: "A username that, as part of a credential object, is used to register a repository or other package source with."
 
       property :password, introduced: "17.6", String,
