@@ -117,7 +117,7 @@ class Chef
         description: "A label that names your package source.",
         name_property: true
 
-      property :new_name, introduced: "17.5.23", String,
+      property :new_name, introduced: "17.6", String,
         description: "Used to change the name of a standard PackageSource."
 
       property :source_location, introduced: "17.6", String,
