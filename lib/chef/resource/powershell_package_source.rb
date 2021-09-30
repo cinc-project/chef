@@ -120,7 +120,7 @@ class Chef
       property :new_name, introduced: "17.5.23", String,
         description: "Used to change the name of a standard PackageSource."
 
-      property :source_location, introduced: "17.5.23", String,
+      property :source_location, introduced: "17.6", String,
         description: "The URL to the location to retrieve modules from."
 
       alias :url :source_location
