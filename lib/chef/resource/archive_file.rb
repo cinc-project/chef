@@ -21,6 +21,15 @@
 require_relative "../resource"
 require "fileutils" unless defined?(FileUtils)
 
+# 2021-10-07 Testing, to be deleted
+require "ffi" unless defined?(FFI)
+module Archive
+  module C
+    ffi_lib %w{libarchive.so.13 libarchive.13 libarchive-13 libarchive.so libarchive archive}.map { |f| ::File.join("/opt/chef/embedded/lib", f) }
+  end
+end
+# end delete
+
 class Chef
   class Resource
     class ArchiveFile < Chef::Resource

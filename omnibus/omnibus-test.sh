@@ -38,6 +38,9 @@ else
   export USR_BIN_DIR="/usr/bin"
 fi
 
+# 2021-10-07 TODO confirming a theory, delete this
+export LD_LIBRARY_PATH="/opt/chef/embedded/lib"
+
 # sanity check that we're getting the correct symlinks from the pre-install script
 # solaris doesn't have readlink or test -e. ls -n is different on BSD. proceed with caution.
 if [[ ! -L $USR_BIN_DIR/chef-client ]] || [[ $(ls -l $USR_BIN_DIR/chef-client | awk '{print$NF}') != "$BIN_DIR/chef-client" ]]; then
