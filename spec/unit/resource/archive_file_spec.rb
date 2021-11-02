@@ -16,21 +16,10 @@
 #
 
 require "spec_helper"
+require "ffi-libarchive"
 
-begin
-  require "ffi-libarchive"
-rescue LoadError
-  module Archive
-    class Reader
-      def close; end
-      def each_entry; end
-      def extract(entry, flags = 0, destination: nil); end
-    end
-  end
-end
-
-# Exclude this test on platforms where ffi-libarchive loading is broken
-describe Chef::Resource::ArchiveFile, :libarchive_loading_broken do
+# Excluding this test on Windows until CI issues can be addressed.
+describe Chef::Resource::ArchiveFile do
   let(:node) { Chef::Node.new }
   let(:events) { Chef::EventDispatch::Dispatcher.new }
   let(:run_context) { Chef::RunContext.new(node, {}, events) }
