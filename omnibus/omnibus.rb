@@ -51,3 +51,5 @@ fetcher_read_timeout 120
 
 fatal_transitive_dependency_licensing_warnings true
 fips_mode (ENV["OMNIBUS_FIPS_MODE"] || "").casecmp("true") >= 0
+
+runtime_dependencies "coreutils" if rhel?
