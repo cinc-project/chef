@@ -32,9 +32,6 @@
     @echo Existing directory found, skipping creation.
 )
 
-> <%= bootstrap_directory %>\wget.vbs (
- <%= win_wget %>
-)
 
 > <%= bootstrap_directory %>\wget.ps1 (
  <%= win_wget_ps %>
@@ -111,14 +108,15 @@ goto chef_installed
 :chef_installed
 @echo Checking for existing <%= ChefUtils::Dist::Infra::PRODUCT %> installation
 WHERE <%= ChefUtils::Dist::Infra::CLIENT %> >nul 2>nul
+<%#
 If !ERRORLEVEL!==0 (
   @echo Existing <%= ChefUtils::Dist::Infra::PRODUCT %> installation detected, skipping download
-  goto key_create
+<%#  goto key_create
 ) else (
   @echo No existing installation of <%= ChefUtils::Dist::Infra::PRODUCT %> detected
   goto install
-)
-
+<%# )
+%>
 :install
 @rem If user has provided the custom installation command, execute it
 <% if @config[:bootstrap_install_command] %>

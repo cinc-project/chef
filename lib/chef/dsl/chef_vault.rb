@@ -19,6 +19,7 @@
 
 autoload :ChefVault, "chef-vault"
 require_relative "data_query"
+require "pry"
 
 class Chef
   module DSL
@@ -37,6 +38,7 @@ class Chef
       # @param [String] bag Name of the data bag to load from.
       # @param [String] id Identifier of the data bag item to load.
       def chef_vault_item(bag, id)
+        binding.pry
         if ::ChefVault::Item.vault?(bag, id)
           ::ChefVault::Item.load(bag, id)
         elsif node["chef-vault"]["databag_fallback"]
@@ -56,6 +58,7 @@ class Chef
       # @param [String] bag Name of the data bag to load from.
       # @return [Array]
       def chef_vault(bag)
+        binding.pry
         raise "'#{bag}' is not a vault" unless Chef::DataBag.list.include? bag
 
         pattern = Regexp.new(/_keys$/).freeze
@@ -74,6 +77,7 @@ class Chef
       # @param [String] id Identifier of the data bag item to load.
       # @return [Hash]
       def chef_vault_item_for_environment(bag, id)
+        binding.pry
         item = chef_vault_item(bag, id)
         return {} unless item[node.chef_environment]
 
