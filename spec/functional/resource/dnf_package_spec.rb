@@ -1049,25 +1049,6 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
           action :install
         end.should_not_be_updated
       end
-
-      it "throws a deprecation warning with allow_downgrade" do
-        Chef::Config[:treat_deprecation_warnings_as_errors] = false
-        expect(Chef).to receive(:deprecated).at_least(:once).with(:dnf_package_allow_downgrade, /^the allow_downgrade property on the dnf_package provider is not used/)
-        preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
-        dnf_package "chef_rpm" do
-          options default_options
-          version "1.2"
-          allow_downgrade true
-          action :install
-        end.should_be_updated
-        expect(shell_out("rpm -q chef_rpm").stdout.chomp).to match("^chef_rpm-1.2-1.#{pkg_arch}")
-        dnf_package "chef_rpm" do
-          options default_options
-          version "1.2"
-          allow_downgrade true
-          action :install
-        end.should_not_be_updated
-      end
     end
 
     context "with source arguments" do
