@@ -455,7 +455,7 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
     end
 
     context "downgrades" do
-      it "downgrades the package when allow_downgrade" do
+      it "downgrades the package when allow_downgrade is true" do
         flush_cache
         preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
         dnf_package "chef_rpm" do
@@ -469,6 +469,17 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
           version "1.2-1"
           action :install
         end.should_not_be_updated
+      end
+      it "does not downgrade the package when allow_downgrade is false" do
+        flush_cache
+        preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
+        dnf_package "chef_rpm" do
+          options default_options
+          allow_downgrade false
+          version "1.2-1"
+          action :install
+        end.should_not_be_updated
+        expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
       end
     end
 
@@ -761,6 +772,17 @@ describe Chef::Resource::DnfPackage, :requires_root, external: exclude_test do
           version "1.2-1"
           action :install
         end.should_not_be_updated
+      end
+
+      it "downgrade on a local file with allow_downgrade false does not downgrade" do
+        preinstall("chef_rpm-1.10-1.#{pkg_arch}.rpm")
+        dnf_package "#{CHEF_SPEC_ASSETS}/yumrepo/chef_rpm-1.2-1.#{pkg_arch}.rpm" do
+          options default_options
+          allow_downgrade false
+          version "1.2-1"
+          action :install
+        end.should_not_be_updated
+        expect(shell_out("rpm -q --queryformat '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' chef_rpm").stdout.chomp).to match("^chef_rpm-1.10-1.#{pkg_arch}$")
       end
 
       it "does not downgrade the package with :install" do
