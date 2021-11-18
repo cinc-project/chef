@@ -562,9 +562,9 @@ class Chef
         package_name_array.each_with_index do |package_name, i|
           candidate_version = candidate_version_array[i]
           current_version = current_version_array[i]
-          magic_version = use_magic_version? ? magic_version[i] : current_version_array[i]
+          magic_version2 = use_magic_version? ? magic_version[i] : current_version_array[i]
           new_version = new_version_array[i]
-          yield package_name, new_version, current_version, candidate_version, magic_version
+          yield package_name, new_version, current_version, candidate_version, magic_version2
         end
       end
 
