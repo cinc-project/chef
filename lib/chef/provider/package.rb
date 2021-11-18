@@ -438,26 +438,28 @@ class Chef
         @target_version_array ||=
           begin
             target_version_array = []
-            each_package do |package_name, new_version, current_version, candidate_version|
+            each_package do |package_name, new_version, current_version, candidate_version, magic_version|
               case action
               when :upgrade
-                if current_version.nil?
-                  # with use_magic_version there may be a package installed, but it fails the user's
-                  # requested new_resource.version constraints
-                  logger.trace("#{new_resource} has no existing installed version. Installing install #{candidate_version}")
-                  target_version_array.push(candidate_version)
-                elsif !use_magic_version? && version_equals?(current_version, new_version)
-                  # this is a short-circuit (mostly for the rubygems provider) to avoid needing to expensively query the candidate_version which must come later
+                if version_equals?(current_version, new_version)
+                  # this is a short-circuit (mostly for the rubygems provider) to avoid needing to
+                  # expensively query the candidate_version which must come later
                   logger.trace("#{new_resource} #{package_name} #{new_version} is already installed")
                   target_version_array.push(nil)
+                elsif !allow_downgrade && version_compare(current_version, candidate_version) == 1
+                  logger.trace("#{new_resource} #{package_name} has installed version #{current_version}, which is newer than available version #{candidate_version}. Skipping...)")
+                  target_version_array.push(nil)
+                elsif current_version.nil?
+                  logger.trace("#{new_resource} has no existing installed version. Installing install #{candidate_version}")
+                  target_version_array.push(candidate_version)
+                elsif magic_version.nil?
+                  logger.trace("#{new_resource} has no installed version that matches the version constraint. Installing install #{candidate_version}")
+                  target_version_array.push(candidate_version)
                 elsif candidate_version.nil?
                   logger.trace("#{new_resource} #{package_name} has no candidate_version to upgrade to")
                   target_version_array.push(nil)
                 elsif version_equals?(current_version, candidate_version)
                   logger.trace("#{new_resource} #{package_name} #{candidate_version} is already installed")
-                  target_version_array.push(nil)
-                elsif !allow_downgrade && version_compare(current_version, candidate_version) == 1
-                  logger.trace("#{new_resource} #{package_name} has installed version #{current_version}, which is newer than available version #{candidate_version}. Skipping...)")
                   target_version_array.push(nil)
                 else
                   logger.trace("#{new_resource} #{package_name} is out of date, will upgrade to #{candidate_version}")
@@ -476,7 +478,7 @@ class Chef
                     logger.trace("#{new_resource} #{package_name} #{current_version} needs updating to #{new_version}")
                     target_version_array.push(new_version)
                   end
-                elsif current_version.nil?
+                elsif magic_version.nil?
                   # with use_magic_version there may be a package installed, but it fails the user's
                   # requested new_resource.version constraints
                   logger.trace("#{new_resource} #{package_name} not installed, installing #{candidate_version}")
@@ -512,8 +514,8 @@ class Chef
         @packages_missing_candidates ||=
           begin
             missing = []
-            each_package do |package_name, new_version, current_version, candidate_version|
-              missing.push(package_name) if current_version.nil? && candidate_version.nil?
+            each_package do |package_name, new_version, current_version, candidate_version, magic_version|
+              missing.push(package_name) if magic_version.nil? && candidate_version.nil?
             end
             missing
           end
@@ -536,7 +538,7 @@ class Chef
         @forced_packages_missing_candidates ||=
           begin
             missing = []
-            each_package do |package_name, new_version, current_version, candidate_version|
+            each_package do |package_name, new_version, current_version, candidate_version, magic_version|
               next if new_version.nil? || current_version.nil?
 
               if use_magic_version?
@@ -559,9 +561,10 @@ class Chef
       def each_package
         package_name_array.each_with_index do |package_name, i|
           candidate_version = candidate_version_array[i]
-          current_version = use_magic_version? ? magic_version[i] : current_version_array[i]
+          current_version = current_version_array[i]
+          magic_version = use_magic_version? ? magic_version[i] : current_version_array[i]
           new_version = new_version_array[i]
-          yield package_name, new_version, current_version, candidate_version
+          yield package_name, new_version, current_version, candidate_version, magic_version
         end
       end
 
