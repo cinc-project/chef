@@ -446,12 +446,12 @@ class Chef
                   # expensively query the candidate_version which must come later
                   logger.trace("#{new_resource} #{package_name} #{new_version} is already installed")
                   target_version_array.push(nil)
-                elsif !allow_downgrade && version_compare(current_version, candidate_version) == 1
-                  logger.trace("#{new_resource} #{package_name} has installed version #{current_version}, which is newer than available version #{candidate_version}. Skipping...)")
-                  target_version_array.push(nil)
                 elsif current_version.nil?
                   logger.trace("#{new_resource} has no existing installed version. Installing install #{candidate_version}")
                   target_version_array.push(candidate_version)
+                elsif !allow_downgrade && version_compare(current_version, candidate_version) == 1
+                  logger.trace("#{new_resource} #{package_name} has installed version #{current_version}, which is newer than available version #{candidate_version}. Skipping...)")
+                  target_version_array.push(nil)
                 elsif magic_version.nil?
                   logger.trace("#{new_resource} has no installed version that matches the version constraint. Installing install #{candidate_version}")
                   target_version_array.push(candidate_version)
