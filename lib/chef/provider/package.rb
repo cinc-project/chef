@@ -564,7 +564,7 @@ class Chef
           current_version = current_version_array[i]
           magic_version = use_magic_version? ? magic_version_array[i] : current_version_array[i]
           new_version = new_version_array[i]
-          yield package_name, new_version, current_version, candidate_version, magic_version_array
+          yield package_name, new_version, current_version, candidate_version, magic_version
         end
       end
 
