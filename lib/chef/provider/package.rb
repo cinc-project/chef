@@ -467,13 +467,13 @@ class Chef
                   target_version_array.push(candidate_version)
                 elsif candidate_version.nil?
                   # This check necessarily unlazies the candidate_version and may be expensive (connecting to
-                  # rubygems.org or whatever).  It coemes as late as possible.
+                  # rubygems.org or whatever).  It comes as late as possible.
                   logger.trace("#{new_resource} #{package_name} has no candidate_version to upgrade to")
                   target_version_array.push(nil)
                 elsif version_equals?(current_version, candidate_version)
                   # This check sees if the candidate_version is already installed or if we should upgrade/update the
                   # package.  This is the normal idempotent behavior of :upgrade and is inherently expensive due to
-                  # unlazy'ing the candidate_version.  To prevent the perf hit the version may be specified with a full
+                  # unlazying the candidate_version.  To prevent the perf hit the version may be specified with a full
                   # version constraint.  Then the cookbook can roll the version forward and use :upgrade to force version
                   # pinning.
                   logger.trace("#{new_resource} #{package_name} #{candidate_version} is already installed")
