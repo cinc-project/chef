@@ -492,8 +492,8 @@ class Chef
                   logger.warn("#{new_resource} #{package_name} has installed version #{current_version}, which is newer than available version #{new_version}. Skipping...)")
                   target_version_array.push(nil)
                 elsif new_version && !use_magic_version?
-                  # This is for "non magic version using" subclasses to do comparisions between the current_verion and the
-                  # desired new_version.  XXX: If we converted this to current_version_requirement_satisified? and made it specific
+                  # This is for "non magic version using" subclasses to do comparisons between the current_version and the
+                  # desired new_version.  XXX: If we converted this to current_version_requirement_satisfied? and made it specific
                   # to the current version check and then eliminated the magic_version, we might be able to eliminate separate codepaths
                   # here, and eliminate the semantic confusion around the magic_version?
                   if version_requirement_satisfied?(current_version, new_version)
