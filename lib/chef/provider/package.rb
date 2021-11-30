@@ -500,9 +500,8 @@ class Chef
                     logger.trace("#{new_resource} #{package_name} #{current_version} satisfies #{new_version} requirement")
                     target_version_array.push(nil)
                   else
-                    # XXX: why do we use new_version here and not candidate_version? is that a bug?
-                    logger.trace("#{new_resource} #{package_name} #{current_version} needs updating to #{new_version}")
-                    target_version_array.push(new_version)
+                    logger.trace("#{new_resource} #{package_name} #{current_version} needs updating to #{candidate_version}")
+                    target_version_array.push(candidate_version)
                   end
                 elsif magic_version.nil?
                   # This is for when we have a "magic version using" subclass and where the installed version does not match the

@@ -182,6 +182,7 @@
     "cname",
     "codepage",
     "codepath",
+    "codepaths",
     "CODESEG",
     "COLORINDEX",
     "COLORREF",
