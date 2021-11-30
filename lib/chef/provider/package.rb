@@ -500,8 +500,13 @@ class Chef
                     logger.trace("#{new_resource} #{package_name} #{current_version} satisfies #{new_version} requirement")
                     target_version_array.push(nil)
                   else
-                    logger.trace("#{new_resource} #{package_name} #{current_version} needs updating to #{candidate_version}")
-                    target_version_array.push(candidate_version)
+                    # XXX: some subclasses seem to depend on this behavior where the new_version can be different from the
+                    # candidate_version and we install the new_version, it seems like the candidate_version should be fixed to
+                    # be resolved correctly to the new_version for those providers.  although it may just be unit test bugs.
+                    # it would be more correct to use the candidate_version here, but then it needs to be the correctly resolved
+                    # candidate_version against the new_version constraint.
+                    logger.trace("#{new_resource} #{package_name} #{current_version} needs updating to #{new_version}")
+                    target_version_array.push(new_version)
                   end
                 elsif magic_version.nil?
                   # This is for when we have a "magic version using" subclass and where the installed version does not match the
