@@ -87,7 +87,6 @@ class Chef
         end
 
         def install_package(names, versions)
-          raise "boom"
           method = nil
           methods = []
           names.each_with_index do |n, i|
