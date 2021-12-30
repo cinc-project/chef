@@ -116,6 +116,8 @@ fi
 # accept license
 export CHEF_LICENSE=accept-no-persist
 
+sudo cp spec/functional/resource/group_spec.rb /opt/chef/embedded/lib/ruby/gems/3.0.0/gems/chef-17.9.18/spec/functional/resource/group_spec.rb
+
 cd "$chef_gem"
 sudo -E bundle install --jobs=3 --retry=3
 sudo -E bundle exec rspec --profile -f progress
