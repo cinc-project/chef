@@ -6,10 +6,8 @@ GIT
     omnibus-software (4.0.0)
       omnibus (>= 8.0.0)
 
-GIT
-  remote: https://github.com/chef/omnibus.git
-  revision: 23daad1dd0b488aab5da23ea0ef55ac7df0e6bae
-  branch: lcg/better-healthcheck-correctness-checking
+PATH
+  remote: ../../omnibus
   specs:
     omnibus (8.1.6)
       aws-sdk-s3 (~> 1)
