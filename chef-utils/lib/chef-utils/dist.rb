@@ -149,3 +149,5 @@ module ChefUtils
     end
   end
 end
+
+ENV['EXTRA_PRODUCTS_FILE'] = "#{__dir__}/cinc-products.rb"
