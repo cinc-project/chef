@@ -165,13 +165,13 @@ GEM
     citrus (3.0.2)
     cleanroom (1.0.0)
     coderay (1.1.3)
-    concurrent-ruby (1.1.9)
+    concurrent-ruby (1.2.0)
     contracts (0.16.1)
     corefoundation (0.3.4)
       ffi (>= 1.15.0)
     diff-lcs (1.3)
-    ed25519 (1.2.4)
-    erubi (1.10.0)
+    ed25519 (1.3.0)
+    erubi (1.12.0)
     erubis (2.7.0)
     faraday (1.4.3)
       faraday-em_http (~> 1.0)
@@ -200,8 +200,9 @@ GEM
     fuzzyurl (0.9.0)
     gssapi (1.3.1)
       ffi (>= 1.0.1)
-    gyoku (1.3.1)
+    gyoku (1.4.0)
       builder (>= 2.1.2)
+      rexml (~> 3.0)
     hashie (4.1.0)
     httpclient (2.8.3)
     iniparse (1.5.0)
@@ -233,7 +234,7 @@ GEM
     iso8601 (0.13.0)
     jmespath (1.5.0)
     json (2.6.1)
-    kitchen-vagrant (1.11.0)
+    kitchen-vagrant (1.14.0)
       test-kitchen (>= 1.4, < 4)
     libyajl2 (2.1.0)
     license-acceptance (2.1.13)
@@ -246,7 +247,7 @@ GEM
       mixlib-shellout (>= 2.2, < 4.0)
       toml-rb (>= 1, < 3)
     little-plugger (1.1.4)
-    logging (2.3.0)
+    logging (2.3.1)
       little-plugger (~> 1.1)
       multi_json (~> 1.14)
     method_source (1.0.0)
@@ -259,14 +260,14 @@ GEM
     mixlib-cli (2.1.8)
     mixlib-config (3.0.9)
       tomlrb
-    mixlib-install (3.12.16)
+    mixlib-install (3.12.27)
       mixlib-shellout
       mixlib-versioning
       thor
     mixlib-log (3.0.9)
-    mixlib-shellout (3.2.5)
+    mixlib-shellout (3.2.7)
       chef-utils
-    mixlib-shellout (3.2.5-universal-mingw32)
+    mixlib-shellout (3.2.7-universal-mingw32)
       chef-utils
       ffi-win32-extensions (~> 1.0.3)
       win32-process (~> 0.9)
@@ -318,6 +319,7 @@ GEM
     rack (2.2.3)
     rainbow (3.1.1)
     retryable (3.0.5)
+    rexml (3.2.5)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -400,7 +402,7 @@ GEM
       pastel (~> 0.8)
       strings (~> 0.2.0)
       tty-screen (~> 0.8)
-    unicode-display_width (2.1.0)
+    unicode-display_width (2.4.2)
     unicode_utils (1.4.0)
     uuidtools (2.2.0)
     vault (0.16.0)
@@ -420,7 +422,7 @@ GEM
       ffi
     win32-mutex (0.4.3)
       win32-ipc (>= 0.6.0)
-    win32-process (0.9.0)
+    win32-process (0.10.0)
       ffi (>= 1.0.0)
     win32-service (2.3.2)
       ffi
@@ -447,7 +449,7 @@ GEM
       rubyzip (~> 2.0)
       winrm (~> 2.0)
     wisper (2.0.1)
-    wmi-lite (1.0.5)
+    wmi-lite (1.0.7)
     zhexdump (0.0.2)
 
 PLATFORMS
