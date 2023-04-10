@@ -1,4 +1,4 @@
-name "chef-foundation"
+name "cinc-foundation"
 license "Apache-2.0"
 license_file "LICENSE"
 
@@ -9,12 +9,12 @@ license_file "NOTICE"
 skip_transitive_dependency_licensing true
 
 if windows?
-  source path: "c:/opscode/chef"
+  source path: "c:/cinc-project/cinc"
 else
-  source path: "/opt/chef"
+  source path: "/opt/cinc"
 end
 
-relative_path "chef-foundation"
+relative_path "cinc-foundation"
 
 build do
   sync "#{project_dir}", "#{install_dir}"
