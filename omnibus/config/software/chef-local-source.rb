@@ -46,7 +46,7 @@ end
 # This is the behavior the transitive omnibus software deps such as chef-dk
 # expect.
 if version != "local_source"
-  source git: "https://github.com/chef/chef.git"
+  source git: "https://gitlab.com/cinc-project/upstream/chef.git", branch: "stable/cinc"
 end
 
 # In order to pass notarization we need to sign any binaries and libraries included in the package.
@@ -59,7 +59,7 @@ gem_dir = "#{install_dir}/embedded/lib/ruby/gems/#{ruby_mmv}"
 bin_dirs bin_dirs.concat ["#{gem_dir}/gems/*/bin/**"]
 lib_dirs ["#{ruby_dir}/**", "#{gem_dir}/extensions/**", "#{gem_dir}/bundler/gems/extensions/**", "#{gem_dir}/bundler/gems/*", "#{gem_dir}/bundler/gems/*/lib/**", "#{gem_dir}/gems/*", "#{gem_dir}/gems/*/lib/**", "#{gem_dir}/gems/*/ext/**"]
 
-dependency "chef-foundation"
+dependency "cinc-foundation"
 
 relative_path "chef"
 
@@ -106,7 +106,7 @@ build do
 
   block do
     # cspell:disable-next-line
-    appbundle "chef", lockdir: project_dir, gem: "inspec-core-bin", without: excluded_groups, env: env
+    appbundle "chef", lockdir: project_dir, gem: "cinc-auditor-core-bin", without: excluded_groups, env: env
     # cspell:disable-next-line
     appbundle "chef", lockdir: project_dir, gem: "chef-bin", without: excluded_groups, env: env
     # cspell:disable-next-line
@@ -123,5 +123,10 @@ build do
       gem_install_dir = shellout!("#{install_dir}/embedded/bin/gem open #{gem}", env: env).stdout.chomp
       remove_directory "#{gem_install_dir}/test"
     end
+  end
+
+  copy "#{project_dir}/cinc/cinc-wrapper", "#{install_dir}/bin/"
+  %w(chef-apply chef-client chef-shell chef-solo inspec).each do |bin|
+    link "#{install_dir}/bin/cinc-wrapper", "#{install_dir}/bin/#{bin}"
   end
 end
