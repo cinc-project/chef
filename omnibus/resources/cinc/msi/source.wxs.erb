@@ -90,13 +90,6 @@
                   Impersonate="no"
                   Return="ignore" />
 
-    <CustomAction Id="RemoveCincClientService"
-                  Directory="TARGETDIR"
-                  ExeCommand="&quot;[SystemFolder]SC.EXE&quot; DELETE &quot;cinc-client&quot;"
-                  Execute="deferred"
-                  Impersonate="no"
-                  Return="ignore" />
-
     <InstallExecuteSequence>
       <Custom Action="FastUnzip" After="InstallFiles">NOT Installed OR REINSTALL</Custom>
       <Custom Action="Cleanup" After="RemoveFiles">REMOVE~="ALL"</Custom>
@@ -106,12 +99,9 @@
       </Custom>
 
       <Custom Action="RemoveCincClientScheduledTask" Before="RemoveFiles">
-        <![CDATA[(Installed AND (&NoneFeature=3 OR &CincServiceFeature=3)) OR (REMOVE="ALL")]]>
+        <![CDATA[(Installed AND &NoneFeature=3) OR (REMOVE="ALL")]]>
       </Custom>
 
-      <Custom Action="RemoveCincClientService" Before="RemoveFiles">
-        <![CDATA[Installed AND (&NoneFeature=3 OR &CincSchTaskFeature=3) OR (REMOVE="ALL")]]>
-      </Custom>
     </InstallExecuteSequence>
 
     <UI>
@@ -154,19 +144,6 @@
             </Directory>
             <Directory Id="EMBEDDED" Name="embedded" >
               <Directory Id="EMBEDDEDBIN" Name="bin" >
-                <Component Id="CincClientService" Guid="{69B2D8BE-4A47-4BE3-AEE8-83FAEB6E2FAF}" >
-                  <File Id="RubyExecutable" Source="$(var.ProjectSourceDir)\embedded\bin\ruby.exe" KeyPath="yes" />
-                  <ServiceInstall Name="cinc-client" Type="ownProcess"
-                                  Start="auto" Vital="yes" ErrorControl="ignore"
-                                  Arguments="[PROJECTLOCATION]bin\cinc-windows-service"
-                                  DisplayName="!(loc.ServiceDisplayName)"
-                                  Description="!(loc.ServiceDescription)">
-                      <ServiceDependency Id="Winmgmt" />
-                      <ServiceConfig DelayedAutoStart="yes" OnInstall="yes" />
-                  </ServiceInstall>
-                  <ServiceControl Id="ControlCincClientService" Name="cinc-client"
-                                  Remove="both" Stop="both" Wait="yes" />
-                </Component>
                 <Component Id="CincClientLog" Guid="{8e492d59-3a0c-43fd-b889-e35dfa33da91}">
                     <util:EventSource xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
                         Name="Cinc" Log="Application"
@@ -209,10 +186,6 @@
 
         <!-- This is an empty component to keep track of the feature -->
         <ComponentRef Id="CincSchTask" />
-      </Feature>
-
-      <Feature Id="CincServiceFeature" Title="!(loc.FeatureServiceName)" Level="1000" AllowAdvertise="no" Display="hidden">
-        <ComponentRef Id="CincClientService" />
       </Feature>
 
       <Feature Id="NoneFeature" Title="None" Level="1000" AllowAdvertise="no" Display="hidden">
@@ -302,7 +275,6 @@
         <Control Id="OptionsRadioGroup" Type="RadioButtonGroup" Property="CINC_SERVICE_OPTIONS_RADIO_BUTTON_GROUP" Height="80" Width="140" X="35" Y="110">
           <RadioButtonGroup Property="CINC_SERVICE_OPTIONS_RADIO_BUTTON_GROUP">
             <RadioButton Value="SchTask" Text="!(loc.CustomizeDlgFirstRadioButtonText)" Height="17" Width="140" X="0" Y="10" />
-            <RadioButton Value="Service" Text="!(loc.CustomizeDlgSecondRadioButtonText)" Height="17" Width="140" X="0" Y="35" />
             <RadioButton Value="None" Text="!(loc.CustomizeDlgThirdRadioButtonText)" Height="17" Width="140" X="0" Y="60" />
           </RadioButtonGroup>
         </Control>
@@ -315,7 +287,6 @@
         </Control>
         <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="Next">
           <Publish Event="AddLocal" Value="CincSchTaskFeature">CINC_SERVICE_OPTIONS_RADIO_BUTTON_GROUP = "SchTask"</Publish>
-          <Publish Event="AddLocal" Value="CincServiceFeature">CINC_SERVICE_OPTIONS_RADIO_BUTTON_GROUP = "Service"</Publish>
           <Publish Event="AddLocal" Value="NoneFeature">CINC_SERVICE_OPTIONS_RADIO_BUTTON_GROUP = "None"</Publish>
           <Publish Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
         </Control>
