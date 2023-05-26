@@ -32,7 +32,7 @@ class Chef
         Chef::Log.warn("knife config use-profile has been deprecated in favor of knife config use. This will be removed in the major release version!")
 
         credentials_data = self.class.config_loader.parse_credentials_file
-        context_file = ChefConfig::PathHelper.home(".chef", "context").freeze
+        context_file = ChefConfig::PathHelper.home(".cinc", "context").freeze
         profile = @name_args[0]&.strip
         if profile.nil? || profile.empty?
           show_usage
