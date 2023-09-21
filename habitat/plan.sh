@@ -1,6 +1,6 @@
 _chef_client_ruby="core/ruby31"
-pkg_name=cinc-infra-client
-pkg_origin=cinc
+pkg_name=cinc-client
+pkg_origin=cincproject
 pkg_upstream_url=https://www.cinc.sh
 pkg_maintainer="The cinc Maintainers <maintainers@cinc.sh>"
 pkg_description="The Cinc Infra Client"
