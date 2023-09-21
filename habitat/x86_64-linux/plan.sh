@@ -1,8 +1,8 @@
 export HAB_BLDR_CHANNEL="base-2025"
 SRC_PATH="$(dirname "$(dirname "$PLAN_CONTEXT")")"
 _chef_client_ruby="core/ruby3_4/3.4.10"
-pkg_name=cinc-infra-client
-pkg_origin=cinc
+pkg_name=cinc-client
+pkg_origin=cincproject
 pkg_upstream_url=https://www.cinc.sh
 pkg_maintainer="The cinc Maintainers <maintainers@cinc.sh>"
 pkg_description="The Cinc Infra Client"
