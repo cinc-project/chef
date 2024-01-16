@@ -32,9 +32,9 @@ group(:omnibus_package) do
   gem "chef-vault"
 
   gem "cinc-auditor-core-bin", ">= 5", "< 6",
-    source: "https://packagecloud.io/cinc-project/stable"
+    source: "https://rubygems.cinc.sh"
 
-  gem "chef-zero", source: "https://packagecloud.io/cinc-project/stable"
+  gem "chef-zero", source: "https://rubygems.cinc.sh"
 end
 
 group(:omnibus_package, :pry) do
