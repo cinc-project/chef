@@ -30,9 +30,9 @@ group(:omnibus_package) do
   gem "appbundler"
   gem "rb-readline"
   gem "cinc-auditor-core-bin", "~> 7.0.38.beta", # need to provide the binaries for inspec
-    source: "https://packagecloud.io/cinc-project/stable"
+    source: "https://rubygems.cinc.sh"
   gem "chef-vault"
-  gem "chef-zero", source: "https://packagecloud.io/cinc-project/stable"
+  gem "chef-zero", source: "https://rubygems.cinc.sh"
 end
 
 group(:omnibus_package, :pry) do
