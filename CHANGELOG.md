@@ -9,7 +9,7 @@ This changelog lists individual merged pull requests to Chef Infra Client and ge
 - Bump omnibus-software from `b3d89a4` to `40ca2a9` in /omnibus [#14250](https://github.com/chef/chef/pull/14250) ([dependabot[bot]](https://github.com/dependabot[bot]))
 <!-- latest_release -->
 
-<!-- release_rollup since=17.10.114 -->
+<!-- release_rollup since=17.10.122 -->
 ### Changes not yet released to stable
 
 #### Merged Pull Requests
@@ -24,6 +24,19 @@ This changelog lists individual merged pull requests to Chef Infra Client and ge
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v17.10.122](https://github.com/chef/chef/tree/v17.10.122) (2024-03-11)
+
+#### Merged Pull Requests
+- bundle update --conservative inspec-core inspec-core-bin [#14201](https://github.com/chef/chef/pull/14201) ([tpowell-progress](https://github.com/tpowell-progress))
+- Try pinning to 0.10.1 if Ruby 3.0.0 specifically is in use (for Fedora rubydistro) [#14212](https://github.com/chef/chef/pull/14212) ([tpowell-progress](https://github.com/tpowell-progress))
+- Updating Train Support to allow for more connection types [#14208](https://github.com/chef/chef/pull/14208) ([johnmccrae](https://github.com/johnmccrae))
+- Try switching to proxifier2 [#14204](https://github.com/chef/chef/pull/14204) ([tpowell-progress](https://github.com/tpowell-progress))
+- Adding an adhoc build for the Chef-17 pipeline to be run every Sunday and Wednesday UTC [#13101](https://github.com/chef/chef/pull/13101) ([PrajaktaPurohit](https://github.com/PrajaktaPurohit))
+- Fix bigdecimal error with webmock / crack in macOS and AIX builds  [#14244](https://github.com/chef/chef/pull/14244) ([tpowell-progress](https://github.com/tpowell-progress))
+- chefspec verify needs to point to chef/chefspec [#14247](https://github.com/chef/chef/pull/14247) ([tpowell-progress](https://github.com/tpowell-progress))
+- Bump omnibus-software from `b3d89a4` to `40ca2a9` in /omnibus [#14250](https://github.com/chef/chef/pull/14250) ([dependabot[bot]](https://github.com/dependabot[bot]))
+<!-- latest_stable_release -->
+
 ## [v17.10.114](https://github.com/chef/chef/tree/v17.10.114) (2024-01-31)
 
 #### Merged Pull Requests
@@ -46,7 +59,6 @@ This changelog lists individual merged pull requests to Chef Infra Client and ge
 - Overcoming Ruby linting error [#14182](https://github.com/chef/chef/pull/14182) ([johnmccrae](https://github.com/johnmccrae))
 - Omnibus bump of Solaris bash update [#14177](https://github.com/chef/chef/pull/14177) ([tpowell-progress](https://github.com/tpowell-progress))
 - Updating FFI-YAJL [#14176](https://github.com/chef/chef/pull/14176) ([johnmccrae](https://github.com/johnmccrae))
-<!-- latest_stable_release -->
 
 ## [v17.10.95](https://github.com/chef/chef/tree/v17.10.95) (2023-11-27)
 
