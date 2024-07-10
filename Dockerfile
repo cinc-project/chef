@@ -18,7 +18,7 @@ FROM busybox
 LABEL maintainer="Cinc Project <docker@cinc.sh>"
 
 ARG CHANNEL=stable
-ARG VERSION=18.3.0
+ARG VERSION=18.5.0
 ARG ARCH=x86_64
 ARG PKG_VERSION=9
 
