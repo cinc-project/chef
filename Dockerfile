@@ -18,9 +18,9 @@ FROM busybox
 LABEL maintainer="Cinc Project <docker@cinc.sh>"
 
 ARG CHANNEL=stable
-ARG VERSION=18.3.0
+ARG VERSION=18.5.0
 ARG ARCH=x86_64
-ARG PKG_VERSION=7
+ARG PKG_VERSION=8
 
 RUN wget "http://ftp-osl.osuosl.org/pub/cinc/files/${CHANNEL}/cinc/${VERSION}/el/${PKG_VERSION}/cinc-${VERSION}-1.el${PKG_VERSION}.${ARCH}.rpm" -O /tmp/cinc-client.rpm && \
     rpm2cpio /tmp/cinc-client.rpm | cpio -idmv && \
