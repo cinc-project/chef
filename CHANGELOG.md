@@ -9,7 +9,7 @@ This changelog lists individual merged pull requests to Chef Infra Client and ge
 - Add Amazon Linux 2023 builders and testers to adhoc and release pipelines. [#14561](https://github.com/chef/chef/pull/14561) ([johnmccrae](https://github.com/johnmccrae))
 <!-- latest_release -->
 
-<!-- release_rollup since=17.10.122 -->
+<!-- release_rollup since=17.10.163 -->
 ### Changes not yet released to stable
 
 #### Merged Pull Requests
@@ -57,6 +57,52 @@ This changelog lists individual merged pull requests to Chef Infra Client and ge
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v17.10.163](https://github.com/chef/chef/tree/v17.10.163) (2024-08-27)
+
+#### Merged Pull Requests
+- Chef-PowerShell to v18 [#14274](https://github.com/chef/chef/pull/14274) ([johnmccrae](https://github.com/johnmccrae))
+- Bumping inspec-core minimum version requirement [#14276](https://github.com/chef/chef/pull/14276) ([johnmccrae](https://github.com/johnmccrae))
+- Restricting kitchen-inspec to &quot;~&gt; 2.5.2&quot; [#14273](https://github.com/chef/chef/pull/14273) ([johnmccrae](https://github.com/johnmccrae))
+- Updating to properly load URI for Fedora [#14271](https://github.com/chef/chef/pull/14271) ([johnmccrae](https://github.com/johnmccrae))
+- Forcing bundle update to get the URI gem to load properly [#14270](https://github.com/chef/chef/pull/14270) ([johnmccrae](https://github.com/johnmccrae))
+- Removing Ruby 2.7 testing [#14260](https://github.com/chef/chef/pull/14260) ([johnmccrae](https://github.com/johnmccrae))
+- Refactoring for Rubocop [#14261](https://github.com/chef/chef/pull/14261) ([johnmccrae](https://github.com/johnmccrae))
+- Bump artifactory from 3.0.15 to 3.0.17 in /omnibus [#14269](https://github.com/chef/chef/pull/14269) ([dependabot[bot]](https://github.com/dependabot[bot]))
+- Amending URU to be more version specific [#14293](https://github.com/chef/chef/pull/14293) ([johnmccrae](https://github.com/johnmccrae))
+- remove macos10.15 support [#14292](https://github.com/chef/chef/pull/14292) ([johnmccrae](https://github.com/johnmccrae))
+- Bump omnibus-software from `40ca2a9` to `8a87f3b` in /omnibus [#14296](https://github.com/chef/chef/pull/14296) ([dependabot[bot]](https://github.com/dependabot[bot]))
+- Pulling in updated Omnibus and Omnibus-Software [#14300](https://github.com/chef/chef/pull/14300) ([johnmccrae](https://github.com/johnmccrae))
+- Updating omnibus-software [#14304](https://github.com/chef/chef/pull/14304) ([johnmccrae](https://github.com/johnmccrae))
+- Updating gems [#14303](https://github.com/chef/chef/pull/14303) ([johnmccrae](https://github.com/johnmccrae))
+- Updating Freebsd versions [#14307](https://github.com/chef/chef/pull/14307) ([johnmccrae](https://github.com/johnmccrae))
+- Revert &quot;[chef-17] backport pr14064&quot; [#14335](https://github.com/chef/chef/pull/14335) ([tpowell-progress](https://github.com/tpowell-progress))
+- Backport: Chef-17 - Remove EOL warning [#14367](https://github.com/chef/chef/pull/14367) ([Stromweld](https://github.com/Stromweld))
+- Jfm/chef17 update omnibus software2 [#14422](https://github.com/chef/chef/pull/14422) ([johnmccrae](https://github.com/johnmccrae))
+- Updating the FFI gem [#14430](https://github.com/chef/chef/pull/14430) ([johnmccrae](https://github.com/johnmccrae))
+- Updating the Vault gem [#14424](https://github.com/chef/chef/pull/14424) ([johnmccrae](https://github.com/johnmccrae))
+- backport fix for chef-client-config [#14431](https://github.com/chef/chef/pull/14431) ([johnmccrae](https://github.com/johnmccrae))
+- Backport of 14465 - client_config no method error [#14466](https://github.com/chef/chef/pull/14466) ([johnmccrae](https://github.com/johnmccrae))
+- forcing win32-process [#14475](https://github.com/chef/chef/pull/14475) ([johnmccrae](https://github.com/johnmccrae))
+- Revert &quot;forcing win32-process&quot; [#14478](https://github.com/chef/chef/pull/14478) ([johnmccrae](https://github.com/johnmccrae))
+- Updating win32-process [#14479](https://github.com/chef/chef/pull/14479) ([johnmccrae](https://github.com/johnmccrae))
+- Updating train-core [#14480](https://github.com/chef/chef/pull/14480) ([johnmccrae](https://github.com/johnmccrae))
+- Updating build targets [#14501](https://github.com/chef/chef/pull/14501) ([johnmccrae](https://github.com/johnmccrae))
+- [Chef-17] Fix error due to method name conflict in Azure Secrets Manager [#14439](https://github.com/chef/chef/pull/14439) ([neha-p6](https://github.com/neha-p6))
+- OpenSSL 3 bump for Chef 17 [#14403](https://github.com/chef/chef/pull/14403) ([tpowell-progress](https://github.com/tpowell-progress))
+- Freebsd testing updates to get past group_spec errors [#14528](https://github.com/chef/chef/pull/14528) ([johnmccrae](https://github.com/johnmccrae))
+- [Chef-17] Updating RDOC to get past a CVE [#14548](https://github.com/chef/chef/pull/14548) ([johnmccrae](https://github.com/johnmccrae))
+- [Chef-17][Backport #13935] Fix regression in calling `choco --version` [#14523](https://github.com/chef/chef/pull/14523) ([neha-p6](https://github.com/neha-p6))
+- [Chef-17][Backport #13327] Fix indentation of condition for disabling repos [#14536](https://github.com/chef/chef/pull/14536) ([neha-p6](https://github.com/neha-p6))
+- [Chef-17][Backport #13147] Fix false updates in cron resource when using integers [#14538](https://github.com/chef/chef/pull/14538) ([neha-p6](https://github.com/neha-p6))
+- rolling back changes to ohai platform and os detection [#14541](https://github.com/chef/chef/pull/14541) ([johnmccrae](https://github.com/johnmccrae))
+- Put an `install_if`  on openssl [#14534](https://github.com/chef/chef/pull/14534) ([tpowell-progress](https://github.com/tpowell-progress))
+- Updating group_spec to filter out AIX on some tests [#14554](https://github.com/chef/chef/pull/14554) ([johnmccrae](https://github.com/johnmccrae))
+- Updating kitchen.yml to update Centos [#14552](https://github.com/chef/chef/pull/14552) ([johnmccrae](https://github.com/johnmccrae))
+- Removing the ntp test for Ubuntu 22.04 [#14556](https://github.com/chef/chef/pull/14556) ([johnmccrae](https://github.com/johnmccrae))
+- Backporting openssl update [#14558](https://github.com/chef/chef/pull/14558) ([johnmccrae](https://github.com/johnmccrae))
+- Add Amazon Linux 2023 builders and testers to adhoc and release pipelines. [#14561](https://github.com/chef/chef/pull/14561) ([johnmccrae](https://github.com/johnmccrae))
+<!-- latest_stable_release -->
+
 ## [v17.10.122](https://github.com/chef/chef/tree/v17.10.122) (2024-03-11)
 
 #### Merged Pull Requests
@@ -68,7 +114,6 @@ This changelog lists individual merged pull requests to Chef Infra Client and ge
 - Fix bigdecimal error with webmock / crack in macOS and AIX builds  [#14244](https://github.com/chef/chef/pull/14244) ([tpowell-progress](https://github.com/tpowell-progress))
 - chefspec verify needs to point to chef/chefspec [#14247](https://github.com/chef/chef/pull/14247) ([tpowell-progress](https://github.com/tpowell-progress))
 - Bump omnibus-software from `b3d89a4` to `40ca2a9` in /omnibus [#14250](https://github.com/chef/chef/pull/14250) ([dependabot[bot]](https://github.com/dependabot[bot]))
-<!-- latest_stable_release -->
 
 ## [v17.10.114](https://github.com/chef/chef/tree/v17.10.114) (2024-01-31)
 
