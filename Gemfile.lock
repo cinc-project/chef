@@ -347,7 +347,7 @@ GEM
     rake (13.0.6)
     rb-readline (0.5.5)
     regexp_parser (2.7.0)
-    rexml (3.2.5)
+    rexml (3.3.6)
     rspec (3.11.0)
       rspec-core (~> 3.11.0)
       rspec-expectations (~> 3.11.0)
