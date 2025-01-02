@@ -80,6 +80,7 @@ package :msi do
   # signing_identity ENV.fetch("OMNIBUS_SIGNING_IDENTITY", "33A82DC08CA7C6B370FFD0C958D9EE30187DE9E4"), machine_store: false, keypair_alias: "key_1340572417"
   parameters CincLogDllPath: windows_safe_path(gem_path("chef-[0-9]*-mingw-ucrt/ext/win32-eventlog/chef-log.dll")),
              ProjectLocationDir: project_location_dir
+  wix_light_delay_validation true
 end
 
 # We don't support appx builds, and they eat a lot of time.
