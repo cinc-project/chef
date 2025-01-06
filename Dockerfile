@@ -22,7 +22,11 @@ ARG VERSION=18.10.17
 ARG ARCH=x86_64
 ARG PKG_VERSION=8
 
-RUN wget "http://ftp-osl.osuosl.org/pub/cinc/files/${CHANNEL}/cinc/${VERSION}/el/${PKG_VERSION}/cinc-${VERSION}-1.el${PKG_VERSION}.${ARCH}.rpm" -O /tmp/cinc-client.rpm && \
+RUN case "$TARGETARCH" in \
+        amd64)  ARCH=x86_64 ;; \
+        arm64)  ARCH=aarch64 ;; \
+    esac && \
+    wget "http://ftp-osl.osuosl.org/pub/cinc/files/${CHANNEL}/cinc/${VERSION}/el/${PKG_VERSION}/cinc-${VERSION}-1.el${PKG_VERSION}.${ARCH}.rpm" -O /tmp/cinc-client.rpm && \
     rpm2cpio /tmp/cinc-client.rpm | cpio -idmv && \
     rm -rf /tmp/cinc-client.rpm
 
