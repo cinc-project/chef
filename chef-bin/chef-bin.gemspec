@@ -21,5 +21,11 @@ Gem::Specification.new do |spec|
     Dir.glob("{lib}/**/*", File::FNM_DOTMATCH).reject { |f| File.directory?(f) }
 
   spec.bindir = "bin"
-  spec.executables = %w{ cinc-apply cinc-client cinc-resource-inspector cinc-service-manager cinc-shell cinc-solo cinc-windows-service cinc-wrapper chef-apply chef-client chef-shell chef-solo inspec }
+  spec.executables = %w{ cinc-apply cinc-client cinc-resource-inspector cinc-service-manager cinc-shell cinc-solo cinc-windows-service cinc-wrapper }
+
+  if Gem.win_platform?
+    spec.executables += %w{chef-apply.bat chef-client.bat chef-shell.bat chef-solo.bat inspec.bat}
+  else
+    spec.executables += %w{chef-apply chef-client chef-shell chef-solo inspec}
+  end
 end
