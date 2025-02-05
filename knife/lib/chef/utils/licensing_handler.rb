@@ -20,7 +20,7 @@ require_relative "licensing_config"
 class Chef
   class Utils
     class LicensingHandler
-      LEGACY_OMNITRUCK_URL = "https://omnitruck.chef.io".freeze
+      LEGACY_OMNITRUCK_URL = "https://omnitruck.cinc.sh".freeze
 
       OMNITRUCK_URLS = {
         "free" => "https://chefdownload-trial.chef.io",
