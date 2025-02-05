@@ -553,7 +553,7 @@ class Chef
 
       def run
         check_eula_license if ChefUtils::Dist::Org::ENFORCE_LICENSE
-        fetch_license
+        fetch_license if ChefUtils::Dist::Org::ENFORCE_LICENSE
 
         plugin_setup!
         validate_name_args!
@@ -575,7 +575,7 @@ class Chef
         bootstrap_path = upload_bootstrap(content)
         perform_bootstrap(bootstrap_path)
         plugin_finalize
-        warn_license_usage
+        warn_license_usage if ChefUtils::Dist::Org::ENFORCE_LICENSE
       ensure
         connection.del_file!(bootstrap_path) if connection && bootstrap_path
       end
