@@ -333,7 +333,7 @@ class Chef
             url = if config[:license_id] && !config[:omnitruck_url].empty?
                     format(config[:omnitruck_url], config[:channel] + "/chef/download") + "&p=windows"
                   else
-                    "https://omnitruck.chef.io/chef/download?p=windows&channel=#{config[:channel]}"
+                    "https://omnitruck.cinc.sh/chef/download?p=windows"
                   end
             url += "&pv=#{machine_os}" unless machine_os.nil?
             url += "&m=#{machine_arch}" unless machine_arch.nil?
