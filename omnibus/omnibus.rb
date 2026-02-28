@@ -41,6 +41,7 @@ s3_secret_key  ENV["AWS_SECRET_ACCESS_KEY"]
 s3_bucket      "cinc-omnibus-cache"
 s3_endpoint    "https://s3.osuosl.org"
 s3_force_path_style true
+s3_acl         "public-read"
 
 build_retries 3
 fetcher_retries 3
