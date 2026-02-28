@@ -31,7 +31,6 @@ GEM
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     artifactory (3.0.15)
-    awesome_print (1.9.2)
     aws-eventstream (1.2.0)
     aws-partitions (1.550.0)
     aws-sdk-core (3.125.5)
@@ -52,7 +51,6 @@ GEM
     aws-sigv4 (1.4.0)
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt_pbkdf (1.1.0)
-    bcrypt_pbkdf (1.1.0-x64-mingw32)
     bcrypt_pbkdf (1.1.0-x86-mingw32)
     berkshelf (7.2.2)
       chef (>= 15.7.32)
@@ -189,7 +187,6 @@ GEM
     faraday_middleware (1.2.0)
       faraday (~> 1.0)
     ffi (1.15.5)
-    ffi (1.15.5-x64-mingw32)
     ffi (1.15.5-x86-mingw32)
     ffi-libarchive (1.1.3)
       ffi (~> 1.0)
@@ -228,7 +225,7 @@ GEM
       train-core (~> 3.0)
       tty-prompt (~> 0.17)
       tty-table (~> 0.10)
-    iostruct (0.0.4)
+    iostruct (0.7.0)
     ipaddress (0.8.3)
     iso8601 (0.13.0)
     jmespath (1.5.0)
@@ -246,6 +243,7 @@ GEM
       mixlib-shellout (>= 2.2, < 4.0)
       toml-rb (>= 1, < 3)
     little-plugger (1.1.4)
+    logger (1.7.0)
     logging (2.3.0)
       little-plugger (~> 1.1)
       multi_json (~> 1.14)
@@ -274,7 +272,7 @@ GEM
     mixlib-versioning (1.2.12)
     molinillo (0.8.0)
     multi_json (1.15.0)
-    multipart-post (2.1.1)
+    multipart-post (2.4.1)
     net-scp (3.0.0)
       net-ssh (>= 2.6.5, < 7.0.0)
     net-sftp (3.0.0)
@@ -303,11 +301,9 @@ GEM
     parslet (1.8.2)
     pastel (0.8.0)
       tty-color (~> 0.5)
-    pedump (0.6.3)
-      awesome_print
-      iostruct (>= 0.0.4)
-      multipart-post (>= 2.0.0)
-      rainbow
+    pedump (0.7.6)
+      iostruct (>= 0.7.0)
+      logger
       zhexdump (>= 0.0.2)
     plist (3.6.0)
     proxifier (1.0.3)
@@ -316,7 +312,6 @@ GEM
       method_source (~> 1.0)
     public_suffix (4.0.6)
     rack (2.2.3)
-    rainbow (3.1.1)
     retryable (3.0.5)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
@@ -448,11 +443,11 @@ GEM
       winrm (~> 2.0)
     wisper (2.0.1)
     wmi-lite (1.0.5)
-    zhexdump (0.0.2)
+    zhexdump (0.3.0)
 
 PLATFORMS
   ruby
-  x64-mingw32
+  x64-mingw-ucrt
   x86-mingw32
 
 DEPENDENCIES
