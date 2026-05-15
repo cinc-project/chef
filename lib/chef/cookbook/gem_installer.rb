@@ -70,9 +70,29 @@ class Chef
                 unless Chef::Config[:skip_gem_metadata_installation]
                   # Add additional options to bundle install
                   cmd = [ "bundle", "install", Chef::Config[:gem_installer_bundler_options] ]
+                  # Workaround for a thread race in Ruby 3.4 / RubyGems 3.6 /
+                  # Bundler 2.6 where the parallel installer can observe a
+                  # partially-loaded Psych module:
+                  #   NoMethodError: undefined method 'safe_load' for module Psych
+                  # while one worker thread is mid-`require "psych"` (only
+                  # psych/versions.rb loaded so far) and another worker thread
+                  # calls Gem.load_yaml -> Gem::SafeYAML.safe_load. Pre-loading
+                  # Psych in the subprocess via RUBYOPT fully initializes it
+                  # before any worker thread runs.
+                  #
+                  # Upstream tracking:
+                  #   - https://github.com/rubygems/rubygems/issues/9347
+                  #   - https://github.com/rubygems/rubygems/pull/9352 (replaces
+                  #     Psych with a pure-ruby YAMLSerializer in Gem.load_yaml's
+                  #     default path; merged to master, not yet released)
+                  #
+                  # Remove this RUBYOPT entry once chef ships on a Ruby whose
+                  # bundled RubyGems contains the YAMLSerializer rewrite
+                  # (post-v4.0.11).
                   env = {
                     "PATH" => path_with_prepended_ruby_bin,
                     "BUNDLE_SILENCE_ROOT_WARNING" => "1",
+                    "RUBYOPT" => [ENV["RUBYOPT"], "-rpsych"].compact.join(" "),
                   }
                   so = shell_out!(cmd, cwd: dir, env: env)
                   Chef::Log.info(so.stdout)
