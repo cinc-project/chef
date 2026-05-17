@@ -42,6 +42,25 @@ end
 
 override :chef, version: "local_source"
 
+# Load dynamically updated overrides
+overrides_path = File.expand_path("../../../omnibus_overrides.rb", current_file)
+instance_eval(IO.read(overrides_path), overrides_path)
+
+dependency "preparation"
+
+# Heavy dependencies previously built by chef-foundation
+dependency "ruby"
+dependency "libarchive" # for archive resource
+# nokogiri cannot go in the Gemfile, see wall of text in the software defn
+dependency "nokogiri"
+
+dependency "gem-permissions"
+dependency "version-manifest"
+dependency "openssl-customization"
+
+# devkit needs to come dead last these days so we do not use it to compile any gems
+dependency "ruby-msys2-devkit" if windows?
+
 dependency "chef-local-source"
 dependency "shebang-cleanup"
 

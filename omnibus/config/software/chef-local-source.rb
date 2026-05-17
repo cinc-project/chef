@@ -59,8 +59,6 @@ gem_dir = "#{install_dir}/embedded/lib/ruby/gems/#{ruby_mmv}"
 bin_dirs bin_dirs.push "#{gem_dir}/gems/*/bin/**"
 lib_dirs ["#{ruby_dir}/**", "#{gem_dir}/extensions/**", "#{gem_dir}/bundler/gems/extensions/**", "#{gem_dir}/bundler/gems/*", "#{gem_dir}/bundler/gems/*/lib/**", "#{gem_dir}/gems/*", "#{gem_dir}/gems/*/lib/**", "#{gem_dir}/gems/*/ext/**"]
 
-dependency "cinc-foundation"
-
 relative_path "chef"
 
 build do
@@ -68,14 +66,11 @@ build do
 
   # The --without groups here MUST match groups in https://github.com/chef/chef/blob/main/Gemfile
   excluded_groups = %w{docgen cookstyle}
-  excluded_groups << "ruby_prof" if aix?
-  excluded_groups << "ruby_shadow" if aix?
   excluded_groups << "ed25519" if solaris2?
 
   # these are gems which are not shipped but which must be installed in the testers
   bundle_excludes = excluded_groups + %w{development test}
 
-  copy "Gemfile.aix.lock", "Gemfile.lock", remove_destination: true if aix?
   bundle "config set --local without docgen cookstyle development test", env: env
   bundle "install --jobs=2 --without #{bundle_excludes.join(" ")}", env: env
   ruby "post-bundle-install.rb", env: env
