@@ -1,16 +1,13 @@
 source "https://rubygems.org"
 
-gem "omnibus", github: ENV.fetch("OMNIBUS_GITHUB_REPO", "chef/omnibus"), branch: ENV.fetch("OMNIBUS_GITHUB_BRANCH", "main")
-
-gem "omnibus-software", git: ENV.fetch("OMNIBUS_SOFTWARE_GITHUB_REPO", "https://gitlab.com/cinc-project/upstream/omnibus-software.git"), branch: ENV.fetch("OMNIBUS_SOFTWARE_GITHUB_BRANCH", "stable/cinc")
+gem "omnibus", source: "https://rubygems.cinc.sh"
+gem "omnibus-software", source: "https://rubygems.cinc.sh"
 
 gem "license_scout", git: ENV.fetch("LICENSE_SCOUT_GITHUB_REPO", "https://gitlab.com/cinc-project/upstream/license-scout.git"), branch: ENV.fetch("LICENSE_SCOUT_GITHUB_BRANCH", "1-stable")
 
 gem "artifactory"
 
 gem "pedump"
-
-gem "ffi", "< 1.17"
 
 # This development group is installed by default when you run `bundle install`,
 # but if you are using Omnibus in a CI-based infrastructure, you do not need
