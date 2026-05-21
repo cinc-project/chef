@@ -33,6 +33,7 @@ group(:packaging) do
   gem "rb-readline"
   gem "cinc-auditor-core-bin", "~> 7.0.107", # need to provide the binaries for inspec
     source: "https://rubygems.cinc.sh"
+  gem "inspec-core", source: "https://rubygems.cinc.sh"
   gem "chef-vault"
   gem "chef-zero", source: "https://rubygems.cinc.sh"
 end
