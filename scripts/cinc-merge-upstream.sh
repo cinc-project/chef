@@ -1,37 +1,38 @@
 #!/usr/bin/env bash
 #
-# Merge an upstream branch into the current branch after first dropping
-# commits that should not appear in the Cinc fork (e.g. the omnibus
-# privatization submodule that replaces the omnibus directory with a
-# private submodule we cannot pull from).
+# Merge an upstream ref into the current Cinc branch while keeping Cinc's own
+# in-tree, public omnibus/ directory.
 #
-# Files marked merge=ignore or merge=union in .gitattributes resolve
-# automatically; everything else surfaces as a real merge conflict for
-# manual resolution. The 'ignore' driver must be registered first:
+# Upstream (chef/inspec/chef-server) relocated omnibus/ into a PRIVATE git
+# submodule that we cannot clone. Naively merging the upstream ref drags in the
+# submodule gitlink and a .gitmodules pointing at an inaccessible repo. This
+# script instead:
 #
+#   1. Builds a "cleaned" copy of the upstream ref as a single commit: the
+#      omnibus submodule and .gitmodules are removed and omnibus/ is repopulated
+#      from *this* branch's in-tree omnibus. Because it is one commit (no history
+#      replay) it is robust no matter how many omnibus-submodule bump commits
+#      upstream layered on after privatization.
+#   2. Merges that cleaned ref into the current branch. Cinc's .gitattributes
+#      (merge=ignore / merge=union) auto-resolves VERSION, the version.rb files,
+#      Gemfile*.lock and CHANGELOG. omnibus/ carries no conflict because both
+#      sides now hold Cinc's tree. As a safety net the merge forces omnibus/ and
+#      the absence of .gitmodules to Cinc's side before committing.
+#
+# The 'ignore' merge driver must be registered first (the build's patch.sh does
+# this):
 #   git config merge.ignore.name 'ignore changes merge driver'
 #   git config merge.ignore.driver 'touch %A'
 #
 # Usage:
-#   scripts/cinc-merge-upstream.sh [upstream-ref] [skip-sha ...]
+#   scripts/cinc-merge-upstream.sh [upstream-ref]
 #
-# Defaults:
-#   upstream-ref = upstream/chef-18
-#   skip-sha     = 623d32af0a024a4fdd144159d6efd4496b841460
-#
-# Examples:
-#   scripts/cinc-merge-upstream.sh
-#   scripts/cinc-merge-upstream.sh upstream/main 623d32af0a abcdef12
+# The upstream-ref may be a branch (upstream/chef-18) or a bare tag/sha
+# (v18.11.11) for a pinned release build. Default: upstream/chef-18.
 
 set -euo pipefail
 
 UPSTREAM_REF="${1:-upstream/chef-18}"
-shift || true
-SKIP_SHAS=("$@")
-if [ ${#SKIP_SHAS[@]} -eq 0 ]; then
-  SKIP_SHAS=("623d32af0a024a4fdd144159d6efd4496b841460")
-fi
-
 TEMP_BRANCH="cinc-merge-upstream-tmp-$$"
 
 current_branch="$(git symbolic-ref --short HEAD 2>/dev/null || true)"
@@ -45,74 +46,78 @@ if [ -n "$(git status --porcelain)" ]; then
   exit 1
 fi
 
-echo "==> Fetching $(echo "$UPSTREAM_REF" | cut -d/ -f1)"
-git fetch "$(echo "$UPSTREAM_REF" | cut -d/ -f1)"
+# Determine the remote to fetch. If the ref is "<remote>/<name>" and <remote> is
+# a configured remote (e.g. upstream/chef-18) fetch that; otherwise the ref is a
+# bare tag or sha (e.g. v18.11.11 for a release) so fetch the default 'upstream'
+# remote. Always fetch tags so version tags resolve.
+fetch_remote="${UPSTREAM_REF%%/*}"
+if [ "$fetch_remote" = "$UPSTREAM_REF" ] || ! git remote get-url "$fetch_remote" >/dev/null 2>&1; then
+  fetch_remote="upstream"
+fi
+echo "==> Fetching $fetch_remote (with tags)"
+git fetch --tags "$fetch_remote"
 
-if ! git rev-parse --verify "$UPSTREAM_REF" >/dev/null 2>&1; then
+if ! git rev-parse --verify "${UPSTREAM_REF}^{commit}" >/dev/null 2>&1; then
   echo "error: upstream ref '$UPSTREAM_REF' not found." >&2
   exit 1
 fi
 
-for sha in "${SKIP_SHAS[@]}"; do
-  if ! git rev-parse --verify "$sha^{commit}" >/dev/null 2>&1; then
-    echo "error: skip commit '$sha' not found in repository." >&2
-    exit 1
-  fi
-  if ! git merge-base --is-ancestor "$sha" "$UPSTREAM_REF"; then
-    echo "error: skip commit '$sha' is not an ancestor of $UPSTREAM_REF." >&2
-    exit 1
-  fi
-done
-
-echo "==> Branch:      $current_branch"
-echo "==> Upstream:    $UPSTREAM_REF ($(git rev-parse --short "$UPSTREAM_REF"))"
-echo "==> Skipping:    ${SKIP_SHAS[*]}"
+echo "==> Branch:   $current_branch"
+echo "==> Upstream: $UPSTREAM_REF ($(git rev-parse --short "${UPSTREAM_REF}^{commit}"))"
 
 cleanup_temp() {
   if git rev-parse --verify "$TEMP_BRANCH" >/dev/null 2>&1; then
     git branch -D "$TEMP_BRANCH" >/dev/null 2>&1 || true
   fi
 }
+trap 'code=$?; cleanup_temp; exit $code' EXIT
 
-cleanup_failed() {
-  local code=$?
-  cleanup_temp
-  exit $code
-}
-trap cleanup_failed EXIT
+echo "==> Building de-privatized upstream on $TEMP_BRANCH"
+git checkout -q -b "$TEMP_BRANCH" "${UPSTREAM_REF}^{commit}"
 
-echo "==> Building cleaned upstream on $TEMP_BRANCH"
-git checkout -b "$TEMP_BRANCH" "$UPSTREAM_REF" >/dev/null
+if git ls-tree "$TEMP_BRANCH" omnibus | grep -q '^160000'; then
+  git rm -q --cached omnibus
+  rm -rf omnibus
+  [ -f .gitmodules ] && git rm -q -f .gitmodules
+  # Repopulate omnibus/ from the branch we are merging into, so the subsequent
+  # merge sees an identical omnibus on both sides (no conflict) and the result
+  # keeps Cinc's in-tree omnibus.
+  git checkout "$current_branch" -- omnibus
+  git add -A omnibus
+  git commit -q -m "Drop private omnibus submodule; keep Cinc's in-tree omnibus"
+else
+  echo "    ($UPSTREAM_REF has no omnibus submodule; nothing to de-privatize)"
+fi
 
-# Drop each skip commit from the temp branch, oldest first. Dedup by full SHA.
-mapfile -t ordered_skips < <(
-  for sha in "${SKIP_SHAS[@]}"; do
-    full="$(git rev-parse "$sha")"
-    printf '%s %s\n' "$(git rev-list --count "$full")" "$full"
-  done | sort -n | awk '!seen[$2]++ {print $2}'
-)
+echo "==> Merging de-privatized upstream into $current_branch"
+git checkout -q "$current_branch"
+git merge --no-commit --no-ff "$TEMP_BRANCH" >/dev/null 2>&1 || true
 
-for sha in "${ordered_skips[@]}"; do
-  echo "    dropping $(git log -1 --oneline "$sha")"
-  if ! git rebase --onto "${sha}^" "$sha"; then
-    echo "error: failed to drop $sha cleanly. Resolve conflicts and re-run, or 'git rebase --abort'." >&2
-    git rebase --abort 2>/dev/null || true
-    git checkout "$current_branch" >/dev/null 2>&1 || true
-    exit 1
-  fi
-done
+# Safety net: force omnibus/ and the absence of .gitmodules to Cinc's side,
+# regardless of how git resolved them.
+rm -rf omnibus
+git checkout "$current_branch" -- omnibus
+git add -A omnibus
+git rm -q --cached --ignore-unmatch .gitmodules >/dev/null 2>&1 || true
+rm -f .gitmodules
 
-echo "==> Merging cleaned upstream into $current_branch"
-git checkout "$current_branch" >/dev/null
-if ! git merge --no-edit -m "Merge cleaned $UPSTREAM_REF into $current_branch" "$TEMP_BRANCH"; then
-  echo
-  echo "Merge paused with conflicts. Resolve them, 'git add' the resolved files,"
-  echo "then 'git commit'. When finished, delete the temp branch:"
-  echo "    git branch -D $TEMP_BRANCH"
+remaining="$(git diff --name-only --diff-filter=U)"
+if [ -n "$remaining" ]; then
+  echo >&2
+  echo "error: unresolved conflicts outside omnibus/ remain:" >&2
+  echo "$remaining" | sed 's/^/    /' >&2
+  echo "Resolve them, 'git add' the files, then 'git commit'. Afterwards delete" >&2
+  echo "the temp branch:  git branch -D $TEMP_BRANCH" >&2
   trap - EXIT
   exit 1
 fi
 
+if git rev-parse --verify MERGE_HEAD >/dev/null 2>&1; then
+  git commit --no-edit -q -m "Merge cleaned $UPSTREAM_REF into $current_branch"
+else
+  echo "==> Already up to date (no merge commit needed)."
+fi
+
 cleanup_temp
 trap - EXIT
-echo "==> Done. $current_branch now contains $UPSTREAM_REF (with skipped commits omitted)."
+echo "==> Done. $current_branch now contains $UPSTREAM_REF's source with Cinc's omnibus preserved."
