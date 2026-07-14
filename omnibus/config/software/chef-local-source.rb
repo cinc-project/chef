@@ -18,6 +18,17 @@
 name "chef"
 default_version "main"
 
+# post-bundle-install.rb (below) patches openssl.rb to `require "ssl_env_hack"`
+# and then requires openssl, but that file is installed by openssl-customization.
+# Declare the dependency so omnibus builds it first. Without this the ordering
+# inverts on Windows: this software declares `name "chef"` while the project
+# depends on "chef-local-source", so Omnibus::Library#build_order's
+# `project.dependencies.include?(component.name)` check misses and puts chef in
+# `head`, while openssl-customization (a leaf project dependency) lands in
+# `tail` -- i.e. dead last. The Windows build then dies in post-bundle-install
+# with "OpenSSL is not available", because ssl_env_hack.rb does not exist yet.
+dependency "openssl-customization"
+
 license "Apache-2.0"
 license_file "LICENSE"
 
