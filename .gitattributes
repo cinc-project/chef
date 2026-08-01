@@ -1,5 +1,15 @@
-# git config merge.ignore.name 'ignore changes merge driver'
-# git config merge.ignore.driver 'touch %A'
-lib/chef/version.rb merge=ignore
+# Auto-resolve merges from upstream chef for files cinc maintains
+# independently. Requires registering the 'ignore' driver once per clone:
+#
+#   git config merge.ignore.name 'ignore changes merge driver'
+#   git config merge.ignore.driver 'touch %A'
+#
+VERSION                                  merge=ignore
+CHANGELOG.md                             merge=union
+lib/chef/version.rb                      merge=ignore
+chef-bin/lib/chef-bin/version.rb         merge=ignore
+chef-config/lib/chef-config/version.rb   merge=ignore
+chef-utils/lib/chef-utils/version.rb     merge=ignore
+Gemfile.lock                             merge=ignore
 *.reg text eol=crlf
 *.sh  text eol=lf

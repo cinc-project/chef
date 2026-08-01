@@ -9,6 +9,15 @@ gem "artifactory"
 
 gem "pedump"
 
+# omnibus loads mixlib-shellout, whose windows.rb does `require "win32/process"`
+# at runtime without declaring the gem. It used to reach the bundle transitively
+# via the development group (berkshelf -> chef), but CI builds run
+# `bundle install --without development`, which drops it and makes `omnibus`
+# fail to load on Windows. Declare it directly. win32-process is pure Ruby
+# (only needs ffi), so it resolves on every platform and is simply unused off
+# Windows; `~> 0.9` matches the version chef pins.
+gem "win32-process", "~> 0.9"
+
 # This development group is installed by default when you run `bundle install`,
 # but if you are using Omnibus in a CI-based infrastructure, you do not need
 # the Test Kitchen-based build lab. You can skip these unnecessary dependencies
