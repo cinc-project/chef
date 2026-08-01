@@ -12,6 +12,11 @@ gem "rest-client", git: "https://github.com/chef/rest-client", branch: "jfm/ucrt
 
 gem "ffi", ">= 1.15.5", force_ruby_platform: true
 
+# unf_ext must come from rubygems.org: rubygems.cinc.sh hosts a stale 0.0.7.2,
+# and bundler binds an undeclared indirect dependency to a scoped source that
+# contains it, which then cannot satisfy the gemspec's ~> 0.0.9.1 pin.
+gem "unf_ext"
+
 gem "chef-utils", path: File.expand_path("chef-utils", __dir__) if File.exist?(File.expand_path("chef-utils", __dir__))
 gem "chef-config", path: File.expand_path("chef-config", __dir__) if File.exist?(File.expand_path("chef-config", __dir__))
 
