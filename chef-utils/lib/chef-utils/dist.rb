@@ -108,8 +108,10 @@ module ChefUtils
       # The name of the server product
       PRODUCT = "Cinc Server"
 
-      # The server's configuration directory
-      CONF_DIR = "/etc/cinc-server"
+      # The server's configuration directory. This is the directory Cinc Server
+      # actually installs into and reads from -- it must match Org::LEGACY_CONF_DIR
+      # above, which is what the server cookbook uses to build the real paths.
+      CONF_DIR = "/etc/cinc-project"
 
       # The servers's alias (chef-server)
       SERVER = "cinc-server"
