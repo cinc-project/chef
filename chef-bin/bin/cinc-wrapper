@@ -19,8 +19,6 @@
 
 Encoding.default_external = Encoding::UTF_8
 
-require 'mixlib/shellout'
-
 command = if File.basename($PROGRAM_NAME) == 'inspec'
             'cinc-auditor'
           else
@@ -30,13 +28,20 @@ command = if File.basename($PROGRAM_NAME) == 'inspec'
 STDERR.puts "Redirecting to #{command}"
 
 cmd_dir = File.dirname(File.realpath($PROGRAM_NAME))
+cmd_path = File.join(cmd_dir, command)
 
-# cinc-shell uses a tty so we need to use Kernel.exec to get this to work
-# https://gitlab.com/cinc-project/distribution/client/-/issues/30
-if command == 'cinc-shell'
-  Kernel.exec(command, *ARGV)
-else
-  cmd = Mixlib::ShellOut.new("#{cmd_dir}/#{command}", *ARGV, live_stream: STDOUT, timeout: 3600)
+if RUBY_PLATFORM.match?(/mswin|mingw|windows/)
+  # Kernel.exec on Windows spawns a child and returns immediately, so use
+  # Mixlib::ShellOut there to keep the exit status.
+  require 'mixlib/shellout'
+  cmd = Mixlib::ShellOut.new(cmd_path, *ARGV, live_stream: STDOUT, timeout: 3600)
   cmd.run_command
   exit cmd.exitstatus
+else
+  # Replace this process with the real command so it inherits the terminal.
+  # Running it through Mixlib::ShellOut gives it pipes instead, which breaks
+  # anything interactive (cinc-shell, cinc-auditor shell, password prompts).
+  # https://gitlab.com/cinc-project/distribution/client/-/issues/30
+  # https://gitlab.com/cinc-project/distribution/auditor/-/issues/16
+  Kernel.exec(cmd_path, *ARGV)
 end
