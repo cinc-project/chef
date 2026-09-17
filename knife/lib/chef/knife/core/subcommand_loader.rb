@@ -73,7 +73,7 @@ class Chef
       end
 
       def self.plugin_manifest_path
-        ChefConfig::PathHelper.home(".chef", "plugin_manifest.json")
+        ChefConfig::PathHelper.home(".cinc", "plugin_manifest.json")
       end
 
       def self.generate_hash
@@ -197,7 +197,7 @@ class Chef
         end
 
         # finally search ~/.chef/plugins/knife/*.rb
-        ChefConfig::PathHelper.home(".chef", "plugins", "knife") do |p|
+        ChefConfig::PathHelper.home(".cinc", "plugins", "knife") do |p|
           user_specific_files.concat Dir.glob(File.join(ChefConfig::PathHelper.escape_glob_dir(p), "*.rb"))
         end
 

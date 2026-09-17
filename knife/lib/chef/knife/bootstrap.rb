@@ -301,7 +301,7 @@ class Chef
       option :bootstrap_product,
         long: "--bootstrap-product PRODUCT",
         description: "Product to install.",
-        default: "chef"
+        default: "cinc"
 
       option :msi_url, # Windows target only
         short: "-m URL",
@@ -506,7 +506,7 @@ class Chef
         bootstrap_files = []
         bootstrap_files << File.join(__dir__, "bootstrap/templates", "#{template}.erb")
         bootstrap_files << File.join(Knife.chef_config_dir, "bootstrap", "#{template}.erb") if Chef::Knife.chef_config_dir
-        ChefConfig::PathHelper.home(".chef", "bootstrap", "#{template}.erb") { |p| bootstrap_files << p }
+        ChefConfig::PathHelper.home(".cinc", "bootstrap", "#{template}.erb") { |p| bootstrap_files << p }
         bootstrap_files << Gem.find_files(File.join("chef", "knife", "bootstrap", "#{template}.erb"))
         bootstrap_files.flatten!
 
@@ -557,7 +557,7 @@ class Chef
 
       def run
         check_eula_license if ChefUtils::Dist::Org::ENFORCE_LICENSE
-        fetch_license
+        fetch_license if ChefUtils::Dist::Org::ENFORCE_LICENSE
 
         plugin_setup!
         validate_name_args!
@@ -579,7 +579,7 @@ class Chef
         bootstrap_path = upload_bootstrap(content)
         perform_bootstrap(bootstrap_path)
         plugin_finalize
-        warn_license_usage
+        warn_license_usage if ChefUtils::Dist::Org::ENFORCE_LICENSE
       ensure
         connection.del_file!(bootstrap_path) if connection && bootstrap_path
       end
