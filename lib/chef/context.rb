@@ -16,6 +16,7 @@
 # limitations under the License.
 
 require_relative "licensing_config"
+require "chef-utils/dist" unless defined?(ChefUtils::Dist)
 
 class Chef
   class Context
@@ -29,11 +30,11 @@ class Chef
         @context ||= (fetch_env_value == "true")
       end
 
-      # This method will switch the license entitlement to Chef Workstation entitlement.
+      # This method will switch the license entitlement to the workstation entitlement.
       def switch_to_workstation_entitlement
-        puts "Running under Test-Kitchen: Switching License to Chef Workstation entitlement!"
+        puts "Running under Test-Kitchen: Switching License to #{ChefUtils::Dist::Workstation::PRODUCT} entitlement!"
         ChefLicensing.configure do |config|
-          # Reset entitlement ID to the ID of Chef Workstation
+          # Reset entitlement ID to the ID of the workstation product
           config.chef_entitlement_id = Chef::LicensingConfig::WORKSTATION_ENTITLEMENT_ID
         end
       end
