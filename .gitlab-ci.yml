@@ -1,0 +1,18 @@
+---
+stages:
+  - test
+
+workflow:
+  rules:
+    # Run if this is a merge request
+    - if: $CI_MERGE_REQUEST_ID
+
+server-testing:
+  stage: test
+  variables:
+    CINC_REF: $CI_COMMIT_REF_NAME
+    # XXX: Temporary for debugging
+    OMNIBUS_LOG_LEVEL: debug
+  trigger:
+    project: cinc-project/distribution/client
+    strategy: depend
