@@ -30,8 +30,14 @@ Dir["#{gem_home}/bundler/gems/*"].each do |gempath|
     # Without --ignore-dependencies, gem install falls back to rubygems.org and installs
     # the wrong gem version with different dependency constraints (e.g. rest-client on
     # rubygems.org requires http-accept >= 1.7.0, < 2.0 instead of ~> 2.1.0).
-    # Use --ignore-dependencies on AIX since all deps are already installed by bundle install.
-    install_flags = RUBY_PLATFORM.include?("aix") ? "--ignore-dependencies --no-document" : "--conservative --minimal-deps --no-document"
+    # On Windows the remote fallback fails outright: bare RubyGems uses Ruby's built-in
+    # openssl gem, which predates the omnibus openssl 3.6 and won't load, so any HTTPS
+    # contact dies with "OpenSSL is not available".
+    # All deps are already installed by bundle install, so keep these installs offline.
+    # --ignore-dependencies alone is not enough: RubyGems' add_always_install still walks
+    # the source list (including the remote) to locate the gem itself, so --local is what
+    # actually prevents any network access.
+    install_flags = (RUBY_PLATFORM.include?("aix") || RUBY_PLATFORM =~ /mswin|mingw|windows/) ? "--local --ignore-dependencies --no-document" : "--conservative --minimal-deps --no-document"
     system("gem install #{gem_name}*.gem #{install_flags}") or raise "gem install failed"
   end
 end
