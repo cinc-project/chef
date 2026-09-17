@@ -15,15 +15,20 @@
 # applied so 15.0.260 would be tagged as "latest", "stable", "15" and "15.0", as well as "15.0.260".
 
 FROM busybox
-LABEL maintainer="Chef Software, Inc. <docker@chef.io>"
+LABEL maintainer="Cinc Project <docker@cinc.sh>"
 
 ARG CHANNEL=stable
 ARG VERSION=18.11.11
-ARG ARCH=x86_64
-ARG PKG_VERSION=9
+ARG PKG_VERSION=8
+ARG TARGETARCH
 
-RUN wget "http://packages.chef.io/files/${CHANNEL}/chef/${VERSION}/el/${PKG_VERSION}/chef-${VERSION}-1.el${PKG_VERSION}.${ARCH}.rpm" -O /tmp/chef-client.rpm && \
-    rpm2cpio /tmp/chef-client.rpm | cpio -idmv && \
-    rm -rf /tmp/chef-client.rpm
+RUN set -euo pipefail; \
+    case "$TARGETARCH" in \
+        amd64) arch=x86_64 ;; \
+        arm64) arch=aarch64 ;; \
+        *) echo "Unsupported TARGETARCH: $TARGETARCH" >&2; exit 1 ;; \
+    esac; \
+    wget "http://ftp-osl.osuosl.org/pub/cinc/files/${CHANNEL}/cinc/${VERSION}/el/${PKG_VERSION}/cinc-${VERSION}-1.el${PKG_VERSION}.$arch.rpm" -O /tmp/cinc-client.rpm && \
+    rpm2cpio /tmp/cinc-client.rpm | cpio -idmv && rm -rf /tmp/cinc-client.rpm
 
-VOLUME [ "/opt/chef" ]
+VOLUME [ "/opt/cinc" ]
