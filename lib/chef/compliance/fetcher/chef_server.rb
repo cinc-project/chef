@@ -99,7 +99,7 @@ class Chef
           when /404/
             Chef::Log.error "Object does not exist on remote server."
           when /413/
-            Chef::Log.error "You most likely hit the erchef request size in #{ChefUtils::Dist::Server::PRODUCT} that defaults to ~2MB. To increase this limit see the Compliance Phase troubleshooting documentation (http://docs.chef.io/chef_compliance_phase/#troubleshooting) or the Chef Infra Server configuration documentation (https://docs.chef.io/server/config_rb_server/)"
+            Chef::Log.error "You most likely hit the erchef request size in #{ChefUtils::Dist::Server::PRODUCT} that defaults to ~2MB. To increase this limit see the Compliance Phase troubleshooting documentation (http://docs.chef.io/chef_compliance_phase/#troubleshooting) or the #{ChefUtils::Dist::Server::PRODUCT} configuration documentation"
           when /429/
             Chef::Log.error "This error typically means the data sent was larger than #{ChefUtils::Dist::Automate::PRODUCT}'s limit (4 MB). Run InSpec locally to identify any controls producing large diffs."
           end
