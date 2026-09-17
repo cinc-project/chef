@@ -19,7 +19,7 @@ gem "chef-config", path: File.expand_path("chef-config", __dir__) if File.exist?
 
 # required for FIPS or bundler will pick up default openssl
 install_if -> { RUBY_PLATFORM !~ /darwin/ } do
-  gem "openssl", "= 3.3.0"
+  gem "openssl", "= 3.3.3"
 end
 
 if File.exist?(File.expand_path("chef-bin", __dir__))
@@ -37,7 +37,10 @@ group(:omnibus_package) do
   gem "rb-readline"
   gem "chef-vault"
 
-  gem "inspec-core-bin", "~> 5.24", "< 6"
+  gem "cinc-auditor-core-bin", ">= 5", "< 6",
+    source: "https://rubygems.cinc.sh"
+
+  gem "chef-zero", source: "https://rubygems.cinc.sh"
 end
 
 group(:omnibus_package, :pry) do
