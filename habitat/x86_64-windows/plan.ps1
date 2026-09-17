@@ -1,11 +1,12 @@
 $env:HAB_BLDR_CHANNEL = "base-2025"
 $SRC_PATH = (Get-Item "$PLAN_CONTEXT\..\..\").FullName
-$pkg_name="chef-infra-client"
-$pkg_origin="chef"
 $pkg_version=(Get-Content "$SRC_PATH\VERSION")
-$pkg_description="Chef Infra Client is an agent that runs locally on every node that is under management by Chef Infra. This package is binary-only to provide Chef Infra Client executables. It does not define a service to run."
-$pkg_maintainer="The Chef Maintainers <maintainers@chef.io>"
-$pkg_upstream_url="https://github.com/chef/chef"
+$pkg_name="cinc-infra-client"
+$env:HAB_BLDR_CHANNEL="LTS-2024"
+$pkg_origin="cinc"
+$pkg_description="Cinc Client is an agent that runs locally on every node that is under management by Cinc. This package is binary-only to provide Cinc Client executables. It does not define a service to run."
+$pkg_maintainer="The Cinc Maintainers <maintainers@cins.sh>"
+$pkg_upstream_url="https://gitlab.com/cinc-project/distribution/client"
 $pkg_license=@("Apache-2.0")
 $pkg_filename="${pkg_name}-${pkg_version}.zip"
 $pkg_bin_dirs=@(

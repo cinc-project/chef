@@ -1,10 +1,11 @@
 export HAB_BLDR_CHANNEL="base-2025"
 SRC_PATH="$(dirname "$(dirname "$PLAN_CONTEXT")")"
 _chef_client_ruby="core/ruby3_4/3.4.10"
-pkg_name="chef-infra-client"
-pkg_origin="chef"
-pkg_maintainer="The Chef Maintainers <humans@chef.io>"
-pkg_description="The Chef Infra Client"
+pkg_name=cinc-client
+pkg_origin=cincproject
+pkg_upstream_url=https://www.cinc.sh
+pkg_maintainer="The cinc Maintainers <maintainers@cinc.sh>"
+pkg_description="The Cinc Infra Client"
 pkg_license=('Apache-2.0')
 pkg_bin_dirs=(
   bin
@@ -182,7 +183,7 @@ do_install() {
     build_line "** fixing binstub shebangs"
     fix_interpreter "${pkg_prefix}/vendor/bin/*" "$_chef_client_ruby" bin/ruby
 
-    for gem in chef-bin chef inspec-core-bin ohai; do
+    for gem in chef-bin chef cinc-auditor-core-bin ohai; do
       build_line "** generating binstubs for $gem with precise version pins"
       "${pkg_prefix}/vendor/bin/appbundler" $CACHE_PATH $pkg_prefix/bin $gem
     done
@@ -192,6 +193,15 @@ do_install() {
       sed -i "/require \"rubygems\"/r ${PLAN_CONTEXT}/../binstub_patch.rb" "$binstub"
     done
   )
+
+  wrapper_links="chef-apply chef-client chef-shell chef-solo inspec"
+  link_target="cinc-wrapper"
+  for link in $wrapper_links; do
+    if [ ! -e ${pkg_prefix}/bin/$link ]; then
+      build_line "Symlinking $link command to cinc-wrapper for compatibility..."
+      ln -sf ${pkg_prefix}/bin/$link_target ${pkg_prefix}/bin/$link || error_exit "Cannot link $link_target to $PREFIX/bin/$link"
+    fi
+  done
 }
 
 do_after() {
