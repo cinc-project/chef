@@ -7,17 +7,11 @@
 #   this programming language.  do not touch.
 # - if you are under 40, get peer review from your elders.
 
+INSTALLER_DIR=/opt/cinc
+WORKSTATION_DIR=/opt/cinc-workstation
+
 is_darwin() {
   uname -a | grep "^Darwin" 2>&1 >/dev/null
-}
-
-is_suse() {
-  if [ -f /etc/os-release ]; then
-    . /etc/os-release
-    [ "$ID_LIKE" = "sles" ] || [ "$ID_LIKE" = "suse" ]
-  else
-    [ -f /etc/SuSE-release ]
-  fi
 }
 
 if is_darwin; then
@@ -26,28 +20,26 @@ else
     PREFIX="/usr"
 fi
 
+# Remove only links that point into this package, and hand each name back to a
+# co-installed Cinc Workstation, which ships all of them.
 cleanup_symlinks() {
-  binaries="cinc-client cinc-solo cinc-apply cinc-shell knife ohai"
-  for binary in $binaries; do
-    rm -f $PREFIX/bin/$binary
-  done
-
-  wrapper_links="chef-apply chef-client chef-shell chef-solo"
-  link_target="cinc-wrapper"
-  for link in $wrapper_links;  do
-    if [ -L $PREFIX/bin/$link -a "$(readlink $PREFIX/bin/$link)" = "$INSTALLER_DIR/bin/$link_target" ]; then
-      echo "Removing $link compatibility symlink..."
-      rm -f $PREFIX/bin/$link
+  for link in cinc-client cinc-solo cinc-apply cinc-shell knife ohai chef-apply chef-client chef-shell chef-solo inspec; do
+    if [ -L $PREFIX/bin/$link ]; then
+      case "`readlink $PREFIX/bin/$link`" in
+        $INSTALLER_DIR/*)
+          rm -f $PREFIX/bin/$link
+          if [ -x $WORKSTATION_DIR/bin/$link ]; then
+            ln -s $WORKSTATION_DIR/bin/$link $PREFIX/bin/$link
+          fi
+          ;;
+      esac
     fi
   done
 }
 
-# Clean up binary symlinks if they exist
-# see: http://tickets.opscode.com/browse/CHEF-3022
-if [ ! -f /etc/redhat-release -a ! -f /etc/fedora-release -a ! -f /etc/system-release -a ! is_suse ]; then
-  # not a redhat-ish RPM-based system
-  cleanup_symlinks
-elif [ "x$1" = "x0" ]; then
-  # RPM-based system and we're uninstalling rather than upgrading
-  cleanup_symlinks
-fi
+# rpm passes the number of installs left, so 1+ is an upgrade whose new links
+# are already in place (CHEF-3022); dpkg passes a word such as remove or purge.
+case "$1" in
+  [1-9]*) ;;
+  *) cleanup_symlinks ;;
+esac
