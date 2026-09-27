@@ -76,8 +76,13 @@ rm -f $PREFIX/bin/chef-client
 rm -f $PREFIX/bin/chef-solo
 rm -f $PREFIX/bin/chef-apply
 rm -f $PREFIX/bin/chef-shell
-rm -f $PREFIX/bin/knife
 rm -f $PREFIX/bin/ohai
+# Older clients linked knife here; a co-installed Workstation's knife stays.
+if [ -L $PREFIX/bin/knife ]; then
+  case "`readlink $PREFIX/bin/knife`" in
+    $INSTALLER_DIR/*) rm -f $PREFIX/bin/knife ;;
+  esac
+fi
 
 ln -sf $INSTALLER_DIR/bin/cinc-solo $PREFIX/bin || error_exit "Cannot link cinc-solo to $PREFIX/bin"
 if [ -f "$INSTALLER_DIR/bin/cinc-apply" ]; then
