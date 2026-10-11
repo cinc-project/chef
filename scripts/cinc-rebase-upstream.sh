@@ -193,7 +193,9 @@ fi
 
 echo "==> Rebasing $current_branch onto cleaned upstream"
 git checkout "$current_branch" >/dev/null
-if ! git rebase --onto "$TEMP_BRANCH" "$merge_base"; then
+# A plain rebase lets git skip the cleaned upstream commits an earlier run
+# already put on the branch; --onto would replay them and conflict.
+if ! git rebase "$TEMP_BRANCH"; then
   echo
   echo "Rebase paused with conflicts. Resolve them, then 'git rebase --continue'."
   echo "When finished, delete the temp branch:  git branch -D $TEMP_BRANCH"
