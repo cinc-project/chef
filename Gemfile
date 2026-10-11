@@ -14,6 +14,9 @@ gem "zlib", ">= 3.2.3"
 # CVE-2026-41316 (CVSS 8.1): ERB @_init deserialization guard bypass via def_method/def_module/def_class.
 # Versions <= 6.0.3 are affected. Fixed in 4.0.3.1, 4.0.4.1, 6.0.1.1, and 6.0.4.
 gem "erb", ">= 4.0.4.1"
+# CVE-2026-85396 (GHSA-47m2-wp7j-p9vc): rubyzip path traversal.
+# Versions < 3.4.0 are affected. Fixed in 3.4.0.
+gem "rubyzip", ">= 3.4"
 gem "chef-utils", path: File.expand_path("chef-utils", __dir__) if File.exist?(File.expand_path("chef-utils", __dir__))
 gem "chef-config", path: File.expand_path("chef-config", __dir__) if File.exist?(File.expand_path("chef-config", __dir__))
 
