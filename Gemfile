@@ -21,6 +21,9 @@ gem "net-ssh", ">= 7.3.8"
 # GHSA-5v64-555j-wjxm and three more: rack multipart, Host header and
 # Rack::Static advisories. Fixed in 3.2.8.
 gem "rack", ">= 3.2.8"
+# CVE-2026-85396 (GHSA-47m2-wp7j-p9vc): rubyzip path traversal.
+# Versions < 3.4.0 are affected. Fixed in 3.4.0.
+gem "rubyzip", ">= 3.4"
 gem "chef-utils", path: File.expand_path("chef-utils", __dir__) if File.exist?(File.expand_path("chef-utils", __dir__))
 gem "chef-config", path: File.expand_path("chef-config", __dir__) if File.exist?(File.expand_path("chef-config", __dir__))
 
