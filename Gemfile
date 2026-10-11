@@ -17,6 +17,10 @@ gem "ffi", ">= 1.15.5", force_ruby_platform: true
 # contains it, which then cannot satisfy the gemspec's ~> 0.0.9.1 pin.
 gem "unf_ext"
 
+# chef-licensing leaves faraday-http-cache unconstrained; 2.8.0 is the first
+# release with the GHSA-p8jg-8p9f-pgmr / GHSA-c33f-42f2-gwcc cache fixes.
+gem "faraday-http-cache", ">= 2.8.0"
+
 gem "chef-utils", path: File.expand_path("chef-utils", __dir__) if File.exist?(File.expand_path("chef-utils", __dir__))
 gem "chef-config", path: File.expand_path("chef-config", __dir__) if File.exist?(File.expand_path("chef-config", __dir__))
 
