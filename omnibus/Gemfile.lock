@@ -4,7 +4,7 @@ GEM
     chef-utils (19.3.14)
       concurrent-ruby
     mixlib-versioning (1.2.12)
-    omnibus (10.6.1)
+    omnibus (10.9.0)
       aws-sdk-s3 (~> 1.116)
       benchmark
       chef-cleanroom (~> 1.0)
