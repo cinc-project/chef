@@ -15,4 +15,5 @@ server-testing:
     OMNIBUS_LOG_LEVEL: debug
   trigger:
     project: cinc-project/distribution/client
+    branch: cinc-18
     strategy: depend
