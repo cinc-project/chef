@@ -22,7 +22,7 @@ GEM
       thor (>= 0.18, < 2.0)
       win32-process (~> 0.9)
       wmi-lite (~> 1.0)
-    omnibus-software (26.7.23)
+    omnibus-software (26.10.34)
       ffi (>= 1.17.0)
       omnibus (>= 9.0.0)
 
