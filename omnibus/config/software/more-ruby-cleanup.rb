@@ -1,5 +1,6 @@
 #
 # Copyright:: Copyright (c) Chef Software Inc.
+# Copyright:: Copyright (c) 2026 Cinc Project
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +26,8 @@ license :project_license
 source path: "#{project.files_path}/#{name}"
 
 build do
+  env = with_standard_compiler_flags(with_embedded_path)
+
   block "Removing console and setup binaries" do
     Dir.glob("#{install_dir}/embedded/lib/ruby/gems/*/gems/*/bin/{console,setup}").each do |f|
       puts "Deleting #{f}"
@@ -156,4 +159,8 @@ build do
       end
     end
   end
+
+  # Make Ruby's default json the installed json gem, so nothing loads or
+  # reports the older default copy.
+  ruby "replace-default-json.rb", env: env
 end
