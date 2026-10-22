@@ -109,14 +109,15 @@ build do
     end
   end
 
-  block "Removing nested Gemfile/Gemfile.lock fixtures that trip SBOM scanners" do
+  block "Removing nested Gemfile.lock fixtures that trip SBOM scanners" do
     # Some gems vendor a Gemfile.lock in a subdirectory for their own dev or
     # type-check setup -- e.g. rbs (a Ruby default gem) ships steep/Gemfile.lock
     # pinning old activesupport and concurrent-ruby. Nothing loads these at
     # runtime, but syft's gemfile cataloger reports their pinned versions as
     # installed packages, producing false-positive CVEs. The blocks above only
-    # match gems/*/Gemfile{,.lock}, so remove them at any depth here.
-    Dir.glob("#{install_dir}/embedded/lib/ruby/gems/*/gems/*/**/{Gemfile,Gemfile.lock}".tr("\\", "/")).each do |f|
+    # match gems/*/Gemfile{,.lock}, so remove the locks at any depth here;
+    # plain Gemfiles stay, since `bundle init` copies bundler's templates/Gemfile.
+    Dir.glob("#{install_dir}/embedded/lib/ruby/gems/*/gems/*/**/Gemfile.lock".tr("\\", "/")).each do |f|
       # keep chef gems' own files, mirroring the exclusions above
       gem_name = f[%r{/gems/[^/]+/gems/([^/]+)/}, 1]
       next if gem_name && gem_name.start_with?("chef-")
