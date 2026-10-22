@@ -48,8 +48,14 @@ if [ -n "$(git status --porcelain)" ]; then
   exit 1
 fi
 
-echo "==> Fetching $(echo "$UPSTREAM_REF" | cut -d/ -f1)"
-git fetch "$(echo "$UPSTREAM_REF" | cut -d/ -f1)"
+# Fetch the ref's remote when it names one (upstream/main); a bare tag or sha
+# (v19.4.46) comes from the 'upstream' remote. Tags are always fetched.
+fetch_remote="${UPSTREAM_REF%%/*}"
+if [ "$fetch_remote" = "$UPSTREAM_REF" ] || ! git remote get-url "$fetch_remote" >/dev/null 2>&1; then
+  fetch_remote="upstream"
+fi
+echo "==> Fetching $fetch_remote (with tags)"
+git fetch --tags "$fetch_remote"
 
 if ! git rev-parse --verify "$UPSTREAM_REF" >/dev/null 2>&1; then
   echo "error: upstream ref '$UPSTREAM_REF' not found." >&2
