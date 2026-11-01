@@ -21,6 +21,20 @@ gem "unf_ext"
 # release with the GHSA-p8jg-8p9f-pgmr / GHSA-c33f-42f2-gwcc cache fixes.
 gem "faraday-http-cache", ">= 2.8.0"
 
+# addressable 2.9.1 fixes seven URI and template advisories (GHSA-qq38-m9mg-xjj5
+# and others); 2.9.2 also fixes 2.9.1's IDNA slowdown.
+gem "addressable", ">= 2.9.2"
+# rubyntlm 0.6.6 fixes the NTLMv2 verification bypass (GHSA-cx24-f932-rr55);
+# 0.6.6 and 0.6.7 shipped broken, so 0.6.8 is the floor.
+gem "rubyntlm", ">= 0.6.8"
+# net-ssh 7.3.5 fixes seven advisories: host certificates (GHSA-vxj5-fg65-x765,
+# already in 7.3.4), ProxyCommand, agent forwarding, and DoS by servers or keys;
+# 7.3.8 completes 7.3.5's ProxyJump fix (GHSA-g2r2-x3p2-5677).
+gem "net-ssh", ">= 7.3.8"
+# rack 3.2.8 fixes the multipart, Host header and Rack::Static advisories
+# (GHSA-5v64-555j-wjxm and others) in the server chef-zero runs on.
+gem "rack", ">= 3.2.8"
+
 gem "chef-utils", path: File.expand_path("chef-utils", __dir__) if File.exist?(File.expand_path("chef-utils", __dir__))
 gem "chef-config", path: File.expand_path("chef-config", __dir__) if File.exist?(File.expand_path("chef-config", __dir__))
 
