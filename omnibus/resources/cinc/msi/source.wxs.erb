@@ -45,8 +45,9 @@
       <![CDATA[Installed OR VersionNT >= 601]]>
     </Condition -->
 
-    <!-- We always do Major upgrades -->
-    <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeErrorMessage)" />
+    <!-- We always do Major upgrades. A respin differs only in the fourth
+         version field, which MSI ignores, so treat the same version as one. -->
+    <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="!(loc.DowngradeErrorMessage)" />
 
 
     <!--
