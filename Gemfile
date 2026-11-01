@@ -17,6 +17,19 @@ gem "erb", ">= 4.0.4.1"
 # CVE-2026-85396 (GHSA-47m2-wp7j-p9vc): rubyzip path traversal.
 # Versions < 3.4.0 are affected. Fixed in 3.4.0.
 gem "rubyzip", ">= 3.4"
+# GHSA-qq38-m9mg-xjj5 and six more: addressable URI and template advisories.
+# Fixed in 2.9.1; 2.9.2 also fixes 2.9.1's IDNA slowdown.
+gem "addressable", ">= 2.9.2"
+# GHSA-cx24-f932-rr55: rubyntlm NTLMv2 verification bypass. Fixed in 0.6.6;
+# 0.6.6 and 0.6.7 shipped broken, so 0.6.8 is the floor.
+gem "rubyntlm", ">= 0.6.8"
+# GHSA-vxj5-fg65-x765 and six more: net-ssh host-certificate, ProxyCommand,
+# agent-forwarding and DoS advisories. Fixed in 7.3.5 (the first in 7.3.4).
+# 7.3.8 completes 7.3.5's ProxyJump fix (GHSA-g2r2-x3p2-5677).
+gem "net-ssh", ">= 7.3.8"
+# GHSA-5v64-555j-wjxm and three more: rack multipart, Host header and
+# Rack::Static advisories. Fixed in 3.2.8.
+gem "rack", ">= 3.2.8"
 gem "chef-utils", path: File.expand_path("chef-utils", __dir__) if File.exist?(File.expand_path("chef-utils", __dir__))
 gem "chef-config", path: File.expand_path("chef-config", __dir__) if File.exist?(File.expand_path("chef-config", __dir__))
 
