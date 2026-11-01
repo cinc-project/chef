@@ -20,6 +20,7 @@ LABEL maintainer="Cinc Project <docker@cinc.sh>"
 ARG CHANNEL=stable
 ARG VERSION=18.10.17
 ARG PKG_VERSION=8
+ARG BUILD_ITERATION=1
 ARG TARGETARCH
 
 RUN set -euo pipefail; \
@@ -28,7 +29,7 @@ RUN set -euo pipefail; \
         arm64) arch=aarch64 ;; \
         *) echo "Unsupported TARGETARCH: $TARGETARCH" >&2; exit 1 ;; \
     esac; \
-    wget "http://ftp-osl.osuosl.org/pub/cinc/files/${CHANNEL}/cinc/${VERSION}/el/${PKG_VERSION}/cinc-${VERSION}-1.el${PKG_VERSION}.$arch.rpm" -O /tmp/cinc-client.rpm && \
+    wget "http://ftp-osl.osuosl.org/pub/cinc/files/${CHANNEL}/cinc/${VERSION}/el/${PKG_VERSION}/cinc-${VERSION}-${BUILD_ITERATION}.el${PKG_VERSION}.$arch.rpm" -O /tmp/cinc-client.rpm && \
     rpm2cpio /tmp/cinc-client.rpm | cpio -idmv && rm -rf /tmp/cinc-client.rpm
 
 VOLUME [ "/opt/cinc" ]
