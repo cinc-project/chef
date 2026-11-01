@@ -188,7 +188,7 @@ GEM
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.9.0)
+    addressable (2.9.2)
       public_suffix (>= 2.0.2, < 8.0)
     appbundler (0.13.4)
       mixlib-cli (>= 1.4, < 3.0)
@@ -361,7 +361,8 @@ GEM
       net-ssh (>= 2.6.5, < 8.0.0)
     net-sftp (4.0.0)
       net-ssh (>= 5.0.0, < 8.0.0)
-    net-ssh (7.3.0)
+    net-ssh (7.3.8)
+      logger
     netrc (0.11.0)
     nori (2.7.0)
       bigdecimal
@@ -387,7 +388,7 @@ GEM
       pry (~> 0.13)
     public_suffix (6.0.2)
     racc (1.8.1)
-    rack (3.2.6)
+    rack (3.2.8)
     rackup (2.3.1)
       rack (>= 3)
     rainbow (3.1.1)
@@ -426,7 +427,7 @@ GEM
       parser (>= 3.3.7.2)
       prism (~> 1.7)
     ruby-progressbar (1.13.0)
-    rubyntlm (0.6.5)
+    rubyntlm (0.6.8)
       base64
     rubyzip (3.7.0)
     semverse (3.0.2)
