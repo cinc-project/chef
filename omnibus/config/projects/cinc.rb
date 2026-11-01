@@ -22,7 +22,8 @@ homepage "https://www.cinc.sh"
 license "Apache-2.0"
 license_file "../LICENSE"
 
-build_iteration 1
+# A respin sets BUILD_ITERATION; unset or empty builds iteration 1.
+build_iteration(ENV["BUILD_ITERATION"].to_s.empty? ? 1 : ENV["BUILD_ITERATION"].to_i)
 # Do not use __FILE__ after this point, use current_file. If you use __FILE__
 # after this point, any dependent defs (ex: angrychef) that use instance_eval
 # will fail to work correctly.
