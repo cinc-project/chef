@@ -117,8 +117,8 @@ class Chef
       def current_solaris_tz
         unless ChefConfig::Config.target_mode?
           raise "The timezone resource's Solaris support is only available in Target Mode. " \
-            "Chef Infra Client 19 has no native Solaris package (Habitat does not build for " \
-            "Solaris), so Solaris can only be managed via `chef-client --target`."
+            "#{ChefUtils::Dist::Infra::PRODUCT} 19 has no native Solaris package, so " \
+            "Solaris can only be managed via `#{ChefUtils::Dist::Infra::CLIENT} --target`."
         end
 
         tz_shellout = shell_out(["svccfg", "-s", "timezone:default", "listprop", "timezone/localtime"])
@@ -196,8 +196,8 @@ class Chef
               when "solaris2"
                 unless ChefConfig::Config.target_mode?
                   raise "The timezone resource's Solaris support is only available in Target Mode. " \
-                    "Chef Infra Client 19 has no native Solaris package (Habitat does not build for " \
-                    "Solaris), so Solaris can only be managed via `chef-client --target`."
+                    "#{ChefUtils::Dist::Infra::PRODUCT} 19 has no native Solaris package, so " \
+                    "Solaris can only be managed via `#{ChefUtils::Dist::Infra::CLIENT} --target`."
                 end
 
                 shell_out!(["svccfg", "-s", "timezone:default", "setprop", "timezone/localtime", "=", "astring:", new_resource.timezone])

@@ -178,9 +178,9 @@ class Chef
       def raise_unless_target_mode_for_solaris!
         return if ChefConfig::Config.target_mode?
 
-        raise "user_ulimit's Solaris support is only available in Target Mode. Chef Infra " \
-          "Client 19 has no native Solaris package (Habitat does not build for Solaris), so " \
-          "Solaris can only be managed via `chef-client --target`."
+        raise "user_ulimit's Solaris support is only available in Target Mode. " \
+          "#{ChefUtils::Dist::Infra::PRODUCT} 19 has no native Solaris package, so " \
+          "Solaris can only be managed via `#{ChefUtils::Dist::Infra::CLIENT} --target`."
       end
 
       # Raises if any ulimit property is set that has no supported Solaris rctl mapping.
