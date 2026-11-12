@@ -47,9 +47,24 @@ spec = Gem::Specification.load(newest.loaded_from)
 spec.files = Dir.glob("**/*", base: gem_lib)
   .select { |f| File.file?(File.join(gem_lib, f)) }
   .reject { |f| f.end_with?(".so", ".bundle") } + ext_files
+stub = File.join(specs_dir, "json-#{newest.version}.gemspec")
 FileUtils.rm_f(Dir.glob(File.join(specs_dir, "json-*.gemspec")))
-File.write(File.join(specs_dir, "json-#{newest.version}.gemspec"), spec.to_ruby)
+File.write(stub, spec.to_ruby)
+
+# A builder's umask can be stricter than 022, and nothing later fixes modes here.
+written = [File.join(lib, "json.rb"), File.join(lib, "json"), File.join(arch, "json"), stub]
+FileUtils.chmod_R("a+rX", written) unless Gem.win_platform?
 puts "json: Ruby's default json is now #{newest.version}"
+
+unless Gem.win_platform?
+  paths = written.flat_map { |w| [w] + Dir.glob("**/*", File::FNM_DOTMATCH, base: w).map { |f| File.join(w, f) } }
+  hidden = paths.reject do |f|
+    need = File.directory?(f) ? 0o005 : 0o004
+    File.stat(f).mode & need == need
+  end
+  abort "json: failing the build: not readable by every user: #{hidden.join(", ")}" unless hidden.empty?
+  puts "json: file modes: readable by every user"
+end
 
 env = { "GEM_HOME" => Gem.default_dir, "GEM_PATH" => Gem.default_dir }
 checks = {
@@ -59,7 +74,9 @@ checks = {
 }
 checks.each do |label, (code, want)|
   args = label == "--disable-gems" ? ["--disable-gems", "-e", code] : ["-e", code]
-  got = IO.popen([env, RbConfig.ruby, *args], err: %i{child out}, &:read).strip
+  # Compare stdout only; the exit status catches a child that dies after printing.
+  got = IO.popen([env, RbConfig.ruby, *args], &:read).strip
+  abort "json: failing the build: #{label} exited #{$?.exitstatus.inspect}" unless $?.success?
   abort "json: failing the build: #{label} gave #{got.inspect}, expected #{want.inspect}" unless got == want
   puts "json: #{label}: #{got}"
 end
