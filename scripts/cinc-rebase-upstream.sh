@@ -54,7 +54,8 @@ if [ "$fetch_remote" = "$UPSTREAM_REF" ] || ! git remote get-url "$fetch_remote"
   fetch_remote="upstream"
 fi
 echo "==> Fetching $fetch_remote (with tags)"
-git fetch --tags "$fetch_remote"
+# Upstream moves some tags; follow it so the fetch does not fail.
+git fetch --tags --force "$fetch_remote"
 
 if ! git rev-parse --verify "$UPSTREAM_REF" >/dev/null 2>&1; then
   echo "error: upstream ref '$UPSTREAM_REF' not found." >&2
